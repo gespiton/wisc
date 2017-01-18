@@ -4,5 +4,6 @@ stats stat { $$ = concat($1, $2); }
 ;
 
 stat:
-endc { $$ = "hello"; }
+endc { ; }
+| defineVariale endc { ; }
 ;

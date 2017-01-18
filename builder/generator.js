@@ -37,7 +37,7 @@ function processCommand(command, type, member, space) {
         var returnString = `char* ${split[2]} = merge(${split.length - 2}${list});\n`;
         return returnString;
     } else if (split[1] == 'push') {
-        var returnString = `if (${split[2]} == NULL) ${split[2]} = ${split[3]};\n    else {\n        ${type}* ${split[4]} = ${split[2]};\n        while(${split[4]}->next != NULL){\n            ${split[4]}->length += 1;\n            ${split[4]} = ${split[4]}->next;\n        }\n    }`;
+        var returnString = `if (${split[2]} == NULL) ${split[2]} = ${split[3]};\n    else {\n        ${type}* ${split[4]} = ${split[2]};\n        while(${split[4]}->next != NULL){\n            ${split[4]}->length += 1;\n            ${split[4]} = ${split[4]}->next;\n        }\n        ${split[4]}->next = ${split[3]};\n    }`;
         return returnString;
     } else return '';
 }

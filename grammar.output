@@ -1,9 +1,5 @@
-Terminals which are not used
-
-   NAME
-
-
-State 3 conflicts: 1 shift/reduce
+State 4 conflicts: 1 shift/reduce
+State 21 conflicts: 1 shift/reduce
 
 
 Grammar
@@ -13,136 +9,282 @@ Grammar
     1 endls: endls ENDL
     2      | ENDL
 
-    3 endc: endls
-    4     | SEMICOLON
+    3 endc: SEMICOLON
+    4     | endls
 
-    5 program: /* empty */
-    6        | stats
+    5 list: COLON
+    6     | list endls
 
-    7 stats: stats stat
-    8      | stat
+    7 name: NAME
 
-    9 stat: endc
+    8 program: /* empty */
+    9        | stats
+
+   10 defineParam: defineType name
+
+   11 paramListP: paramListP list defineParam
+   12           | defineParam
+
+   13 stats: stats stat
+   14      | stat
+
+   15 stat: endc
+   16     | defineVariale endc
+
+   17 defineType: name
+
+   18 defineVariale: paramListP
 
 
 Terminals, with rules where they appear
 
 $end (0) 0
 error (256)
-NAME (258)
+NAME (258) 7
 ENDL (259) 1 2
-SEMICOLON (260) 4
+SEMICOLON (260) 3
+COLON (261) 5
 
 
 Nonterminals, with rules where they appear
 
-$accept (6)
+$accept (7)
     on left: 0
-endls (7)
-    on left: 1 2, on right: 1 3
-endc (8)
-    on left: 3 4, on right: 9
-program (9)
-    on left: 5 6, on right: 0
-stats (10)
-    on left: 7 8, on right: 6 7
-stat (11)
-    on left: 9, on right: 7 8
+endls (8)
+    on left: 1 2, on right: 1 4 6
+endc (9)
+    on left: 3 4, on right: 15 16
+list (10)
+    on left: 5 6, on right: 6 11
+name (11)
+    on left: 7, on right: 10 17
+program (12)
+    on left: 8 9, on right: 0
+defineParam (13)
+    on left: 10, on right: 11 12
+paramListP (14)
+    on left: 11 12, on right: 11 18
+stats (15)
+    on left: 13 14, on right: 9 13
+stat (16)
+    on left: 15 16, on right: 13 14
+defineType (17)
+    on left: 17, on right: 10
+defineVariale (18)
+    on left: 18, on right: 16
 
 
 state 0
 
     0 $accept: . program $end
 
-    ENDL       shift, and go to state 1
-    SEMICOLON  shift, and go to state 2
+    NAME       shift, and go to state 1
+    ENDL       shift, and go to state 2
+    SEMICOLON  shift, and go to state 3
 
-    $default  reduce using rule 5 (program)
+    $default  reduce using rule 8 (program)
 
-    endls    go to state 3
-    endc     go to state 4
-    program  go to state 5
-    stats    go to state 6
-    stat     go to state 7
+    endls          go to state 4
+    endc           go to state 5
+    name           go to state 6
+    program        go to state 7
+    defineParam    go to state 8
+    paramListP     go to state 9
+    stats          go to state 10
+    stat           go to state 11
+    defineType     go to state 12
+    defineVariale  go to state 13
 
 
 state 1
+
+    7 name: NAME .
+
+    $default  reduce using rule 7 (name)
+
+
+state 2
 
     2 endls: ENDL .
 
     $default  reduce using rule 2 (endls)
 
 
-state 2
-
-    4 endc: SEMICOLON .
-
-    $default  reduce using rule 4 (endc)
-
-
 state 3
 
-    1 endls: endls . ENDL
-    3 endc: endls .
+    3 endc: SEMICOLON .
 
-    ENDL  shift, and go to state 8
-
-    ENDL      [reduce using rule 3 (endc)]
     $default  reduce using rule 3 (endc)
 
 
 state 4
 
-    9 stat: endc .
+    1 endls: endls . ENDL
+    4 endc: endls .
 
-    $default  reduce using rule 9 (stat)
+    ENDL  shift, and go to state 14
+
+    ENDL      [reduce using rule 4 (endc)]
+    $default  reduce using rule 4 (endc)
 
 
 state 5
 
-    0 $accept: program . $end
+   15 stat: endc .
 
-    $end  shift, and go to state 9
+    $default  reduce using rule 15 (stat)
 
 
 state 6
 
-    6 program: stats .
-    7 stats: stats . stat
+   17 defineType: name .
 
-    ENDL       shift, and go to state 1
-    SEMICOLON  shift, and go to state 2
-
-    $default  reduce using rule 6 (program)
-
-    endls  go to state 3
-    endc   go to state 4
-    stat   go to state 10
+    $default  reduce using rule 17 (defineType)
 
 
 state 7
 
-    8 stats: stat .
+    0 $accept: program . $end
 
-    $default  reduce using rule 8 (stats)
+    $end  shift, and go to state 15
 
 
 state 8
+
+   12 paramListP: defineParam .
+
+    $default  reduce using rule 12 (paramListP)
+
+
+state 9
+
+   11 paramListP: paramListP . list defineParam
+   18 defineVariale: paramListP .
+
+    COLON  shift, and go to state 16
+
+    $default  reduce using rule 18 (defineVariale)
+
+    list  go to state 17
+
+
+state 10
+
+    9 program: stats .
+   13 stats: stats . stat
+
+    NAME       shift, and go to state 1
+    ENDL       shift, and go to state 2
+    SEMICOLON  shift, and go to state 3
+
+    $default  reduce using rule 9 (program)
+
+    endls          go to state 4
+    endc           go to state 5
+    name           go to state 6
+    defineParam    go to state 8
+    paramListP     go to state 9
+    stat           go to state 18
+    defineType     go to state 12
+    defineVariale  go to state 13
+
+
+state 11
+
+   14 stats: stat .
+
+    $default  reduce using rule 14 (stats)
+
+
+state 12
+
+   10 defineParam: defineType . name
+
+    NAME  shift, and go to state 1
+
+    name  go to state 19
+
+
+state 13
+
+   16 stat: defineVariale . endc
+
+    ENDL       shift, and go to state 2
+    SEMICOLON  shift, and go to state 3
+
+    endls  go to state 4
+    endc   go to state 20
+
+
+state 14
 
     1 endls: endls ENDL .
 
     $default  reduce using rule 1 (endls)
 
 
-state 9
+state 15
 
     0 $accept: program $end .
 
     $default  accept
 
 
-state 10
+state 16
 
-    7 stats: stats stat .
+    5 list: COLON .
 
-    $default  reduce using rule 7 (stats)
+    $default  reduce using rule 5 (list)
+
+
+state 17
+
+    6 list: list . endls
+   11 paramListP: paramListP list . defineParam
+
+    NAME  shift, and go to state 1
+    ENDL  shift, and go to state 2
+
+    endls        go to state 21
+    name         go to state 6
+    defineParam  go to state 22
+    defineType   go to state 12
+
+
+state 18
+
+   13 stats: stats stat .
+
+    $default  reduce using rule 13 (stats)
+
+
+state 19
+
+   10 defineParam: defineType name .
+
+    $default  reduce using rule 10 (defineParam)
+
+
+state 20
+
+   16 stat: defineVariale endc .
+
+    $default  reduce using rule 16 (stat)
+
+
+state 21
+
+    1 endls: endls . ENDL
+    6 list: list endls .
+
+    ENDL  shift, and go to state 14
+
+    ENDL      [reduce using rule 6 (list)]
+    $default  reduce using rule 6 (list)
+
+
+state 22
+
+   11 paramListP: paramListP list defineParam .
+
+    $default  reduce using rule 11 (paramListP)

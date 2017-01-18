@@ -67,11 +67,28 @@
         }
     },
 
+    "string" : {
+        "struct" : {
+            "name" : ["char", "\"\""],
+
+            "location" : ["location", "NULL"]
+        },
+        "action" : {
+            "create" : {
+                "return" : "string",
+                "params" : {
+                    "name" : "char"
+                }
+            }
+        }
+    },
+
     "type" : {
         "struct" : {
             "name" : ["char", "\"\""],
             "code" : ["char", "\"\""],
 
+            "location" : ["location", "NULL"],
             "length" : ["int", "1"],
             "next" : ["type", "NULL"]
         },
@@ -79,7 +96,7 @@
             "create" : {
                 "return" : "type",
                 "params" : {
-                    "name" : "char"
+                    "name" : "string"
                 }
             },
             "push" : {
@@ -97,6 +114,7 @@
             "name" : ["char", "\"\""],
             "type" : ["type", "NULL"],
 
+            "location" : ["location", "NULL"],
             "length" : ["int", "1"],
             "next" : ["param", "NULL"]
         },
@@ -104,7 +122,7 @@
             "create" : {
                 "return" : "param",
                 "params" : {
-                    "name" : "char",
+                    "name" : "string",
                     "type" : "type"
                 }
             },

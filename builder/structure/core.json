@@ -9,7 +9,10 @@
         "type_boolean" : "\"boolean\"",
         "type_int" : "\"int\"",
         "type_number" : "\"number\"",
-        "type_string" : "\"string\""
+        "type_string" : "\"string\"",
+
+        "syntax_error" : 101,
+        "unknow_type_error" : 102
     },
     "params" : {
         "main_path" : ["char", "\"\""],
@@ -17,6 +20,7 @@
 
         "files_list" : ["file", "NULL"],
         "current_file" : ["file", "NULL"],
+        "current_location" : ["location", "NULL"],
 
         "parsing_step" : ["int", "2"],
 
@@ -45,6 +49,32 @@
                     "params" : {
                         "root" : "list",
                         "sub" : "list"
+                    }
+                }
+            }
+        },
+        "location" : {
+            "struct" : {
+                "fc" : ["int", "1"],
+                "fl" : ["int", "1"],
+                "lc" : ["int", "1"],
+                "ll" : ["int", "1"]
+            },
+            "action" : {
+                "create" : {
+                    "return" : "location",
+                    "params" : {
+                        "fc" : "int",
+                        "fl" : "int",
+                        "lc" : "int",
+                        "ll" : "int"
+                    }
+                },
+                "plus" : {
+                    "return" : "location",
+                    "params" : {
+                        "left" : "location",
+                        "right" : "location"
                     }
                 }
             }
@@ -97,6 +127,14 @@
             "return" : "int",
             "params" : {
                 "msg" : "const char"
+            }
+        },
+        "error" : {
+            "return" : "int",
+            "params" : {
+                "code" : "int",
+                "msg" : "const char",
+                "location" : "location"
             }
         }
     }

@@ -1,8 +1,9 @@
 all:
-	${MAKE} clean ${MAKE} build && ${MAKE} clean || ${MAKE} clean
+	${MAKE} clean
+	${MAKE} build
+	${MAKE} clean
 
 build:
-	${MAKE} clean
 	# Building source code
 	if not exist ".\build" mkdir build
 	node .\builder\main.js
@@ -21,7 +22,6 @@ build:
 	# Compile project
 	gcc .\build\*.c -o .\bin\wisc
 	# Test running
-	${MAKE} run
 
 run:
 	.\bin\wisc testing\test1\main

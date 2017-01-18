@@ -13,6 +13,8 @@ if (files_list == NULL)
 else file_push(files_list, nfile);
 // Set current working file
 current_file = nfile;
+// Init this file
+init_file();
 
 yyin = scriptFile;
 yyrestart(yyin);
