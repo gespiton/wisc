@@ -5,6 +5,7 @@ WiScript compiler. Write by C language
 ## Purpose
 1. Parsing a single input file
 2. Create and variable with available typing
-3. Throw error if typing not available
+3. Throw error if typing not available and its location
+
 ## Error code
 1. Code #100: Type '{type name}' not exist
