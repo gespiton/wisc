@@ -8,4 +8,5 @@ WiScript compiler. Write by C language
 3. Throw error if typing not available and its location
 
 ## Error code
-1. Code #100: Type '{type name}' not exist
+2. #100: Syntax error
+1. #101: Type '{type name}' not exist

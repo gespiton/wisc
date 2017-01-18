@@ -11,8 +11,8 @@
         "type_number" : "\"number\"",
         "type_string" : "\"string\"",
 
-        "syntax_error" : 101,
-        "unknow_type_error" : 102
+        "syntax_error" : 100,
+        "unknow_type_error" : 101
     },
     "params" : {
         "main_path" : ["char", "\"\""],
