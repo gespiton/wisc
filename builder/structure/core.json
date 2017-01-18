@@ -1,0 +1,103 @@
+{
+    "include" : ["ast"],
+    "define" : {
+        "type" : 102,
+        "define" : 101,
+        "stat" : 100,
+
+        "type_void" : "\"void\"",
+        "type_boolean" : "\"boolean\"",
+        "type_int" : "\"int\"",
+        "type_number" : "\"number\"",
+        "type_string" : "\"string\""
+    },
+    "params" : {
+        "main_path" : ["char", "\"\""],
+        "waiting_file" : ["list", "NULL"],
+
+        "files_list" : ["file", "NULL"],
+        "current_file" : ["file", "NULL"],
+
+        "parsing_step" : ["int", "2"],
+
+        "line_number" : ["int", "1"],
+        "col_number" : ["int", "1"],
+
+        "error_number" : ["int", "0"],
+        "warning_number" : ["int", "0"]
+    },
+    "struct" : {
+        "list" : {
+            "struct" : {
+                "name" : ["char", "''"],
+                "length" : ["int", "1"],
+                "next" : ["list", "NULL"]
+            },
+            "action" : {
+                "create" : {
+                    "return" : "list",
+                    "params" : {
+                        "name" : "char"
+                    }
+                },
+                "push" : {
+                    "return" : "list",
+                    "params" : {
+                        "root" : "list",
+                        "sub" : "list"
+                    }
+                }
+            }
+        }
+    },
+    "function" : {
+        "start" : {
+            "return" : "void",
+            "params" : {
+                "path" : "char"
+            }
+        },
+        "parse_file" : {
+            "return" : "void",
+            "params" : {
+                "cfile" : "file"
+            }
+        },
+        "init_file" : {
+            "return" : "void",
+            "params" : {}
+        },
+        "define_file" : {
+            "return" : "void",
+            "params" : {}
+        },
+        "parse_path" : {
+            "return" : "void",
+            "params" : {
+                "p" : "char*",
+                "f" : "char*",
+                "pf" : "char"
+            }
+        },
+        "concat" : {
+            "return" : "char",
+            "params" : {
+                "string1" : "const char",
+                "string2" : "const char"
+            }
+        },
+        "merge" : {
+            "return" : "const char",
+            "params" : {
+                "length" : "int",
+                "..." : ""
+            }
+        },
+        "yyerror" : {
+            "return" : "int",
+            "params" : {
+                "msg" : "const char"
+            }
+        }
+    }
+}

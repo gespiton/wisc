@@ -1,0 +1,120 @@
+{
+    "file" : {
+        "struct" : {
+            "name" : ["char", "\"\""],
+            "path" : ["char", "\"\""],
+            "generate" : ["char", "\"\""],
+
+            "structures" : ["structure", "NULL"],
+
+            "length" : ["int", "1"],
+            "next" : ["file", "NULL"]
+        },
+
+        "action" : {
+            "create" : {
+                "return" : "file",
+                "params" : {
+                    "path" : "char"
+                }
+            },
+            "push" : {
+                "return" : "file",
+                "params" : {
+                    "root" : "file",
+                    "sub" : "file"
+                }
+            },
+            "add_structure" : {
+                "return" : "void",
+                "params" : {
+                    "target" : "file",
+                    "structure" : "structure"
+                }
+            },
+            "search_structure" : {
+                "return" : "structure",
+                "params" : {
+                    "target" : "file",
+                    "name" : "char"
+                }
+            }
+        }
+    },
+
+    "structure" : {
+        "struct" : {
+            "name" : ["char", "\"\""],
+
+            "length" : ["int", "1"],
+            "next" : ["structure", "NULL"]
+        },
+
+        "action" : {
+            "create" : {
+                "return" : "structure",
+                "params" : {
+                    "name" : "char"
+                }
+            },
+            "push" : {
+                "return" : "structure",
+                "params" : {
+                    "root" : "structure",
+                    "sub" : "structure"
+                }
+            }
+        }
+    },
+
+    "type" : {
+        "struct" : {
+            "name" : ["char", "\"\""],
+            "code" : ["char", "\"\""],
+
+            "length" : ["int", "1"],
+            "next" : ["type", "NULL"]
+        },
+        "action" : {
+            "create" : {
+                "return" : "type",
+                "params" : {
+                    "name" : "char"
+                }
+            },
+            "push" : {
+                "return" : "type",
+                "params" : {
+                    "root" : "type",
+                    "sub" : "type"
+                }
+            }
+        }
+    },
+
+    "param" : {
+        "struct" : {
+            "name" : ["char", "\"\""],
+            "type" : ["type", "NULL"],
+
+            "length" : ["int", "1"],
+            "next" : ["param", "NULL"]
+        },
+        "action" : {
+            "create" : {
+                "return" : "param",
+                "params" : {
+                    "name" : "char",
+                    "type" : "type"
+                }
+            },
+            "push" : {
+                "return" : "param",
+                "params" : {
+                    "root" : "param",
+                    "sub" : "param"
+                }
+            }
+        }
+    }
+}
