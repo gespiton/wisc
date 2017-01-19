@@ -3,9 +3,9 @@ WiScript compiler. Write by C language
 
 # - [x] Testing 1
 ## Purpose
-1. Parsing a single input file [x]
-2. Create and variable with available typing [x]
-3. Throw error if typing not available and its location [x]
+- [x] Parsing a single input file
+- [x] Create and variable with available typing
+- [ ] Throw error if typing not available and its location
 
 ## Error code
 2. #100: Syntax error [x]
