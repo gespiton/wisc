@@ -1,27 +1,27 @@
 # wisc
 WiScript compiler. Write by C language
 
-# - [x] Testing 1
+# Testing 1
 ## Purpose
 - [x] Parsing a single input file
 - [x] Create and variable with available typing
-- [ ] Throw error if typing not available and its location
+- [x] Throw error if typing not available and its location
 
 ## Error code
-2. #100: Syntax error [x]
-1. #101: Unknown type '{type name}' [x]
+- [x] #100: Syntax error
+- [x] #101: Unknown type '{type name}'
 
-# Testing 2 [ ]
+# Testing 2
 ## Purpose
-1. Call created variable [x]
-2. Expression void [x]
-3. Expression boolean [x]
-4. Expression int [x]
-5. Expression number [x]
-6. Expression string [x]
-7. Set expression to param [x]
-8. Assignment expression to available variable and check if they are match [ ]
-9. Display output expression by trace command [ ]
+- [x] Call created variable
+- [x] Expression void
+- [x] Expression boolean
+- [x] Expression int
+- [x] Expression number
+- [x] Expression string
+- [x] Set expression to param
+- [ ] Assignment expression to available variable and check if they are match
+- [ ] Display output expression by trace command
 
 ## Matching rule
 1. boolean < void
@@ -29,6 +29,6 @@ WiScript compiler. Write by C language
 3. number < int
 
 ## Error code
-1. #102: Variable '{variable name}' already exist [x]
-2. #103: Variable '{variable name}' type '{variable type name}' cannot match with '{type name}' [ ]
-3. #104: Unknown identifier '{variable name}' [x]
+- [x] #102: Variable '{variable name}' already exist
+- [ ] #103: Variable '{variable name}' type '{variable type name}' cannot match with '{type name}'
+- [x] #104: Unknown identifier '{variable name}'
