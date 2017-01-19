@@ -12,7 +12,10 @@
         "type_string" : "\"string\"",
 
         "syntax_error" : 100,
-        "unknow_type_error" : 101
+        "unknown_type_error" : 101,
+        "var_already_exist" : 102,
+        "var_cannot_match" : 103,
+        "unknown_iden" : 104
     },
     "params" : {
         "main_path" : ["char", "\"\""],
@@ -20,6 +23,7 @@
 
         "files_list" : ["file", "NULL"],
         "current_file" : ["file", "NULL"],
+        "current_space" : ["space", "NULL"],
         "current_location" : ["location", "NULL"],
 
         "parsing_step" : ["int", "2"],
@@ -112,28 +116,49 @@
         "concat" : {
             "return" : "char",
             "params" : {
-                "string1" : "const char",
-                "string2" : "const char"
+                "string1" : "char",
+                "string2" : "char"
             }
         },
         "merge" : {
-            "return" : "const char",
+            "return" : "char",
             "params" : {
                 "length" : "int",
                 "..." : ""
             }
         },
+        "itoc" : {
+            "return" : "char",
+            "params" : {
+                "val" : "int"
+            }
+        },
+        "output" : {
+            "return" : "int",
+            "params" : {
+                "type" : "char",
+                "msg" : "char",
+                "location" : "location"
+            }
+        },
         "yyerror" : {
             "return" : "int",
             "params" : {
-                "msg" : "const char"
+                "msg" : "char"
             }
         },
         "error" : {
             "return" : "int",
             "params" : {
                 "code" : "int",
-                "msg" : "const char",
+                "msg" : "char",
+                "location" : "location"
+            }
+        },
+        "note" : {
+            "return" : "int",
+            "params" : {
+                "msg" : "char",
                 "location" : "location"
             }
         }

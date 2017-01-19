@@ -4,6 +4,7 @@ FILE* scriptFile = fopen(merge(3, main_path, cfile->name, ".wis"), "r");
 if (!scriptFile) return;
 
 current_file = cfile;
+current_space = current_file->main_space;
 yyin = scriptFile;
 yyrestart(yyin);
 

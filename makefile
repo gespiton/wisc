@@ -24,7 +24,7 @@ build:
 	${MAKE} run
 
 run:
-	./bin/wisc testing/test1/main
+	./bin/wisc testing/test2/main
 
 clean:
 	rm -fr build || :

@@ -1,5 +1,5 @@
 State 4 conflicts: 1 shift/reduce
-State 21 conflicts: 1 shift/reduce
+State 33 conflicts: 1 shift/reduce
 
 
 Grammar
@@ -20,20 +20,33 @@ Grammar
     8 program: /* empty */
     9        | stats
 
-   10 defineParam: defineType name
+   10 expr: STRING
+   11     | VALUE_VOID
+   12     | VALUE_BOOLEAN
+   13     | INT
+   14     | NUMBER
+   15     | defineIden
 
-   11 paramListP: paramListP list defineParam
-   12           | defineParam
+   16 defineIden: name
 
-   13 stats: stats stat
-   14      | stat
+   17 assignment: defineIden ASSIGN expr
 
-   15 stat: endc
-   16     | defineVariale endc
+   18 defineParam: defineType name
+   19            | defineType name ASSIGN expr
 
-   17 defineType: name
+   20 paramListP: paramListP list defineParam
+   21           | defineParam
 
-   18 defineVariale: paramListP
+   22 stats: stats stat
+   23      | stat
+
+   24 stat: endc
+   25     | defineVariale endc
+   26     | assignment endc
+
+   27 defineType: name
+
+   28 defineVariale: paramListP
 
 
 Terminals, with rules where they appear
@@ -42,36 +55,48 @@ $end (0) 0
 error (256)
 NAME (258) 7
 ENDL (259) 1 2
-SEMICOLON (260) 3
-COLON (261) 5
+INT (260) 13
+NUMBER (261) 14
+STRING (262) 10
+VALUE_BOOLEAN (263) 12
+VALUE_VOID (264) 11
+SEMICOLON (265) 3
+COLON (266) 5
+ASSIGN (267) 17 19
 
 
 Nonterminals, with rules where they appear
 
-$accept (7)
+$accept (13)
     on left: 0
-endls (8)
+endls (14)
     on left: 1 2, on right: 1 4 6
-endc (9)
-    on left: 3 4, on right: 15 16
-list (10)
-    on left: 5 6, on right: 6 11
-name (11)
-    on left: 7, on right: 10 17
-program (12)
+endc (15)
+    on left: 3 4, on right: 24 25 26
+list (16)
+    on left: 5 6, on right: 6 20
+name (17)
+    on left: 7, on right: 16 18 19 27
+program (18)
     on left: 8 9, on right: 0
-defineParam (13)
-    on left: 10, on right: 11 12
-paramListP (14)
-    on left: 11 12, on right: 11 18
-stats (15)
-    on left: 13 14, on right: 9 13
-stat (16)
-    on left: 15 16, on right: 13 14
-defineType (17)
-    on left: 17, on right: 10
-defineVariale (18)
-    on left: 18, on right: 16
+expr (19)
+    on left: 10 11 12 13 14 15, on right: 17 19
+defineIden (20)
+    on left: 16, on right: 15 17
+assignment (21)
+    on left: 17, on right: 26
+defineParam (22)
+    on left: 18 19, on right: 20 21
+paramListP (23)
+    on left: 20 21, on right: 20 28
+stats (24)
+    on left: 22 23, on right: 9 22
+stat (25)
+    on left: 24 25 26, on right: 22 23
+defineType (26)
+    on left: 27, on right: 18 19
+defineVariale (27)
+    on left: 28, on right: 25
 
 
 state 0
@@ -88,12 +113,14 @@ state 0
     endc           go to state 5
     name           go to state 6
     program        go to state 7
-    defineParam    go to state 8
-    paramListP     go to state 9
-    stats          go to state 10
-    stat           go to state 11
-    defineType     go to state 12
-    defineVariale  go to state 13
+    defineIden     go to state 8
+    assignment     go to state 9
+    defineParam    go to state 10
+    paramListP     go to state 11
+    stats          go to state 12
+    stat           go to state 13
+    defineType     go to state 14
+    defineVariale  go to state 15
 
 
 state 1
@@ -122,7 +149,7 @@ state 4
     1 endls: endls . ENDL
     4 endc: endls .
 
-    ENDL  shift, and go to state 14
+    ENDL  shift, and go to state 16
 
     ENDL      [reduce using rule 4 (endc)]
     $default  reduce using rule 4 (endc)
@@ -130,48 +157,68 @@ state 4
 
 state 5
 
-   15 stat: endc .
+   24 stat: endc .
 
-    $default  reduce using rule 15 (stat)
+    $default  reduce using rule 24 (stat)
 
 
 state 6
 
-   17 defineType: name .
+   16 defineIden: name .
+   27 defineType: name .
 
-    $default  reduce using rule 17 (defineType)
+    NAME      reduce using rule 27 (defineType)
+    $default  reduce using rule 16 (defineIden)
 
 
 state 7
 
     0 $accept: program . $end
 
-    $end  shift, and go to state 15
+    $end  shift, and go to state 17
 
 
 state 8
 
-   12 paramListP: defineParam .
+   17 assignment: defineIden . ASSIGN expr
 
-    $default  reduce using rule 12 (paramListP)
+    ASSIGN  shift, and go to state 18
 
 
 state 9
 
-   11 paramListP: paramListP . list defineParam
-   18 defineVariale: paramListP .
+   26 stat: assignment . endc
 
-    COLON  shift, and go to state 16
+    ENDL       shift, and go to state 2
+    SEMICOLON  shift, and go to state 3
 
-    $default  reduce using rule 18 (defineVariale)
-
-    list  go to state 17
+    endls  go to state 4
+    endc   go to state 19
 
 
 state 10
 
+   21 paramListP: defineParam .
+
+    $default  reduce using rule 21 (paramListP)
+
+
+state 11
+
+   20 paramListP: paramListP . list defineParam
+   28 defineVariale: paramListP .
+
+    COLON  shift, and go to state 20
+
+    $default  reduce using rule 28 (defineVariale)
+
+    list  go to state 21
+
+
+state 12
+
     9 program: stats .
-   13 stats: stats . stat
+   22 stats: stats . stat
 
     NAME       shift, and go to state 1
     ENDL       shift, and go to state 2
@@ -182,109 +229,224 @@ state 10
     endls          go to state 4
     endc           go to state 5
     name           go to state 6
-    defineParam    go to state 8
-    paramListP     go to state 9
-    stat           go to state 18
-    defineType     go to state 12
-    defineVariale  go to state 13
-
-
-state 11
-
-   14 stats: stat .
-
-    $default  reduce using rule 14 (stats)
-
-
-state 12
-
-   10 defineParam: defineType . name
-
-    NAME  shift, and go to state 1
-
-    name  go to state 19
+    defineIden     go to state 8
+    assignment     go to state 9
+    defineParam    go to state 10
+    paramListP     go to state 11
+    stat           go to state 22
+    defineType     go to state 14
+    defineVariale  go to state 15
 
 
 state 13
 
-   16 stat: defineVariale . endc
+   23 stats: stat .
+
+    $default  reduce using rule 23 (stats)
+
+
+state 14
+
+   18 defineParam: defineType . name
+   19            | defineType . name ASSIGN expr
+
+    NAME  shift, and go to state 1
+
+    name  go to state 23
+
+
+state 15
+
+   25 stat: defineVariale . endc
 
     ENDL       shift, and go to state 2
     SEMICOLON  shift, and go to state 3
 
     endls  go to state 4
-    endc   go to state 20
+    endc   go to state 24
 
 
-state 14
+state 16
 
     1 endls: endls ENDL .
 
     $default  reduce using rule 1 (endls)
 
 
-state 15
+state 17
 
     0 $accept: program $end .
 
     $default  accept
 
 
-state 16
+state 18
+
+   17 assignment: defineIden ASSIGN . expr
+
+    NAME           shift, and go to state 1
+    INT            shift, and go to state 25
+    NUMBER         shift, and go to state 26
+    STRING         shift, and go to state 27
+    VALUE_BOOLEAN  shift, and go to state 28
+    VALUE_VOID     shift, and go to state 29
+
+    name        go to state 30
+    expr        go to state 31
+    defineIden  go to state 32
+
+
+state 19
+
+   26 stat: assignment endc .
+
+    $default  reduce using rule 26 (stat)
+
+
+state 20
 
     5 list: COLON .
 
     $default  reduce using rule 5 (list)
 
 
-state 17
+state 21
 
     6 list: list . endls
-   11 paramListP: paramListP list . defineParam
+   20 paramListP: paramListP list . defineParam
 
     NAME  shift, and go to state 1
     ENDL  shift, and go to state 2
 
-    endls        go to state 21
-    name         go to state 6
-    defineParam  go to state 22
-    defineType   go to state 12
+    endls        go to state 33
+    name         go to state 34
+    defineParam  go to state 35
+    defineType   go to state 14
 
 
-state 18
+state 22
 
-   13 stats: stats stat .
+   22 stats: stats stat .
 
-    $default  reduce using rule 13 (stats)
-
-
-state 19
-
-   10 defineParam: defineType name .
-
-    $default  reduce using rule 10 (defineParam)
+    $default  reduce using rule 22 (stats)
 
 
-state 20
+state 23
 
-   16 stat: defineVariale endc .
+   18 defineParam: defineType name .
+   19            | defineType name . ASSIGN expr
 
-    $default  reduce using rule 16 (stat)
+    ASSIGN  shift, and go to state 36
+
+    $default  reduce using rule 18 (defineParam)
 
 
-state 21
+state 24
+
+   25 stat: defineVariale endc .
+
+    $default  reduce using rule 25 (stat)
+
+
+state 25
+
+   13 expr: INT .
+
+    $default  reduce using rule 13 (expr)
+
+
+state 26
+
+   14 expr: NUMBER .
+
+    $default  reduce using rule 14 (expr)
+
+
+state 27
+
+   10 expr: STRING .
+
+    $default  reduce using rule 10 (expr)
+
+
+state 28
+
+   12 expr: VALUE_BOOLEAN .
+
+    $default  reduce using rule 12 (expr)
+
+
+state 29
+
+   11 expr: VALUE_VOID .
+
+    $default  reduce using rule 11 (expr)
+
+
+state 30
+
+   16 defineIden: name .
+
+    $default  reduce using rule 16 (defineIden)
+
+
+state 31
+
+   17 assignment: defineIden ASSIGN expr .
+
+    $default  reduce using rule 17 (assignment)
+
+
+state 32
+
+   15 expr: defineIden .
+
+    $default  reduce using rule 15 (expr)
+
+
+state 33
 
     1 endls: endls . ENDL
     6 list: list endls .
 
-    ENDL  shift, and go to state 14
+    ENDL  shift, and go to state 16
 
     ENDL      [reduce using rule 6 (list)]
     $default  reduce using rule 6 (list)
 
 
-state 22
+state 34
 
-   11 paramListP: paramListP list defineParam .
+   27 defineType: name .
 
-    $default  reduce using rule 11 (paramListP)
+    $default  reduce using rule 27 (defineType)
+
+
+state 35
+
+   20 paramListP: paramListP list defineParam .
+
+    $default  reduce using rule 20 (paramListP)
+
+
+state 36
+
+   19 defineParam: defineType name ASSIGN . expr
+
+    NAME           shift, and go to state 1
+    INT            shift, and go to state 25
+    NUMBER         shift, and go to state 26
+    STRING         shift, and go to state 27
+    VALUE_BOOLEAN  shift, and go to state 28
+    VALUE_VOID     shift, and go to state 29
+
+    name        go to state 30
+    expr        go to state 37
+    defineIden  go to state 32
+
+
+state 37
+
+   19 defineParam: defineType name ASSIGN expr .
+
+    $default  reduce using rule 19 (defineParam)

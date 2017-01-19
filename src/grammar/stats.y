@@ -6,4 +6,5 @@ stats stat { $$ = concat($1, $2); }
 stat:
 endc { ; }
 | defineVariale endc { ; }
+| assignment endc { ; }
 ;

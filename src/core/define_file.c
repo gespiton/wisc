@@ -13,6 +13,7 @@ if (files_list == NULL)
 else file_push(files_list, nfile);
 // Set current working file
 current_file = nfile;
+current_space = current_file->main_space;
 // Init this file
 init_file();
 

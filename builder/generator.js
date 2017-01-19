@@ -87,19 +87,22 @@ function processStruct(type, struct, sourceDirection, step) {
                 var actionParam = actionList[j]['params'];
                 // Action define code
                 var actionDefine = `${returnType} ${type}_${j}(`;
-                for (var h in actionParam)
+                var active = false;
+                for (var h in actionParam) {
+                    active = true;
                     actionDefine += `${gt(actionParam[h])} ${h},`;
-                actionDefine = actionDefine.substring(0, actionDefine.length - 1);
+                }
+                if (active) actionDefine = actionDefine.substring(0, actionDefine.length - 1);
                 actionDefine += ')';
 
                 // Add to action define code
                 actionContext += actionDefine + ';\n';
                 // Add to action source code
                 sourceContext += `\n${actionDefine} ${processCode(fs.readFileSync(`${sourceDirection}/${type}/${j}.c`, 'utf8'), memberList, type)}`;
-            } else console.error(`${step}: ${type}: warning: missing action ${j}`);
+            } else console.error(`\x1b[33m${step}: ${type}: warning:\x1b[0m missing action ${j}`);
         }
         actionContext += '\n';
-    } else console.error(`${step}: warning: missing structure ${type}`);
+    } else console.error(`\x1b[33m${step}: warning:\x1b[0m missing structure ${type}`);
     return { structContext, actionContext, sourceContext }
 }
 

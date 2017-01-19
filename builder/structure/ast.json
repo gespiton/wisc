@@ -6,6 +6,7 @@
             "generate" : ["char", "\"\""],
 
             "structures" : ["structure", "NULL"],
+            "main_space" : ["space", "NULL"],
 
             "length" : ["int", "1"],
             "next" : ["file", "NULL"]
@@ -83,6 +84,84 @@
         }
     },
 
+    "space" : {
+        "struct" : {
+            "id" : ["int", "0"],
+            "parent" : ["space", "NULL"],
+            "children" : ["space", "NULL"],
+            "current_child" : ["space", "NULL"],
+
+            "defines" : ["var", "NULL"],
+            "variables" : ["var", "NULL"],
+
+            "length" : ["int", "1"],
+            "next" : ["space", "NULL"]
+        },
+        "action" : {
+            "create" : {
+                "return" : "space",
+                "params" : {}
+            },
+            "prev" : {
+                "return" : "void",
+                "params" : {}
+            },
+            "next" : {
+                "return" : "void",
+                "params" : {}
+            },
+            "add_var" : {
+                "return" : "int",
+                "params" : {
+                    "variable" : "var"
+                }
+            },
+            "search_var" : {
+                "return" : "var",
+                "params" : {
+                    "target" : "space",
+                    "name" : "char",
+                    "search_parent" : "int"
+                }
+            },
+            "search_define" : {
+                "return" : "var",
+                "params" : {
+                    "target" : "space",
+                    "name" : "char",
+                    "search_parent" : "int"
+                }
+            }
+        }
+    },
+
+    "var" : {
+        "struct" : {
+            "name" : ["char", "\"\""],
+            "gname" : ["char", "\"\""],
+            "type" : ["type", "NULL"],
+
+            "location" : ["location", "NULL"],
+            "length" : ["int", "1"],
+            "next" : ["var", "NULL"]
+        },
+        "action" : {
+            "create" : {
+                "return" : "var",
+                "params" : {
+                    "value" : "param"
+                }
+            },
+            "push" : {
+                "return" : "var",
+                "params" : {
+                    "root" : "var",
+                    "sub" : "var"
+                }
+            }
+        }
+    },
+
     "type" : {
         "struct" : {
             "name" : ["char", "\"\""],
@@ -109,10 +188,35 @@
         }
     },
 
+    "iden" : {
+        "struct" : {
+            "name" : ["char", "\"\""],
+            "type" : ["type", "NULL"],
+            "attach" : ["var", "NULL"],
+
+            "location" : ["location", "NULL"]
+        },
+        "action" : {
+            "create" : {
+                "return" : "iden",
+                "params" : {
+                    "name" : "string"
+                }
+            },
+            "name" : {
+                "return" : "char",
+                "params" : {
+                    "target" : "iden"
+                }
+            }
+        }
+    },
+
     "param" : {
         "struct" : {
             "name" : ["char", "\"\""],
             "type" : ["type", "NULL"],
+            "expr" : ["expr", "NULL"],
 
             "location" : ["location", "NULL"],
             "length" : ["int", "1"],
@@ -123,7 +227,8 @@
                 "return" : "param",
                 "params" : {
                     "name" : "string",
-                    "type" : "type"
+                    "type" : "type",
+                    "expr" : "expr"
                 }
             },
             "push" : {
@@ -134,5 +239,33 @@
                 }
             }
         }
+    },
+
+    "expr" : {
+        "struct" : {
+            "type" : ["type", "NULL"],
+            "value" : ["char", "\"\""],
+
+            "location" : ["location", "NULL"],
+            "length" : ["int", "1"],
+            "next" : ["expr", "NULL"]
+        },
+        "action" : {
+            "create" : {
+                "return" : "expr",
+                "params" : {
+                    "value" : "string",
+                    "type" : "type"
+                }
+            },
+            "push" : {
+                "return" : "expr",
+                "params" : {
+                    "root" : "expr",
+                    "sub" : "expr"
+                }
+            }
+        }
     }
+
 }

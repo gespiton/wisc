@@ -1,5 +1,6 @@
 defineParam:
-defineType name { $$ = param_create($2, $1); }
+defineType name { $$ = param_create($2, $1, NULL); }
+| defineType name ASSIGN expr { $$ = param_create($2, $1, $4); }
 ;
 
 paramListP:

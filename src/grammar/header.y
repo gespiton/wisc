@@ -1,6 +1,7 @@
 %{
     #include <stdio.h>
     #include <stdlib.h>
+    #include <string.h>
 
     #include "core.h"
 
@@ -12,20 +13,24 @@
 
     struct string* string;
     struct type* type;
+    struct iden* iden;
     struct param* param;
+    struct expr* expr;
 }
 
 %locations
 
-%token NAME ENDL
-%token SEMICOLON COLON
+%token NAME ENDL INT NUMBER STRING VALUE_BOOLEAN VALUE_VOID
+%token SEMICOLON COLON ASSIGN
 
-%type <sval> NAME
+%type <sval> NAME INT NUMBER STRING VALUE_BOOLEAN VALUE_VOID
 %type <sval> stats stat
 
 %type <string> name
 %type <type> defineType
+%type <iden> defineIden
 %type <param> defineParam paramListP
+%type <expr> expr
 
 %start program
 
