@@ -9,4 +9,4 @@ WiScript compiler. Write by C language
 
 ## Error code
 2. #100: Syntax error
-1. #101: Type '{type name}' not exist
+1. #101: Unknow type '{type name}'
