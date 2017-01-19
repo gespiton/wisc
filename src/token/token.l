@@ -27,9 +27,9 @@
 [0-9]+                      { return INT; }
 \+[0-9]+                    { yylval.sval = &yylval.sval[1]; return INT; }
 \-[0-9]+                    { return INT; }
-[0-9]\.[0-9]+               { return NUMBER; }
+[0-9]+\.[0-9]+               { return NUMBER; }
 \.[0-9]+                    { yylval.sval = concat("0", yytext); return NUMBER; }
-\-[0-9]\.[0-9]+             { return NUMBER; }
+\-[0-9]+\.[0-9]+             { return NUMBER; }
 \-\.[0-9]+                  { yylval.sval = concat("-0", &yylval.sval[1]); return NUMBER; }
 
 \"                          { BEGIN(STRINGQ); on_string = ""; }

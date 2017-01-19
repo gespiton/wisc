@@ -184,6 +184,13 @@
                     "root" : "type",
                     "sub" : "type"
                 }
+            },
+            "compare" : {
+                "return" : "int",
+                "params" : {
+                    "left" : "type",
+                    "right" : "type"
+                }
             }
         }
     },

@@ -1,2 +1,1 @@
-string demo = "Hello world"
-demo = "demo"
+string demo = 21
