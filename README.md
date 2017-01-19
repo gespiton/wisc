@@ -1,7 +1,7 @@
 # wisc
 WiScript compiler. Write by C language
 
-# Testing 1 [x]
+# - [x] Testing 1
 ## Purpose
 1. Parsing a single input file [x]
 2. Create and variable with available typing [x]
