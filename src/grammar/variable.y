@@ -13,7 +13,7 @@ paramListP {
                         output("", merge(6, "Create ", cp->name, " type ", cp->type->code, " value ", cp->expr->value), location_plus(cp->location, cp->expr->location));
                     else {
                         error(VAR_CANNOT_MATCH,
-                            merge(7, "Variable \x1b[35m'", cp->name, "'\x1b[0m type \x1b[35m'", cp->type->code, "'\x1b[0m cannot match with \x1b[35m'", cp->expr->type->code, "'\x1b[0m"),
+                            merge(6, "Variable ", token(cp->name), " type ", token(cp->type->code), " cannot match with ", token(cp->expr->type->code)),
                             cp->location);
                     }
                 } else output("", merge(4, "Create ", cp->name, " type ", cp->type->code), cp->location);

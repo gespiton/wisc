@@ -4,8 +4,8 @@ if (parsing_step > DEFINE) return 0;
 var* cvar = space_search_define(current_space, variable->name, 0);
 if (parsing_step == DEFINE) {
     if (cvar != NULL) {
-        error(VAR_ALREADY_EXIST, merge(3, "Variable \x1b[35m'", variable->name, "'\x1b[0m already exist"), variable->location);
-        note(merge(3, "Variable \x1b[35m'", variable->name, "'\x1b[0m was define here"), cvar->location);
+        error(VAR_ALREADY_EXIST, merge(3, "Variable ", token(variable->name), " already exist"), variable->location);
+        note(merge(3, "Variable ", token(cvar->name), " was define here"), cvar->location);
         return 0;
     } else {
         current_space->defines = var_push(current_space->defines, variable);

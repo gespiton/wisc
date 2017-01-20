@@ -11,6 +11,11 @@
         "type_number" : "\"number\"",
         "type_string" : "\"string\"",
 
+        "color_error" : "\"\\x1b[31m\"",
+        "color_note" : "\"\\x1b[36m\"",
+        "color_warning" : "\"\\x1b[33m\"",
+        "color_token" : "\"\\x1b[32m\"",
+
         "syntax_error" : 100,
         "unknown_type_error" : 101,
         "var_already_exist" : 102,
@@ -139,6 +144,12 @@
                 "type" : "char",
                 "msg" : "char",
                 "location" : "location"
+            }
+        },
+        "token" : {
+            "return" : "char",
+            "params" : {
+                "token" : "char"
             }
         },
         "yyerror" : {

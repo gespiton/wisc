@@ -1,1 +1,2 @@
-string demo = 21
+string demo
+demo = 210

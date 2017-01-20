@@ -1,9 +1,6 @@
-# wisc
-WiScript compiler. Write by C language
+# Schedule
 
-# Testing
-
-## Testing 1 (1/19/17)
+## Schedule 1 (1/19/17)
 #### Purpose
 - [x] Parsing a single input file
 - [x] Create and variable with available typing
@@ -13,7 +10,7 @@ WiScript compiler. Write by C language
 - [x] #100: Syntax error
 - [x] #101: Unknown type '{type name}'
 
-## Testing 2 (1/20/17)
+## Schedule 2 (1/20/17)
 #### Purpose
 - [x] Call created variable
 - [x] Expression void
@@ -33,3 +30,20 @@ WiScript compiler. Write by C language
 - [x] #102: Variable '{variable name}' already exist
 - [x] #103: Variable '{variable name}' type '{variable type name}' cannot match with '{type name}'
 - [x] #104: Unknown identifier '{variable name}'
+
+## Schedule 3
+#### Purpose
+- [ ] Special type system
+- [ ] Define multiple function
+- [ ] Calling function
+- [ ] Function return
+- [ ] Define function type
+- [ ] Function expression
+- [ ] Calling function as expression
+
+#### Error code
+- [ ] #105: Function '{variable name}' already define by type '{type name}', cannot match with '{variable name}'
+- [ ] #106: Same function param with '{variable name}' already exist
+
+#### Warning code
+- [ ] #100: Function '{variable name}' define by type '{type name}' don't have return value
