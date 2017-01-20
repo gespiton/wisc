@@ -21,7 +21,7 @@
 }
 
 %token NAME ENDL INT NUMBER STRING VALUE_BOOLEAN VALUE_VOID
-%token SEMICOLON COLON ASSIGN RPAREN LPAREN RBRACE LBRACE
+%token SEMICOLON COLON ASSIGN RPAREN LPAREN RBRACE LBRACE COMMA
 
 %type <sval> NAME INT NUMBER STRING VALUE_BOOLEAN VALUE_VOID
 %type <sval> stats stat
@@ -29,7 +29,7 @@
 %type <func> funcHeaderV
 
 %type <string> name
-%type <type> defineType typeListP typeList
+%type <type> defineType typeListP typeList funcType
 %type <iden> defineIden
 %type <param> defineParam paramListP paramList
 %type <expr> expr
@@ -49,7 +49,7 @@ SEMICOLON { ; }
 ;
 
 list:
-COLON { ; }
+COMMA { ; }
 | list endls { ; }
 ;
 

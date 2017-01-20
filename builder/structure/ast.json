@@ -206,6 +206,12 @@
                 "params" : {
                     "tlist" : "type"
                 }
+            },
+            "string" : {
+                "return" : "char",
+                "params" : {
+                    "tlist" : "type"
+                }
             }
         }
     },
@@ -258,6 +264,12 @@
                 "params" : {
                     "root" : "param",
                     "sub" : "param"
+                }
+            },
+            "to_type" : {
+                "return" : "type",
+                "params" : {
+                    "plist" : "param"
                 }
             }
         }

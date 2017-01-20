@@ -1,5 +1,6 @@
 defineType:
 name { $$ = type_create($1, stype_blank()); }
+| funcType { $$ = $1; }
 ;
 
 typeListP:

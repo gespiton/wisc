@@ -1,7 +1,7 @@
-if (params_list == NULL) return NULL;
+if (plist == NULL) return NULL;
 
-param* cp = params_list;
+param* cp = plist;
 type* ntype = NULL;
-for (; cp != NULL; cp = cp->next) {
-    
-}
+for (; cp != NULL; cp = cp->next)
+    ntype = type_push(ntype, type_new(cp->type));
+return ntype;

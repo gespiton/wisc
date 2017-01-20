@@ -34,3 +34,11 @@ RPAREN paramList LPAREN {
         $$->location = current_location;
 }
 ;
+
+funcType:
+defineType RPAREN typeList LPAREN {
+    $$ = func_type(func_create($1, type_to_param($3)));
+    if ($$ != NULL)
+        $$->location = location_plus($1->location, current_location);
+}
+;

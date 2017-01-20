@@ -15,7 +15,8 @@
 %%
 
 ";"                         { return SEMICOLON; }
-","                         { return COLON; }
+":"                         { return COLON; }
+","                         { return COMMA; }
 "="                         { return ASSIGN; }
 "("                         { return RPAREN; }
 ")"                         { return LPAREN; }

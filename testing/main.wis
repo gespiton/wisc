@@ -1,11 +1,3 @@
-string hello = "Hello world"
-
-string myFunc(number de, string h) {
-    string hello = "asds"
-}
-
-hello = "asdf"
-
-number de() {
+string(number, string) hello(string demo) {
 
 }

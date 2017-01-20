@@ -7,7 +7,7 @@
 - [ ] Define multiple function
 - [ ] Calling function
 - [ ] Function return
-- [ ] Define function type
+- [x] Define function type
 - [ ] Function expression
 - [ ] Calling function as expression
 
