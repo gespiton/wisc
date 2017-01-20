@@ -1,5 +1,11 @@
 all:
-	${MAKE} clean ${MAKE} build && ${MAKE} clean || ${MAKE} clean
+	${MAKE} clean && ${MAKE} build && ${MAKE} clean || ${MAKE} clean
+
+debug:
+	${MAKE} clean && ${MAKE} build
+
+gcc:
+	gcc ./build/*.c -o ./bin/wisc && ${MAKE} run || :
 
 build:
 	${MAKE} clean
@@ -24,7 +30,7 @@ build:
 	${MAKE} run
 
 run:
-	./bin/wisc testing/test2/main
+	./bin/wisc testing/main
 
 clean:
 	rm -fr build || :

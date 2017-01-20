@@ -1,5 +1,5 @@
 {
-    "include" : ["ast"],
+    "include" : ["ast", "stype"],
     "define" : {
         "type" : 102,
         "define" : 101,
@@ -10,6 +10,7 @@
         "type_int" : "\"int\"",
         "type_number" : "\"number\"",
         "type_string" : "\"string\"",
+        "type_function" : "\"function\"",
 
         "color_error" : "\"\\x1b[31m\"",
         "color_note" : "\"\\x1b[36m\"",
@@ -20,7 +21,11 @@
         "unknown_type_error" : 101,
         "var_already_exist" : 102,
         "var_cannot_match" : 103,
-        "unknown_iden" : 104
+        "unknown_iden" : 104,
+
+        "func_type_not_match" : 105,
+        "same_func_param_already_exist" : 106,
+        "define_func_type_failed" : 107
     },
     "params" : {
         "main_path" : ["char", "\"\""],
@@ -31,7 +36,7 @@
         "current_space" : ["space", "NULL"],
         "current_location" : ["location", "NULL"],
 
-        "parsing_step" : ["int", "2"],
+        "parsing_step" : ["int", "TYPE"],
 
         "line_number" : ["int", "1"],
         "col_number" : ["int", "1"],

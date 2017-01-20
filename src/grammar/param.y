@@ -7,3 +7,7 @@ paramListP:
 paramListP list defineParam { $$ = param_push($1, $3); }
 | defineParam { $$ = $1; }
 ;
+
+paramList: { $$ = NULL; }
+| paramListP { $$ = $1; }
+;

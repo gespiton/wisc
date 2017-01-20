@@ -2,7 +2,8 @@
 
 ## Schedule 3
 #### Purpose
-- [ ] Special type system
+- [x] Special type system
+- [x] Function special type
 - [ ] Define multiple function
 - [ ] Calling function
 - [ ] Function return
@@ -13,6 +14,7 @@
 #### Error code
 - [ ] #105: Function '{variable name}' already define by type '{type name}', cannot match with '{variable name}'
 - [ ] #106: Same function param with '{variable name}' already exist
+- [x] #107: Cannot define a variable function type like this
 
 #### Warning code
 - [ ] #100: Function '{variable name}' define by type '{type name}' don't have return value

@@ -11,6 +11,8 @@
 %union {
     char* sval;
 
+    struct func* func;
+
     struct string* string;
     struct type* type;
     struct iden* iden;
@@ -18,18 +20,18 @@
     struct expr* expr;
 }
 
-%locations
-
 %token NAME ENDL INT NUMBER STRING VALUE_BOOLEAN VALUE_VOID
-%token SEMICOLON COLON ASSIGN
+%token SEMICOLON COLON ASSIGN RPAREN LPAREN RBRACE LBRACE
 
 %type <sval> NAME INT NUMBER STRING VALUE_BOOLEAN VALUE_VOID
 %type <sval> stats stat
 
+%type <func> funcHeaderV
+
 %type <string> name
-%type <type> defineType
+%type <type> defineType typeListP typeList
 %type <iden> defineIden
-%type <param> defineParam paramListP
+%type <param> defineParam paramListP paramList
 %type <expr> expr
 
 %start program

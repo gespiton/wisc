@@ -8,9 +8,7 @@ if (!scriptFile) {
 
 // Create new file
 file* nfile = file_create(waiting_file->name);
-if (files_list == NULL)
-    files_list = nfile;
-else file_push(files_list, nfile);
+files_list = file_push(files_list, nfile);
 // Set current working file
 current_file = nfile;
 current_space = current_file->main_space;
@@ -28,6 +26,7 @@ waiting_file = waiting_file->next;
 do {
     yyparse();
 } while(!feof(yyin));
+current_space->current_child = current_space->children;
 
 // Continue define if there are more waiting file
 if (waiting_file != NULL) define_file();

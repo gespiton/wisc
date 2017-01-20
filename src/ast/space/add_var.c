@@ -1,4 +1,5 @@
 if (parsing_step > DEFINE) return 0;
+if (variable == NULL) return 0;
 
 // Search if variable name already exists
 var* cvar = space_search_define(current_space, variable->name, 0);

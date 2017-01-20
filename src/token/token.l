@@ -17,6 +17,10 @@
 ";"                         { return SEMICOLON; }
 ","                         { return COLON; }
 "="                         { return ASSIGN; }
+"("                         { return RPAREN; }
+")"                         { return LPAREN; }
+"{"                         { return RBRACE; }
+"}"                         { return LBRACE; }
 
 "true"                      { return VALUE_BOOLEAN; }
 "false"                     { return VALUE_BOOLEAN; }

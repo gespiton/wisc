@@ -15,5 +15,6 @@ col_number = 1;
 do {
     yyparse();
 } while( !feof(yyin) );
+current_space->current_child = current_space->children;
 
 if (cfile->next != NULL) parse_file(cfile);

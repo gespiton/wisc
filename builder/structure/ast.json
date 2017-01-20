@@ -167,6 +167,8 @@
             "name" : ["char", "\"\""],
             "code" : ["char", "\"\""],
 
+            "stype" : ["stype", "NULL"],
+
             "location" : ["location", "NULL"],
             "length" : ["int", "1"],
             "next" : ["type", "NULL"]
@@ -175,7 +177,8 @@
             "create" : {
                 "return" : "type",
                 "params" : {
-                    "name" : "string"
+                    "name" : "string",
+                    "stype" : "struct stype"
                 }
             },
             "push" : {
@@ -190,6 +193,18 @@
                 "params" : {
                     "left" : "type",
                     "right" : "type"
+                }
+            },
+            "new" : {
+                "return" : "type",
+                "params" : {
+                    "otype" : "type"
+                }
+            },
+            "to_param" : {
+                "return" : "param",
+                "params" : {
+                    "tlist" : "type"
                 }
             }
         }

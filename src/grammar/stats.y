@@ -5,6 +5,7 @@ stats stat { $$ = concat($1, $2); }
 
 stat:
 endc { ; }
+| defineFunc endc { ; }
 | defineVariale endc { ; }
 | assignment endc { ; }
 ;

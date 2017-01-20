@@ -1,0 +1,29 @@
+{
+    "func" : {
+        "struct" : {
+            "return_type" : ["type", "NULL"],
+            "params_list" : ["param", "NULL"],
+
+            "have_return" : ["int", "0"],
+
+            "location" : ["location", "NULL"],
+            "length" : ["int", "1"],
+            "next" : ["func", "NULL"]
+        },
+        "action" : {
+            "create" : {
+                "return" : "func",
+                "params" : {
+                    "return_type" : "type",
+                    "params_list" : "param"
+                }
+            },
+            "type" : {
+                "return" : "type",
+                "params" : {
+                    "func_header" : "func"
+                }
+            }
+        }
+    }
+}
