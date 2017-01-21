@@ -11,6 +11,8 @@
 %union {
     char* sval;
 
+    struct location* location;
+
     struct func* func;
 
     struct string* string;
@@ -22,17 +24,20 @@
 
 %token NAME ENDL INT NUMBER STRING VALUE_BOOLEAN VALUE_VOID
 %token SEMICOLON COLON ASSIGN RPAREN LPAREN RBRACE LBRACE COMMA
+%token RETURN
 
 %type <sval> NAME INT NUMBER STRING VALUE_BOOLEAN VALUE_VOID
 %type <sval> stats stat
+
+%type <location> RETURN
 
 %type <func> funcHeaderV
 
 %type <string> name
 %type <type> defineType typeListP typeList funcType
-%type <iden> defineIden
+%type <iden> defineIden idenFunc
 %type <param> defineParam paramListP paramList
-%type <expr> expr
+%type <expr> expr exprList
 
 %start program
 
@@ -55,6 +60,6 @@ COMMA { ; }
 
 name: NAME { $$ = string_create($1); }
 
-program: { if (parsing_step == STAT) current_file->generate = ""; }
-| stats { if (parsing_step == STAT) current_file->generate = $1; }
+program: { ; }
+| space { ; }
 ;

@@ -1,5 +1,5 @@
 {
-    "include" : ["ast", "stype"],
+    "include" : ["ast", "stype", "stats"],
     "define" : {
         "type" : 102,
         "define" : 101,
@@ -16,6 +16,7 @@
         "color_note" : "\"\\x1b[36m\"",
         "color_warning" : "\"\\x1b[33m\"",
         "color_token" : "\"\\x1b[32m\"",
+        "color_debug" : "\"\\x1b[35m\"",
 
         "syntax_error" : 100,
         "unknown_type_error" : 101,
@@ -25,11 +26,19 @@
 
         "func_type_not_match" : 105,
         "same_func_param_already_exist" : 106,
-        "define_func_type_failed" : 107
+        "define_func_type_failed" : 107,
+        "return_not_allow_here" : 108,
+        "return_not_match" : 109,
+        "invalid_left_hand" : 110,
+        "isnt_function" : 111,
+        "calling_func_failed" : 112
     },
     "params" : {
         "main_path" : ["char", "\"\""],
         "waiting_file" : ["list", "NULL"],
+
+        "option_debug" : ["int", "0"],
+        "option_step" : ["int", "0"],
 
         "files_list" : ["file", "NULL"],
         "current_file" : ["file", "NULL"],
@@ -171,7 +180,21 @@
                 "location" : "location"
             }
         },
+        "warning" : {
+            "return" : "int",
+            "params" : {
+                "msg" : "char",
+                "location" : "location"
+            }
+        },
         "note" : {
+            "return" : "int",
+            "params" : {
+                "msg" : "char",
+                "location" : "location"
+            }
+        },
+        "debug" : {
             "return" : "int",
             "params" : {
                 "msg" : "char",

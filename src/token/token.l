@@ -23,6 +23,8 @@
 "{"                         { return RBRACE; }
 "}"                         { return LBRACE; }
 
+"return"                    { yylval.location = current_location; return RETURN; }
+
 "true"                      { return VALUE_BOOLEAN; }
 "false"                     { return VALUE_BOOLEAN; }
 "undefined"                 { return VALUE_VOID; }

@@ -1,25 +1,34 @@
 defineFunc:
 defineType name funcHeaderV {
     if (parsing_step == DEFINE) {
-        // Check if name already exist
-        var* svar = space_search_define(current_space, $2->name, 0);
-        if (svar == NULL) {
-            space_add_var(
-                var_create(
-                    param_create(
-                        string_create($2->name),
-                        func_type($3),
-                        NULL) ));
-            space_create();
-        } else {
-            space_add_var(svar);
+        int lock = 0;
+        if ($1 != NULL && $3 != NULL) {
+            $3->return_type = $1;
+            if (strcmp($3->return_type->code, TYPE_VOID) == 0) $3->have_return = 1;
+            else $3->have_return = 0;
+            var* nvar = var_create(param_create($2, func_type($3), NULL));
+            nvar->location = location_plus($1->location, $3->location);
+            if (!space_add_var(nvar)) lock = 1;
+        } else lock = 1;
+        space_create();
+        current_space->lock = lock;
+        current_space->func = $3;
+        $3->location = location_plus($1->location, $3->location);
+        if (!lock) {
+            // Add variable params
+            param* cp = $3->params_list;
+            for (; cp != NULL; cp = cp->next) {
+                var* nvar = var_create(cp);
+                space_add_var(nvar);
+            }
         }
     } else if (parsing_step == STAT) {
         space_next();
-        output("", merge(4, "Define function ", $2->name, " type ", $1->code), location_plus($1->location, $3->location));
     }
 } subSpace {
     if (parsing_step < TYPE) {
+        if (parsing_step == STAT && current_space->func != NULL && !current_space->func->have_return)
+            warning(merge(3, "Function ", token($2->name), " is non-void"), location_plus($1->location, $3->location));
         space_end();
     }
 }
@@ -36,8 +45,8 @@ RPAREN paramList LPAREN {
 ;
 
 funcType:
-defineType RPAREN typeList LPAREN {
-    $$ = func_type(func_create($1, type_to_param($3)));
+defineType COLON RPAREN typeList LPAREN {
+    $$ = func_type(func_create($1, type_to_param($4)));
     if ($$ != NULL)
         $$->location = location_plus($1->location, current_location);
 }

@@ -1,0 +1,10 @@
+{
+    "assignment" : {
+        "iden" : "iden",
+        "expr" : "expr"
+    },
+    "return" : {
+        "location" : "struct location",
+        "expr" : "expr"
+    }
+}

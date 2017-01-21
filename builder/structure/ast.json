@@ -90,9 +90,13 @@
             "parent" : ["space", "NULL"],
             "children" : ["space", "NULL"],
             "current_child" : ["space", "NULL"],
+            "generate" : ["char", "\"\""],
 
-            "defines" : ["var", "NULL"],
+            "func" : ["func", "NULL"],
+
             "variables" : ["var", "NULL"],
+
+            "lock" : ["int", "0"],
 
             "length" : ["int", "1"],
             "next" : ["space", "NULL"]
@@ -117,14 +121,6 @@
                 }
             },
             "search_var" : {
-                "return" : "var",
-                "params" : {
-                    "target" : "space",
-                    "name" : "char",
-                    "search_parent" : "int"
-                }
-            },
-            "search_define" : {
                 "return" : "var",
                 "params" : {
                     "target" : "space",
@@ -157,6 +153,12 @@
                 "params" : {
                     "root" : "var",
                     "sub" : "var"
+                }
+            },
+            "new" : {
+                "return" : "var",
+                "params" : {
+                    "ovar" : "var"
                 }
             }
         }
@@ -195,6 +197,13 @@
                     "right" : "type"
                 }
             },
+            "compare_list" : {
+                "return" : "int",
+                "params" : {
+                    "tlist1" : "type",
+                    "tlist2" : "type"
+                }
+            },
             "new" : {
                 "return" : "type",
                 "params" : {
@@ -219,6 +228,7 @@
     "iden" : {
         "struct" : {
             "name" : ["char", "\"\""],
+            "gname" : ["char", "\"\""],
             "type" : ["type", "NULL"],
             "attach" : ["var", "NULL"],
 
@@ -235,6 +245,20 @@
                 "return" : "char",
                 "params" : {
                     "target" : "iden"
+                }
+            },
+            "gname" : {
+                "return" : "char",
+                "params" : {
+                    "target" : "iden"
+                }
+            },
+            "func" : {
+                "return" : "iden",
+                "params" : {
+                    "target" : "iden",
+                    "params" : "expr",
+                    "location" : "struct location"
                 }
             }
         }
@@ -279,6 +303,7 @@
         "struct" : {
             "type" : ["type", "NULL"],
             "value" : ["char", "\"\""],
+            "name" : ["char", "\"\""],
 
             "location" : ["location", "NULL"],
             "length" : ["int", "1"],
@@ -297,6 +322,24 @@
                 "params" : {
                     "root" : "expr",
                     "sub" : "expr"
+                }
+            },
+            "string" : {
+                "return" : "char",
+                "params" : {
+                    "elist" : "expr"
+                }
+            },
+            "name" : {
+                "return" : "char",
+                "params" : {
+                    "elist" : "expr"
+                }
+            },
+            "to_type" : {
+                "return" : "type",
+                "params" : {
+                    "tlist" : "expr"
                 }
             }
         }

@@ -1,8 +1,9 @@
 var* cvar = target->variables;
+var* rvar = NULL;
 for (; cvar != NULL; cvar = cvar->next)
     if (strcmp(cvar->name, name) == 0)
-        return cvar;
+        rvar = var_push(rvar, var_new(cvar));
 
-if (cvar == NULL && search_parent && target->parent != NULL)
+if (rvar == NULL && search_parent && target->parent != NULL)
     return space_search_var(target->parent, name, 1);
-else return NULL;
+else return rvar;

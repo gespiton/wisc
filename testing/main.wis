@@ -1,3 +1,17 @@
-string(number, string) hello(string demo) {
+void demo() {
+    string h
+    string demo() {
+        return undefined
+    }
 
+    string demo(string de) {
+        return undefined
+    }
+
+    string demo(number i) {
+        return "false"
+    }
+
+
+    demo(true)
 }

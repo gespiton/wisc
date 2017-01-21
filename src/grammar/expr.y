@@ -32,8 +32,14 @@ STRING {
 
 | defineIden {
     if ($1 != NULL && parsing_step == STAT) {
-        $$ = expr_create(string_create(iden_name($1)), $1->type);
+        $$ = expr_create(string_create(iden_gname($1)), $1->type);
         $$->location = $1->location;
+        $$->name = iden_gname($1);
     } else $$ = NULL;
 }
+;
+
+exprList: { $$ = NULL; }
+| exprList list expr { $$ = expr_push($1, $3); }
+| expr { $$ = $1; }
 ;

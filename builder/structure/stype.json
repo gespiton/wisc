@@ -23,6 +23,20 @@
                 "params" : {
                     "func_header" : "func"
                 }
+            },
+            "compare" : {
+                "return" : "int",
+                "params" : {
+                    "func1" : "func",
+                    "func2" : "func"
+                }
+            },
+            "push" : {
+                "return" : "func",
+                "params" : {
+                    "root" : "func",
+                    "sub" : "func"
+                }
             }
         }
     }

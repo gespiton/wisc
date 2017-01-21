@@ -4,20 +4,24 @@
 #### Purpose
 - [x] Special type system
 - [x] Function special type
-- [ ] Define multiple function
-- [ ] Calling function
-- [ ] Function return
+- [x] Define function
+- [x] Function params
+- [x] Define multiple function
+- [x] Calling multiple function
+- [x] Function return
 - [x] Define function type
 - [ ] Function expression
-- [ ] Calling function as expression
+- [x] Calling function as expression
 
 #### Error code
-- [ ] #105: Function '{variable name}' already define by type '{type name}', cannot match with '{variable name}'
-- [ ] #106: Same function param with '{variable name}' already exist
+- [x] #105: Function '{variable name}' already define by type '{type name}', cannot match with '{variable name}'
+- [x] #106: Same function param with '{variable name}' already exist
 - [x] #107: Cannot define a variable function type like this
-
-#### Warning code
-- [ ] #100: Function '{variable name}' define by type '{type name}' don't have return value
+- [x] #108: Return not allow here
+- [x] #109: Current function was define by type '{type name}' cannot return value type '{type name}'
+- [x] #110: Invalid left-hand side in assignment
+- [x] #111: '{variable name}' is not a function
+- [x] #112: Calling function failed, passing params does not match with any '{function name}'
 
 ## Schedule 2 (1/20/17)
 #### Purpose

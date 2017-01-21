@@ -1,10 +1,7 @@
-Terminals which are not used
-
-   COLON
-
-
 State 4 conflicts: 1 shift/reduce
-State 37 conflicts: 1 shift/reduce
+State 13 conflicts: 4 shift/reduce
+State 23 conflicts: 6 reduce/reduce
+State 35 conflicts: 1 shift/reduce
 
 
 Grammar
@@ -23,7 +20,7 @@ Grammar
     7 name: NAME
 
     8 program: /* empty */
-    9        | stats
+    9        | space
 
    10 expr: STRING
    11     | VALUE_VOID
@@ -32,47 +29,67 @@ Grammar
    14     | NUMBER
    15     | defineIden
 
-   16 @1: /* empty */
+   16 exprList: /* empty */
+   17         | exprList list expr
+   18         | expr
 
-   17 defineFunc: defineType name funcHeaderV @1 subSpace
+   19 @1: /* empty */
 
-   18 funcHeaderV: RPAREN paramList LPAREN
+   20 defineFunc: defineType name funcHeaderV @1 subSpace
 
-   19 funcType: defineType RPAREN typeList LPAREN
+   21 funcHeaderV: RPAREN paramList LPAREN
 
-   20 defineIden: name
+   22 funcType: defineType COLON RPAREN typeList LPAREN
 
-   21 assignment: defineIden ASSIGN expr
+   23 defineIden: name
+   24           | idenFunc
 
-   22 defineParam: defineType name
-   23            | defineType name ASSIGN expr
+   25 idenFunc: defineIden RPAREN exprList LPAREN
 
-   24 paramListP: paramListP list defineParam
-   25           | defineParam
+   26 assignment: defineIden ASSIGN expr
 
-   26 paramList: /* empty */
-   27          | paramListP
+   27 defineParam: defineType name
+   28            | defineType name ASSIGN expr
 
-   28 subSpace: RBRACE stats LBRACE
+   29 paramListP: paramListP list defineParam
+   30           | defineParam
 
-   29 stats: stats stat
-   30      | stat
+   31 paramList: /* empty */
+   32          | paramListP
 
-   31 stat: endc
-   32     | defineFunc endc
-   33     | defineVariale endc
-   34     | assignment endc
+   33 subSpace: RBRACE space LBRACE
 
-   35 defineType: name
-   36           | funcType
+   34 space: defineStats stats
 
-   37 typeListP: typeListP list defineType
-   38          | defineType
+   35 controlSpace: RETURN expr
+   36             | RETURN
 
-   39 typeList: /* empty */
-   40         | typeListP
+   37 stats: /* empty */
+   38      | stats stat
+   39      | stat
 
-   41 defineVariale: paramListP
+   40 stat: endc
+   41     | assignment endc
+   42     | controlSpace endc
+   43     | idenFunc endc
+
+   44 defineStats: defineStats defineStat
+   45            | defineStat
+
+   46 defineStat: endc
+   47           | defineFunc endc
+   48           | defineVariale endc
+
+   49 defineType: name
+   50           | funcType
+
+   51 typeListP: typeListP list defineType
+   52          | defineType
+
+   53 typeList: /* empty */
+   54         | typeListP
+
+   55 defineVariale: paramListP
 
 
 Terminals, with rules where they appear
@@ -87,63 +104,76 @@ STRING (262) 10
 VALUE_BOOLEAN (263) 12
 VALUE_VOID (264) 11
 SEMICOLON (265) 3
-COLON (266)
-ASSIGN (267) 21 23
-RPAREN (268) 18 19
-LPAREN (269) 18 19
-RBRACE (270) 28
-LBRACE (271) 28
+COLON (266) 22
+ASSIGN (267) 26 28
+RPAREN (268) 21 22 25
+LPAREN (269) 21 22 25
+RBRACE (270) 33
+LBRACE (271) 33
 COMMA (272) 5
+RETURN (273) 35 36
 
 
 Nonterminals, with rules where they appear
 
-$accept (18)
+$accept (19)
     on left: 0
-endls (19)
+endls (20)
     on left: 1 2, on right: 1 4 6
-endc (20)
-    on left: 3 4, on right: 31 32 33 34
-list (21)
-    on left: 5 6, on right: 6 24 37
-name (22)
-    on left: 7, on right: 17 20 22 23 35
-program (23)
+endc (21)
+    on left: 3 4, on right: 40 41 42 43 46 47 48
+list (22)
+    on left: 5 6, on right: 6 17 29 51
+name (23)
+    on left: 7, on right: 20 23 27 28 49
+program (24)
     on left: 8 9, on right: 0
-expr (24)
-    on left: 10 11 12 13 14 15, on right: 21 23
-defineFunc (25)
-    on left: 17, on right: 32
-@1 (26)
-    on left: 16, on right: 17
-funcHeaderV (27)
-    on left: 18, on right: 17
-funcType (28)
-    on left: 19, on right: 36
-defineIden (29)
-    on left: 20, on right: 15 21
-assignment (30)
-    on left: 21, on right: 34
-defineParam (31)
-    on left: 22 23, on right: 24 25
-paramListP (32)
-    on left: 24 25, on right: 24 27 41
-paramList (33)
-    on left: 26 27, on right: 18
-subSpace (34)
-    on left: 28, on right: 17
-stats (35)
-    on left: 29 30, on right: 9 28 29
-stat (36)
-    on left: 31 32 33 34, on right: 29 30
-defineType (37)
-    on left: 35 36, on right: 17 19 22 23 37 38
-typeListP (38)
-    on left: 37 38, on right: 37 40
-typeList (39)
-    on left: 39 40, on right: 19
-defineVariale (40)
-    on left: 41, on right: 33
+expr (25)
+    on left: 10 11 12 13 14 15, on right: 17 18 26 28 35
+exprList (26)
+    on left: 16 17 18, on right: 17 25
+defineFunc (27)
+    on left: 20, on right: 47
+@1 (28)
+    on left: 19, on right: 20
+funcHeaderV (29)
+    on left: 21, on right: 20
+funcType (30)
+    on left: 22, on right: 50
+defineIden (31)
+    on left: 23 24, on right: 15 25 26
+idenFunc (32)
+    on left: 25, on right: 24 43
+assignment (33)
+    on left: 26, on right: 41
+defineParam (34)
+    on left: 27 28, on right: 29 30
+paramListP (35)
+    on left: 29 30, on right: 29 32 55
+paramList (36)
+    on left: 31 32, on right: 21
+subSpace (37)
+    on left: 33, on right: 20
+space (38)
+    on left: 34, on right: 9 33
+controlSpace (39)
+    on left: 35 36, on right: 42
+stats (40)
+    on left: 37 38 39, on right: 34 38
+stat (41)
+    on left: 40 41 42 43, on right: 38 39
+defineStats (42)
+    on left: 44 45, on right: 34 44
+defineStat (43)
+    on left: 46 47 48, on right: 44 45
+defineType (44)
+    on left: 49 50, on right: 20 22 27 28 51 52
+typeListP (45)
+    on left: 51 52, on right: 51 54
+typeList (46)
+    on left: 53 54, on right: 22
+defineVariale (47)
+    on left: 55, on right: 48
 
 
 state 0
@@ -162,14 +192,13 @@ state 0
     program        go to state 7
     defineFunc     go to state 8
     funcType       go to state 9
-    defineIden     go to state 10
-    assignment     go to state 11
-    defineParam    go to state 12
-    paramListP     go to state 13
-    stats          go to state 14
-    stat           go to state 15
-    defineType     go to state 16
-    defineVariale  go to state 17
+    defineParam    go to state 10
+    paramListP     go to state 11
+    space          go to state 12
+    defineStats    go to state 13
+    defineStat     go to state 14
+    defineType     go to state 15
+    defineVariale  go to state 16
 
 
 state 1
@@ -198,7 +227,7 @@ state 4
     1 endls: endls . ENDL
     4 endc: endls .
 
-    ENDL  shift, and go to state 18
+    ENDL  shift, and go to state 17
 
     ENDL      [reduce using rule 4 (endc)]
     $default  reduce using rule 4 (endc)
@@ -206,549 +235,770 @@ state 4
 
 state 5
 
-   31 stat: endc .
+   46 defineStat: endc .
 
-    $default  reduce using rule 31 (stat)
+    $default  reduce using rule 46 (defineStat)
 
 
 state 6
 
-   20 defineIden: name .
-   35 defineType: name .
+   49 defineType: name .
 
-    ASSIGN    reduce using rule 20 (defineIden)
-    $default  reduce using rule 35 (defineType)
+    $default  reduce using rule 49 (defineType)
 
 
 state 7
 
     0 $accept: program . $end
 
-    $end  shift, and go to state 19
+    $end  shift, and go to state 18
 
 
 state 8
 
-   32 stat: defineFunc . endc
+   47 defineStat: defineFunc . endc
 
     ENDL       shift, and go to state 2
     SEMICOLON  shift, and go to state 3
 
     endls  go to state 4
-    endc   go to state 20
+    endc   go to state 19
 
 
 state 9
 
-   36 defineType: funcType .
+   50 defineType: funcType .
 
-    $default  reduce using rule 36 (defineType)
+    $default  reduce using rule 50 (defineType)
 
 
 state 10
 
-   21 assignment: defineIden . ASSIGN expr
+   30 paramListP: defineParam .
 
-    ASSIGN  shift, and go to state 21
+    $default  reduce using rule 30 (paramListP)
 
 
 state 11
 
-   34 stat: assignment . endc
+   29 paramListP: paramListP . list defineParam
+   55 defineVariale: paramListP .
 
-    ENDL       shift, and go to state 2
-    SEMICOLON  shift, and go to state 3
+    COMMA  shift, and go to state 20
 
-    endls  go to state 4
-    endc   go to state 22
+    $default  reduce using rule 55 (defineVariale)
+
+    list  go to state 21
 
 
 state 12
 
-   25 paramListP: defineParam .
+    9 program: space .
 
-    $default  reduce using rule 25 (paramListP)
+    $default  reduce using rule 9 (program)
 
 
 state 13
 
-   24 paramListP: paramListP . list defineParam
-   41 defineVariale: paramListP .
-
-    COMMA  shift, and go to state 23
-
-    $default  reduce using rule 41 (defineVariale)
-
-    list  go to state 24
-
-
-state 14
-
-    9 program: stats .
-   29 stats: stats . stat
+   34 space: defineStats . stats
+   44 defineStats: defineStats . defineStat
 
     NAME       shift, and go to state 1
     ENDL       shift, and go to state 2
     SEMICOLON  shift, and go to state 3
+    RETURN     shift, and go to state 22
 
-    $default  reduce using rule 9 (program)
+    NAME       [reduce using rule 37 (stats)]
+    ENDL       [reduce using rule 37 (stats)]
+    SEMICOLON  [reduce using rule 37 (stats)]
+    RETURN     [reduce using rule 37 (stats)]
+    $default   reduce using rule 37 (stats)
 
     endls          go to state 4
-    endc           go to state 5
-    name           go to state 6
+    endc           go to state 23
+    name           go to state 24
     defineFunc     go to state 8
     funcType       go to state 9
-    defineIden     go to state 10
-    assignment     go to state 11
-    defineParam    go to state 12
-    paramListP     go to state 13
-    stat           go to state 25
-    defineType     go to state 16
-    defineVariale  go to state 17
+    defineIden     go to state 25
+    idenFunc       go to state 26
+    assignment     go to state 27
+    defineParam    go to state 10
+    paramListP     go to state 11
+    controlSpace   go to state 28
+    stats          go to state 29
+    stat           go to state 30
+    defineStat     go to state 31
+    defineType     go to state 15
+    defineVariale  go to state 16
+
+
+state 14
+
+   45 defineStats: defineStat .
+
+    $default  reduce using rule 45 (defineStats)
 
 
 state 15
 
-   30 stats: stat .
+   20 defineFunc: defineType . name funcHeaderV @1 subSpace
+   22 funcType: defineType . COLON RPAREN typeList LPAREN
+   27 defineParam: defineType . name
+   28            | defineType . name ASSIGN expr
 
-    $default  reduce using rule 30 (stats)
+    NAME   shift, and go to state 1
+    COLON  shift, and go to state 32
+
+    name  go to state 33
 
 
 state 16
 
-   17 defineFunc: defineType . name funcHeaderV @1 subSpace
-   19 funcType: defineType . RPAREN typeList LPAREN
-   22 defineParam: defineType . name
-   23            | defineType . name ASSIGN expr
-
-    NAME    shift, and go to state 1
-    RPAREN  shift, and go to state 26
-
-    name  go to state 27
-
-
-state 17
-
-   33 stat: defineVariale . endc
+   48 defineStat: defineVariale . endc
 
     ENDL       shift, and go to state 2
     SEMICOLON  shift, and go to state 3
 
     endls  go to state 4
-    endc   go to state 28
+    endc   go to state 34
 
 
-state 18
+state 17
 
     1 endls: endls ENDL .
 
     $default  reduce using rule 1 (endls)
 
 
-state 19
+state 18
 
     0 $accept: program $end .
 
     $default  accept
 
 
+state 19
+
+   47 defineStat: defineFunc endc .
+
+    $default  reduce using rule 47 (defineStat)
+
+
 state 20
-
-   32 stat: defineFunc endc .
-
-    $default  reduce using rule 32 (stat)
-
-
-state 21
-
-   21 assignment: defineIden ASSIGN . expr
-
-    NAME           shift, and go to state 1
-    INT            shift, and go to state 29
-    NUMBER         shift, and go to state 30
-    STRING         shift, and go to state 31
-    VALUE_BOOLEAN  shift, and go to state 32
-    VALUE_VOID     shift, and go to state 33
-
-    name        go to state 34
-    expr        go to state 35
-    defineIden  go to state 36
-
-
-state 22
-
-   34 stat: assignment endc .
-
-    $default  reduce using rule 34 (stat)
-
-
-state 23
 
     5 list: COMMA .
 
     $default  reduce using rule 5 (list)
 
 
-state 24
+state 21
 
     6 list: list . endls
-   24 paramListP: paramListP list . defineParam
+   29 paramListP: paramListP list . defineParam
 
     NAME  shift, and go to state 1
     ENDL  shift, and go to state 2
 
-    endls        go to state 37
-    name         go to state 38
+    endls        go to state 35
+    name         go to state 6
     funcType     go to state 9
-    defineParam  go to state 39
-    defineType   go to state 40
+    defineParam  go to state 36
+    defineType   go to state 37
+
+
+state 22
+
+   35 controlSpace: RETURN . expr
+   36             | RETURN .
+
+    NAME           shift, and go to state 1
+    INT            shift, and go to state 38
+    NUMBER         shift, and go to state 39
+    STRING         shift, and go to state 40
+    VALUE_BOOLEAN  shift, and go to state 41
+    VALUE_VOID     shift, and go to state 42
+
+    $default  reduce using rule 36 (controlSpace)
+
+    name        go to state 43
+    expr        go to state 44
+    defineIden  go to state 45
+    idenFunc    go to state 46
+
+
+state 23
+
+   40 stat: endc .
+   46 defineStat: endc .
+
+    $end       reduce using rule 40 (stat)
+    $end       [reduce using rule 46 (defineStat)]
+    NAME       reduce using rule 40 (stat)
+    NAME       [reduce using rule 46 (defineStat)]
+    ENDL       reduce using rule 40 (stat)
+    ENDL       [reduce using rule 46 (defineStat)]
+    SEMICOLON  reduce using rule 40 (stat)
+    SEMICOLON  [reduce using rule 46 (defineStat)]
+    LBRACE     reduce using rule 40 (stat)
+    LBRACE     [reduce using rule 46 (defineStat)]
+    RETURN     reduce using rule 40 (stat)
+    RETURN     [reduce using rule 46 (defineStat)]
+    $default   reduce using rule 40 (stat)
+
+
+state 24
+
+   23 defineIden: name .
+   49 defineType: name .
+
+    NAME      reduce using rule 49 (defineType)
+    COLON     reduce using rule 49 (defineType)
+    $default  reduce using rule 23 (defineIden)
 
 
 state 25
 
-   29 stats: stats stat .
+   25 idenFunc: defineIden . RPAREN exprList LPAREN
+   26 assignment: defineIden . ASSIGN expr
 
-    $default  reduce using rule 29 (stats)
+    ASSIGN  shift, and go to state 47
+    RPAREN  shift, and go to state 48
 
 
 state 26
 
-   19 funcType: defineType RPAREN . typeList LPAREN
+   24 defineIden: idenFunc .
+   43 stat: idenFunc . endc
 
-    NAME  shift, and go to state 1
+    ENDL       shift, and go to state 2
+    SEMICOLON  shift, and go to state 3
 
-    $default  reduce using rule 39 (typeList)
+    $default  reduce using rule 24 (defineIden)
 
-    name        go to state 38
-    funcType    go to state 9
-    defineType  go to state 41
-    typeListP   go to state 42
-    typeList    go to state 43
+    endls  go to state 4
+    endc   go to state 49
 
 
 state 27
 
-   17 defineFunc: defineType name . funcHeaderV @1 subSpace
-   22 defineParam: defineType name .
-   23            | defineType name . ASSIGN expr
+   41 stat: assignment . endc
 
-    ASSIGN  shift, and go to state 44
-    RPAREN  shift, and go to state 45
+    ENDL       shift, and go to state 2
+    SEMICOLON  shift, and go to state 3
 
-    $default  reduce using rule 22 (defineParam)
-
-    funcHeaderV  go to state 46
+    endls  go to state 4
+    endc   go to state 50
 
 
 state 28
 
-   33 stat: defineVariale endc .
+   42 stat: controlSpace . endc
 
-    $default  reduce using rule 33 (stat)
+    ENDL       shift, and go to state 2
+    SEMICOLON  shift, and go to state 3
+
+    endls  go to state 4
+    endc   go to state 51
 
 
 state 29
+
+   34 space: defineStats stats .
+   38 stats: stats . stat
+
+    NAME       shift, and go to state 1
+    ENDL       shift, and go to state 2
+    SEMICOLON  shift, and go to state 3
+    RETURN     shift, and go to state 22
+
+    $default  reduce using rule 34 (space)
+
+    endls         go to state 4
+    endc          go to state 52
+    name          go to state 43
+    defineIden    go to state 25
+    idenFunc      go to state 26
+    assignment    go to state 27
+    controlSpace  go to state 28
+    stat          go to state 53
+
+
+state 30
+
+   39 stats: stat .
+
+    $default  reduce using rule 39 (stats)
+
+
+state 31
+
+   44 defineStats: defineStats defineStat .
+
+    $default  reduce using rule 44 (defineStats)
+
+
+state 32
+
+   22 funcType: defineType COLON . RPAREN typeList LPAREN
+
+    RPAREN  shift, and go to state 54
+
+
+state 33
+
+   20 defineFunc: defineType name . funcHeaderV @1 subSpace
+   27 defineParam: defineType name .
+   28            | defineType name . ASSIGN expr
+
+    ASSIGN  shift, and go to state 55
+    RPAREN  shift, and go to state 56
+
+    $default  reduce using rule 27 (defineParam)
+
+    funcHeaderV  go to state 57
+
+
+state 34
+
+   48 defineStat: defineVariale endc .
+
+    $default  reduce using rule 48 (defineStat)
+
+
+state 35
+
+    1 endls: endls . ENDL
+    6 list: list endls .
+
+    ENDL  shift, and go to state 17
+
+    ENDL      [reduce using rule 6 (list)]
+    $default  reduce using rule 6 (list)
+
+
+state 36
+
+   29 paramListP: paramListP list defineParam .
+
+    $default  reduce using rule 29 (paramListP)
+
+
+state 37
+
+   22 funcType: defineType . COLON RPAREN typeList LPAREN
+   27 defineParam: defineType . name
+   28            | defineType . name ASSIGN expr
+
+    NAME   shift, and go to state 1
+    COLON  shift, and go to state 32
+
+    name  go to state 58
+
+
+state 38
 
    13 expr: INT .
 
     $default  reduce using rule 13 (expr)
 
 
-state 30
+state 39
 
    14 expr: NUMBER .
 
     $default  reduce using rule 14 (expr)
 
 
-state 31
+state 40
 
    10 expr: STRING .
 
     $default  reduce using rule 10 (expr)
 
 
-state 32
+state 41
 
    12 expr: VALUE_BOOLEAN .
 
     $default  reduce using rule 12 (expr)
 
 
-state 33
+state 42
 
    11 expr: VALUE_VOID .
 
     $default  reduce using rule 11 (expr)
 
 
-state 34
-
-   20 defineIden: name .
-
-    $default  reduce using rule 20 (defineIden)
-
-
-state 35
-
-   21 assignment: defineIden ASSIGN expr .
-
-    $default  reduce using rule 21 (assignment)
-
-
-state 36
-
-   15 expr: defineIden .
-
-    $default  reduce using rule 15 (expr)
-
-
-state 37
-
-    1 endls: endls . ENDL
-    6 list: list endls .
-
-    ENDL  shift, and go to state 18
-
-    ENDL      [reduce using rule 6 (list)]
-    $default  reduce using rule 6 (list)
-
-
-state 38
-
-   35 defineType: name .
-
-    $default  reduce using rule 35 (defineType)
-
-
-state 39
-
-   24 paramListP: paramListP list defineParam .
-
-    $default  reduce using rule 24 (paramListP)
-
-
-state 40
-
-   19 funcType: defineType . RPAREN typeList LPAREN
-   22 defineParam: defineType . name
-   23            | defineType . name ASSIGN expr
-
-    NAME    shift, and go to state 1
-    RPAREN  shift, and go to state 26
-
-    name  go to state 47
-
-
-state 41
-
-   19 funcType: defineType . RPAREN typeList LPAREN
-   38 typeListP: defineType .
-
-    RPAREN  shift, and go to state 26
-
-    $default  reduce using rule 38 (typeListP)
-
-
-state 42
-
-   37 typeListP: typeListP . list defineType
-   40 typeList: typeListP .
-
-    COMMA  shift, and go to state 23
-
-    $default  reduce using rule 40 (typeList)
-
-    list  go to state 48
-
-
 state 43
 
-   19 funcType: defineType RPAREN typeList . LPAREN
+   23 defineIden: name .
 
-    LPAREN  shift, and go to state 49
+    $default  reduce using rule 23 (defineIden)
 
 
 state 44
 
-   23 defineParam: defineType name ASSIGN . expr
+   35 controlSpace: RETURN expr .
 
-    NAME           shift, and go to state 1
-    INT            shift, and go to state 29
-    NUMBER         shift, and go to state 30
-    STRING         shift, and go to state 31
-    VALUE_BOOLEAN  shift, and go to state 32
-    VALUE_VOID     shift, and go to state 33
-
-    name        go to state 34
-    expr        go to state 50
-    defineIden  go to state 36
+    $default  reduce using rule 35 (controlSpace)
 
 
 state 45
 
-   18 funcHeaderV: RPAREN . paramList LPAREN
+   15 expr: defineIden .
+   25 idenFunc: defineIden . RPAREN exprList LPAREN
 
-    NAME  shift, and go to state 1
+    RPAREN  shift, and go to state 48
 
-    $default  reduce using rule 26 (paramList)
-
-    name         go to state 38
-    funcType     go to state 9
-    defineParam  go to state 12
-    paramListP   go to state 51
-    paramList    go to state 52
-    defineType   go to state 40
+    $default  reduce using rule 15 (expr)
 
 
 state 46
 
-   17 defineFunc: defineType name funcHeaderV . @1 subSpace
+   24 defineIden: idenFunc .
 
-    $default  reduce using rule 16 (@1)
-
-    @1  go to state 53
+    $default  reduce using rule 24 (defineIden)
 
 
 state 47
 
-   22 defineParam: defineType name .
-   23            | defineType name . ASSIGN expr
+   26 assignment: defineIden ASSIGN . expr
 
-    ASSIGN  shift, and go to state 44
+    NAME           shift, and go to state 1
+    INT            shift, and go to state 38
+    NUMBER         shift, and go to state 39
+    STRING         shift, and go to state 40
+    VALUE_BOOLEAN  shift, and go to state 41
+    VALUE_VOID     shift, and go to state 42
 
-    $default  reduce using rule 22 (defineParam)
+    name        go to state 43
+    expr        go to state 59
+    defineIden  go to state 45
+    idenFunc    go to state 46
 
 
 state 48
 
-    6 list: list . endls
-   37 typeListP: typeListP list . defineType
+   25 idenFunc: defineIden RPAREN . exprList LPAREN
 
-    NAME  shift, and go to state 1
-    ENDL  shift, and go to state 2
+    NAME           shift, and go to state 1
+    INT            shift, and go to state 38
+    NUMBER         shift, and go to state 39
+    STRING         shift, and go to state 40
+    VALUE_BOOLEAN  shift, and go to state 41
+    VALUE_VOID     shift, and go to state 42
 
-    endls       go to state 37
-    name        go to state 38
-    funcType    go to state 9
-    defineType  go to state 54
+    $default  reduce using rule 16 (exprList)
+
+    name        go to state 43
+    expr        go to state 60
+    exprList    go to state 61
+    defineIden  go to state 45
+    idenFunc    go to state 46
 
 
 state 49
 
-   19 funcType: defineType RPAREN typeList LPAREN .
+   43 stat: idenFunc endc .
 
-    $default  reduce using rule 19 (funcType)
+    $default  reduce using rule 43 (stat)
 
 
 state 50
 
-   23 defineParam: defineType name ASSIGN expr .
+   41 stat: assignment endc .
 
-    $default  reduce using rule 23 (defineParam)
+    $default  reduce using rule 41 (stat)
 
 
 state 51
 
-   24 paramListP: paramListP . list defineParam
-   27 paramList: paramListP .
+   42 stat: controlSpace endc .
 
-    COMMA  shift, and go to state 23
-
-    $default  reduce using rule 27 (paramList)
-
-    list  go to state 24
+    $default  reduce using rule 42 (stat)
 
 
 state 52
 
-   18 funcHeaderV: RPAREN paramList . LPAREN
+   40 stat: endc .
 
-    LPAREN  shift, and go to state 55
+    $default  reduce using rule 40 (stat)
 
 
 state 53
 
-   17 defineFunc: defineType name funcHeaderV @1 . subSpace
+   38 stats: stats stat .
 
-    RBRACE  shift, and go to state 56
-
-    subSpace  go to state 57
+    $default  reduce using rule 38 (stats)
 
 
 state 54
 
-   19 funcType: defineType . RPAREN typeList LPAREN
-   37 typeListP: typeListP list defineType .
+   22 funcType: defineType COLON RPAREN . typeList LPAREN
 
-    RPAREN  shift, and go to state 26
+    NAME  shift, and go to state 1
 
-    $default  reduce using rule 37 (typeListP)
+    $default  reduce using rule 53 (typeList)
+
+    name        go to state 6
+    funcType    go to state 9
+    defineType  go to state 62
+    typeListP   go to state 63
+    typeList    go to state 64
 
 
 state 55
 
-   18 funcHeaderV: RPAREN paramList LPAREN .
+   28 defineParam: defineType name ASSIGN . expr
 
-    $default  reduce using rule 18 (funcHeaderV)
+    NAME           shift, and go to state 1
+    INT            shift, and go to state 38
+    NUMBER         shift, and go to state 39
+    STRING         shift, and go to state 40
+    VALUE_BOOLEAN  shift, and go to state 41
+    VALUE_VOID     shift, and go to state 42
+
+    name        go to state 43
+    expr        go to state 65
+    defineIden  go to state 45
+    idenFunc    go to state 46
 
 
 state 56
 
-   28 subSpace: RBRACE . stats LBRACE
+   21 funcHeaderV: RPAREN . paramList LPAREN
 
-    NAME       shift, and go to state 1
-    ENDL       shift, and go to state 2
-    SEMICOLON  shift, and go to state 3
+    NAME  shift, and go to state 1
 
-    endls          go to state 4
-    endc           go to state 5
-    name           go to state 6
-    defineFunc     go to state 8
-    funcType       go to state 9
-    defineIden     go to state 10
-    assignment     go to state 11
-    defineParam    go to state 12
-    paramListP     go to state 13
-    stats          go to state 58
-    stat           go to state 15
-    defineType     go to state 16
-    defineVariale  go to state 17
+    $default  reduce using rule 31 (paramList)
+
+    name         go to state 6
+    funcType     go to state 9
+    defineParam  go to state 10
+    paramListP   go to state 66
+    paramList    go to state 67
+    defineType   go to state 37
 
 
 state 57
 
-   17 defineFunc: defineType name funcHeaderV @1 subSpace .
+   20 defineFunc: defineType name funcHeaderV . @1 subSpace
 
-    $default  reduce using rule 17 (defineFunc)
+    $default  reduce using rule 19 (@1)
+
+    @1  go to state 68
 
 
 state 58
 
-   28 subSpace: RBRACE stats . LBRACE
-   29 stats: stats . stat
+   27 defineParam: defineType name .
+   28            | defineType name . ASSIGN expr
+
+    ASSIGN  shift, and go to state 55
+
+    $default  reduce using rule 27 (defineParam)
+
+
+state 59
+
+   26 assignment: defineIden ASSIGN expr .
+
+    $default  reduce using rule 26 (assignment)
+
+
+state 60
+
+   18 exprList: expr .
+
+    $default  reduce using rule 18 (exprList)
+
+
+state 61
+
+   17 exprList: exprList . list expr
+   25 idenFunc: defineIden RPAREN exprList . LPAREN
+
+    LPAREN  shift, and go to state 69
+    COMMA   shift, and go to state 20
+
+    list  go to state 70
+
+
+state 62
+
+   22 funcType: defineType . COLON RPAREN typeList LPAREN
+   52 typeListP: defineType .
+
+    COLON  shift, and go to state 32
+
+    $default  reduce using rule 52 (typeListP)
+
+
+state 63
+
+   51 typeListP: typeListP . list defineType
+   54 typeList: typeListP .
+
+    COMMA  shift, and go to state 20
+
+    $default  reduce using rule 54 (typeList)
+
+    list  go to state 71
+
+
+state 64
+
+   22 funcType: defineType COLON RPAREN typeList . LPAREN
+
+    LPAREN  shift, and go to state 72
+
+
+state 65
+
+   28 defineParam: defineType name ASSIGN expr .
+
+    $default  reduce using rule 28 (defineParam)
+
+
+state 66
+
+   29 paramListP: paramListP . list defineParam
+   32 paramList: paramListP .
+
+    COMMA  shift, and go to state 20
+
+    $default  reduce using rule 32 (paramList)
+
+    list  go to state 21
+
+
+state 67
+
+   21 funcHeaderV: RPAREN paramList . LPAREN
+
+    LPAREN  shift, and go to state 73
+
+
+state 68
+
+   20 defineFunc: defineType name funcHeaderV @1 . subSpace
+
+    RBRACE  shift, and go to state 74
+
+    subSpace  go to state 75
+
+
+state 69
+
+   25 idenFunc: defineIden RPAREN exprList LPAREN .
+
+    $default  reduce using rule 25 (idenFunc)
+
+
+state 70
+
+    6 list: list . endls
+   17 exprList: exprList list . expr
+
+    NAME           shift, and go to state 1
+    ENDL           shift, and go to state 2
+    INT            shift, and go to state 38
+    NUMBER         shift, and go to state 39
+    STRING         shift, and go to state 40
+    VALUE_BOOLEAN  shift, and go to state 41
+    VALUE_VOID     shift, and go to state 42
+
+    endls       go to state 35
+    name        go to state 43
+    expr        go to state 76
+    defineIden  go to state 45
+    idenFunc    go to state 46
+
+
+state 71
+
+    6 list: list . endls
+   51 typeListP: typeListP list . defineType
+
+    NAME  shift, and go to state 1
+    ENDL  shift, and go to state 2
+
+    endls       go to state 35
+    name        go to state 6
+    funcType    go to state 9
+    defineType  go to state 77
+
+
+state 72
+
+   22 funcType: defineType COLON RPAREN typeList LPAREN .
+
+    $default  reduce using rule 22 (funcType)
+
+
+state 73
+
+   21 funcHeaderV: RPAREN paramList LPAREN .
+
+    $default  reduce using rule 21 (funcHeaderV)
+
+
+state 74
+
+   33 subSpace: RBRACE . space LBRACE
 
     NAME       shift, and go to state 1
     ENDL       shift, and go to state 2
     SEMICOLON  shift, and go to state 3
-    LBRACE     shift, and go to state 59
 
     endls          go to state 4
     endc           go to state 5
     name           go to state 6
     defineFunc     go to state 8
     funcType       go to state 9
-    defineIden     go to state 10
-    assignment     go to state 11
-    defineParam    go to state 12
-    paramListP     go to state 13
-    stat           go to state 25
-    defineType     go to state 16
-    defineVariale  go to state 17
+    defineParam    go to state 10
+    paramListP     go to state 11
+    space          go to state 78
+    defineStats    go to state 13
+    defineStat     go to state 14
+    defineType     go to state 15
+    defineVariale  go to state 16
 
 
-state 59
+state 75
 
-   28 subSpace: RBRACE stats LBRACE .
+   20 defineFunc: defineType name funcHeaderV @1 subSpace .
 
-    $default  reduce using rule 28 (subSpace)
+    $default  reduce using rule 20 (defineFunc)
+
+
+state 76
+
+   17 exprList: exprList list expr .
+
+    $default  reduce using rule 17 (exprList)
+
+
+state 77
+
+   22 funcType: defineType . COLON RPAREN typeList LPAREN
+   51 typeListP: typeListP list defineType .
+
+    COLON  shift, and go to state 32
+
+    $default  reduce using rule 51 (typeListP)
+
+
+state 78
+
+   33 subSpace: RBRACE space . LBRACE
+
+    LBRACE  shift, and go to state 79
+
+
+state 79
+
+   33 subSpace: RBRACE space LBRACE .
+
+    $default  reduce using rule 33 (subSpace)

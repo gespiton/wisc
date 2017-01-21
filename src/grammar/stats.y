@@ -1,11 +1,22 @@
-stats:
-stats stat { $$ = concat($1, $2); }
-| stat { $$ = $1; }
+stats: { ; }
+| stats stat { ; }
+| stat { ; }
 ;
 
 stat:
 endc { ; }
+| assignment endc { ; }
+| controlSpace endc { ; }
+| idenFunc endc { ; }
+;
+
+defineStats:
+defineStats defineStat { ; }
+| defineStat { ; }
+;
+
+defineStat:
+endc { ; }
 | defineFunc endc { ; }
 | defineVariale endc { ; }
-| assignment endc { ; }
 ;
