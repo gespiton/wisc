@@ -1,6 +1,15 @@
 # Schedule
 
-## Schedule 3
+## Schedule 4
+#### Purpose
+- [ ] If statement
+- [ ] For statement
+- [ ] While statement
+- [ ] Switch statement
+- [ ] Space controller break
+- [ ] Space controller continue
+
+## Schedule 3 (1/22/17)
 #### Purpose
 - [x] Special type system
 - [x] Function special type
@@ -21,7 +30,7 @@
 - [x] #109: Current function was define by type '{type name}' cannot return value type '{type name}'
 - [x] #110: Invalid left-hand side in assignment
 - [x] #111: '{variable name}' is not a function
-- [x] #112: Calling function failed, passing params does not match with any '{function name}'
+- [x] #112: Calling function failed, passing params '{param list}' does not match with any '{function name}'
 
 ## Schedule 2 (1/20/17)
 #### Purpose
