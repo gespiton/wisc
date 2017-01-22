@@ -1,5 +1,6 @@
 subSpace:
 RBRACE space LBRACE { ; }
+| endls subSpace { ; }
 ;
 
 space:

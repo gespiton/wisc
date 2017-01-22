@@ -23,11 +23,14 @@ if (target->attach != NULL) {
 
     if (fail) {
         error(CALLING_FUNC_FAILED,
-            concat("Calling function failed, passing params does not match with any function ", token(cvar->name)),
+            merge(4, "Calling function failed, passing params ", token(merge(3, "(", type_string(expr_to_type(params)), ")")), " does not match with any function ", token(cvar->name)),
             location_plus(target->location, location));
         var* chvar = target->attach;
-        for (; chvar != NULL; chvar = chvar->next)
-            note(merge(3, "Function ", token(chvar->name), " was define here"), chvar->location);
+        for (; chvar != NULL; chvar = chvar->next) {
+            if (chvar->type->stype->func->params_list != NULL)
+                note(merge(5, "Function ", token(chvar->name), " was define with params ", token(merge(3, "(", type_string(param_to_type(chvar->type->stype->func->params_list)), ")")), " here"), chvar->location);
+            else note(merge(5, "Function ", token(chvar->name), " was define with params ", token("()"), " here"), chvar->location);
+        }
         return NULL;
     } else {
         name = merge(4, iden_name(target), "(", expr_name(params), ")");
@@ -41,7 +44,7 @@ if (target->attach != NULL) {
         call_type = target->type->stype->func->return_type;
     } else {
         error(CALLING_FUNC_FAILED,
-            "Calling function failed, passing params does not match",
+            merge(3, "Calling function failed, passing params ", token(merge(3, "(", type_string(expr_to_type(params)), ")")), " does not match"),
             location_plus(target->location, location));
         return NULL;
     }

@@ -37,6 +37,8 @@ STRING {
         $$->name = iden_gname($1);
     } else $$ = NULL;
 }
+
+| funcExpr { $$ = $1; }
 ;
 
 exprList: { $$ = NULL; }

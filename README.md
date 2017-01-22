@@ -10,7 +10,7 @@
 - [x] Calling multiple function
 - [x] Function return
 - [x] Define function type
-- [ ] Function expression
+- [x] Function expression
 - [x] Calling function as expression
 
 #### Error code

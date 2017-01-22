@@ -31,13 +31,13 @@
 
 %type <location> RETURN
 
-%type <func> funcHeaderV
+%type <func> funcHeaderV funcHeaderE
 
 %type <string> name
 %type <type> defineType typeListP typeList funcType
 %type <iden> defineIden idenFunc
 %type <param> defineParam paramListP paramList
-%type <expr> expr exprList
+%type <expr> expr exprList funcExpr
 
 %start program
 

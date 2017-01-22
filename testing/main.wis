@@ -1,17 +1,9 @@
-void demo() {
-    string h
-    string demo() {
-        return undefined
-    }
-
-    string demo(string de) {
-        return undefined
-    }
-
-    string demo(number i) {
-        return "false"
-    }
-
-
-    demo(true)
+void:() demo = ():void {
+    string mystring = "Hello world"
 }
+
+void demo(string str) {
+    string mystring = str
+}
+
+demo("Hello world", 12)

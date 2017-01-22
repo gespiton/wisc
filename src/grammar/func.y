@@ -34,6 +34,39 @@ defineType name funcHeaderV {
 }
 ;
 
+funcExpr:
+funcHeaderE {
+    if (parsing_step == DEFINE) {
+        space_create();
+        if ($1 != NULL) {
+            current_space->func = $1;
+            // Add define params
+            param* cp = $1->params_list;
+            for (; cp != NULL; cp = cp->next) {
+                var* nvar = var_create(cp);
+                space_add_var(nvar);
+            }
+        } else current_space->lock = 1;
+    } else if (parsing_step == STAT) {
+        space_next();
+        if (!current_space->lock) {
+            $<expr>$ = expr_create(string_create("function"), func_type($1));
+            $<expr>$->location = $1->location;
+        } else $<expr>$ = NULL;
+    }
+} subSpace {
+    if (parsing_step < TYPE) {
+        if (parsing_step == STAT) {
+            $$ = $<expr>2;
+            if (current_space->func != NULL && !current_space->func->have_return)
+                warning("Function is non-void", current_space->func->location);
+        } else $$ = NULL;
+        space_end();
+    }
+}
+;
+
+
 funcHeaderV:
 RPAREN paramList LPAREN {
     string* typeString = string_create(TYPE_VOID);
@@ -41,6 +74,15 @@ RPAREN paramList LPAREN {
     $$ = func_create(type_create(typeString, NULL), $2);
     if ($$ != NULL)
         $$->location = current_location;
+}
+;
+
+funcHeaderE:
+RPAREN { $<location>$ = current_location; } paramList LPAREN COLON defineType {
+    $$ = func_create($6, $3);
+    if ($$ != NULL && $6 != NULL) {
+        $$->location = location_plus($<location>2, $6->location);
+    }
 }
 ;
 
