@@ -1,5 +1,9 @@
 assignment:
 defineIden ASSIGN expr {
-    stat_assignment($1, $3);
+    if (parsing_step == STAT) stat_assignment($1, $3);
 }
+;
+
+iteration:
+assignment { ; }
 ;

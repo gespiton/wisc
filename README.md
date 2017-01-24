@@ -1,13 +1,18 @@
 # Schedule
 
-## Schedule 4
+## Schedule 4 (1/24/17)
 #### Purpose
-- [ ] If statement
-- [ ] For statement
-- [ ] While statement
-- [ ] Switch statement
-- [ ] Space controller break
-- [ ] Space controller continue
+- [x] If statement
+- [x] Else system
+- [x] For statement
+- [x] While statement
+- [x] Switch statement
+- [x] Space controller break
+- [x] Space controller continue
+
+#### Error code
+- [x] #113: Break not allow here
+- [x] #114: Continue not allow here
 
 ## Schedule 3 (1/22/17)
 #### Purpose

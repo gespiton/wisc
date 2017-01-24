@@ -11,9 +11,8 @@ paramListP {
         for (; cp != NULL; cp = cp->next) {
             if (space_search_var(current_space, cp->name, 0) != NULL)
                 if (cp->expr != NULL) {
-                    iden* niden = iden_create(string_create(cp->name));
-                    niden->location = cp->location;
-                    stat_assignment(niden, cp->expr);
+                    var* cvar = space_search_var(current_space, cp->name, 0);
+                    if (cvar != NULL) cvar->expr = cp->expr;
                 }
         }
     }

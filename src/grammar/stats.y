@@ -5,13 +5,18 @@ stats: { ; }
 
 stat:
 endc { ; }
-| assignment endc { ; }
+| iteration endc { ; }
 | controlSpace endc { ; }
 | idenFunc endc { ; }
+
+| defineIf endc { ; }
+| defineWhile endc { ; }
+| defineFor endc { ; }
+| defineSwitch endc { ; }
 ;
 
-defineStats:
-defineStats defineStat { ; }
+defineStats: { ; }
+| defineStats defineStat { ; }
 | defineStat { ; }
 ;
 

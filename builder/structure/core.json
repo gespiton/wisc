@@ -31,14 +31,17 @@
         "return_not_match" : 109,
         "invalid_left_hand" : 110,
         "isnt_function" : 111,
-        "calling_func_failed" : 112
+        "calling_func_failed" : 112,
+
+        "break_not_allow_here" : 113,
+        "continue_not_allow_here" : 114
     },
     "params" : {
         "main_path" : ["char", "\"\""],
         "waiting_file" : ["list", "NULL"],
 
         "option_debug" : ["int", "0"],
-        "option_step" : ["int", "0"],
+        "option_step" : ["int", "1"],
 
         "files_list" : ["file", "NULL"],
         "current_file" : ["file", "NULL"],

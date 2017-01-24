@@ -24,6 +24,15 @@
 "}"                         { return LBRACE; }
 
 "return"                    { yylval.location = current_location; return RETURN; }
+"if"                        { yylval.location = current_location; return IF; }
+"else"                      { yylval.location = current_location; return ELSE; }
+"for"                       { yylval.location = current_location; return FOR; }
+"while"                     { yylval.location = current_location; return WHILE; }
+"switch"                    { yylval.location = current_location; return SWITCH; }
+"case"                      { yylval.location = current_location; return CASE; }
+"default"                   { yylval.location = current_location; return DEFAULT; }
+"break"                     { yylval.location = current_location; return BREAK; }
+"continue"                  { yylval.location = current_location; return CONTINUE; }
 
 "true"                      { return VALUE_BOOLEAN; }
 "false"                     { return VALUE_BOOLEAN; }

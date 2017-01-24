@@ -93,6 +93,7 @@
             "generate" : ["char", "\"\""],
 
             "func" : ["func", "NULL"],
+            "loop" : ["int", "0"],
 
             "variables" : ["var", "NULL"],
 
@@ -136,6 +137,7 @@
             "name" : ["char", "\"\""],
             "gname" : ["char", "\"\""],
             "type" : ["type", "NULL"],
+            "expr" : ["expr", "NULL"],
 
             "location" : ["location", "NULL"],
             "length" : ["int", "1"],

@@ -1,5 +1,4 @@
 if (parsing_step != STAT) return NULL;
-
 // Check current space variable
 var* cvar = space_search_var(current_space, name->name, 1);
 if (cvar == NULL) {
