@@ -1,5 +1,13 @@
 # Schedule
 
+## Schedule 5
+#### Purpose
+- [x] Operator system
+- [x] Commutative operator
+- [ ] Expression operator
+- [ ] Initialize system
+- [ ] Initialize operator grammar
+
 ## Schedule 4 (1/24/17)
 #### Purpose
 - [x] If statement

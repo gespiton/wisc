@@ -68,6 +68,54 @@
         }
     },
 
+    "operator" : {
+        "struct" : {
+            "symbol" : ["char", "\"\""],
+            "left" : ["type", "NULL"],
+            "right" : ["type", "NULL"],
+            "output" : ["char", "\"\""],
+
+            "length" : ["int", "1"],
+            "next" : ["operator", "NULL"]
+        },
+        "action" : {
+            "create" : {
+                "return" : "operator",
+                "params" : {
+                    "symbol" : "char",
+                    "left" : "type",
+                    "right" : "type",
+                    "output" : "char"
+                }
+            },
+            "add" : {
+                "return" : "void",
+                "params" : {
+                    "target" : "operator"
+                }
+            },
+            "push" : {
+                "return" : "operator",
+                "params" : {
+                    "root" : "operator",
+                    "sub" : "operator"
+                }
+            },
+            "search" : {
+                "return" : "operator",
+                "params" : {
+                    "target" : "operator"
+                }
+            },
+            "is_commutative" : {
+                "return" : "int",
+                "params" : {
+                    "symbol" : "char"
+                }
+            }
+        }
+    },
+
     "string" : {
         "struct" : {
             "name" : ["char", "\"\""],

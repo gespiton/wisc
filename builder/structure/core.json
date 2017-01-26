@@ -44,6 +44,7 @@
         "option_step" : ["int", "1"],
 
         "files_list" : ["file", "NULL"],
+        "main_operator" : ["operator", "NULL"],
         "current_file" : ["file", "NULL"],
         "current_space" : ["space", "NULL"],
         "current_location" : ["location", "NULL"],
