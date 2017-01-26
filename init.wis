@@ -1,0 +1,59 @@
+#init
+
+operator {
+    boolean + boolean = int
+    boolean - boolean = int
+    boolean * boolean = int
+    boolean / boolean = int
+    boolean % boolean = boolean
+
+    boolean + int = int
+    boolean - int = int
+    boolean * int = int
+    boolean / int = number
+    boolean % int = int
+
+    boolean + number = number
+    boolean - number = number
+    boolean * number = number
+    boolean / number = number
+    boolean % number = number
+
+    boolean + string = string
+
+    int - boolean = init
+    int / boolean = number
+    int % boolean = int
+
+    int + int = int
+    int - int = int
+    int * int = int
+    int / int = number
+    int % int = int
+
+    int + number = number
+    int - number = number
+    int * number = number
+    int / number = number
+    int % number = number
+
+    int + string = string
+
+    number - boolean = number
+    number / boolean = number
+    number % boolean = number
+
+    number - int = number
+    number / int = number
+    number % int = number
+
+    number + number = number
+    number - number = number
+    number * number = number
+    number / number = number
+    number % number = number
+
+    number + string = string
+}
+
+#end

@@ -34,9 +34,14 @@
         "calling_func_failed" : 112,
 
         "break_not_allow_here" : 113,
-        "continue_not_allow_here" : 114
+        "continue_not_allow_here" : 114,
+
+        "cannot_load_init" : 115,
+        "cannot_operator_with" : 116
     },
     "params" : {
+        "inited" : ["int", "0"],
+
         "main_path" : ["char", "\"\""],
         "waiting_file" : ["list", "NULL"],
 

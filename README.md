@@ -1,12 +1,18 @@
 # Schedule
 
-## Schedule 5
+## Schedule 5 (1/27/17)
 #### Purpose
 - [x] Operator system
 - [x] Commutative operator
-- [ ] Expression operator
-- [ ] Initialize system
-- [ ] Initialize operator grammar
+- [x] Expression operator
+- [x] Initialize system
+- [x] Initialize operator grammar
+- [x] Initialize file loading
+- [x] Initialize operator rule
+
+#### Error code
+- [x] #115: Cannot load init file
+- [x] #116: Type '{type name}' cannot '{operator symbol}' with '{type name}'
 
 ## Schedule 4 (1/24/17)
 #### Purpose

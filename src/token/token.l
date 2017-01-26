@@ -23,6 +23,15 @@
 "{"                         { return RBRACE; }
 "}"                         { return LBRACE; }
 
+"+"                         { return PLUS; }
+"-"                         { return MINUS; }
+"*"                         { return MULT; }
+"/"                         { return DIVIDE; }
+"%"                         { return MODULUS; }
+
+"#init"                     { return DINIT; }
+"#end"                      { return DEND; }
+
 "return"                    { yylval.location = current_location; return RETURN; }
 "if"                        { yylval.location = current_location; return IF; }
 "else"                      { yylval.location = current_location; return ELSE; }
@@ -33,6 +42,7 @@
 "default"                   { yylval.location = current_location; return DEFAULT; }
 "break"                     { yylval.location = current_location; return BREAK; }
 "continue"                  { yylval.location = current_location; return CONTINUE; }
+"operator"                  { yylval.location = current_location; return OPERATOR; }
 
 "true"                      { return VALUE_BOOLEAN; }
 "false"                     { return VALUE_BOOLEAN; }

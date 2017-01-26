@@ -88,6 +88,14 @@
                     "output" : "char"
                 }
             },
+            "do" : {
+                "return" : "expr",
+                "params" : {
+                    "symbol" : "char",
+                    "left" : "expr",
+                    "right" : "expr"
+                }
+            },
             "add" : {
                 "return" : "void",
                 "params" : {

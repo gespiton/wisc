@@ -1,5 +1,11 @@
 expr:
-STRING {
+expr PLUS expr { operator_do("+", $1, $3); }
+| expr MINUS expr { operator_do("-", $1, $3); }
+| expr MULT expr { operator_do("*", $1, $3); }
+| expr DIVIDE expr { operator_do("/", $1, $3); }
+| expr MODULUS expr { operator_do("*", $1, $3); }
+
+| STRING {
     $$ = expr_create(
         string_create(merge(3, "\"", $1, "\"")),
         type_create(string_create(TYPE_STRING), stype_blank())
