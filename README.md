@@ -1,6 +1,6 @@
 # Schedule
 
-## Schedule 6
+## Schedule 6 (1/28/17)
 - [x] Array special type
 - [x] Array expression
 - [x] Dictionary special type
