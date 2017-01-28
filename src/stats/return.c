@@ -1,3 +1,5 @@
+if (expr == NULL) return "";
+
 if (current_space->func == NULL) {
     if (expr != NULL)
         error(RETURN_NOT_ALLOW_HERE, "Return not allow here", location_plus(location, expr->location));

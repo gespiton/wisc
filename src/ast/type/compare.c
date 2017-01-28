@@ -10,6 +10,9 @@ if (strcmp(left->name, TYPE_INT) == 0 && strcmp(right->name, TYPE_BOOLEAN) == 0)
 // Compare two function
 if (left->stype->func != NULL && right->stype->func != NULL)
     if (!func_compare(left->stype->func, right->stype->func)) return 1;
+// Compare two array
+if (left->stype->array != NULL && right->stype->array != NULL)
+    return type_compare(left->stype->array->type, right->stype->array->type);
 
 // Compare two type name
 if (strcmp(left->code, right->code) == 0) return 1;

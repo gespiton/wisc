@@ -1,5 +1,5 @@
 defineFor:
-FOR RPAREN paramList {
+FOR LPAREN paramList {
     if (parsing_step == DEFINE) {
         space_create();
         current_space->loop = 1;
@@ -12,7 +12,7 @@ FOR RPAREN paramList {
     } else if (parsing_step == STAT) {
         space_next();
     }
-} SEMICOLON expr SEMICOLON iteration LPAREN subSpace {
+} SEMICOLON expr SEMICOLON iteration RPAREN subSpace {
     if (parsing_step < TYPE)
         space_end();
 }

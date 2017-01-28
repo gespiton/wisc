@@ -1,5 +1,5 @@
 defineWhile:
-WHILE RPAREN expr LPAREN {
+WHILE LPAREN expr RPAREN {
     if (parsing_step == DEFINE) {
         space_create();
         current_space->loop = 1;

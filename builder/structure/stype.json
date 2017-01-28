@@ -39,5 +39,43 @@
                 }
             }
         }
+    },
+    "array" : {
+        "struct" : {
+            "type" : ["type", "NULL"]
+        },
+        "action" : {
+            "create" : {
+                "return" : "array",
+                "params" : {
+                    "atype" : "type"
+                }
+            },
+            "type" : {
+                "return" : "type",
+                "params" : {
+                    "atype" : "type"
+                }
+            }
+        }
+    },
+    "dict" : {
+        "struct" : {
+            "type" : ["type", "NULL"]
+        },
+        "action" : {
+            "create" : {
+                "return" : "dict",
+                "params" : {
+                    "atype" : "type"
+                }
+            },
+            "type" : {
+                "return" : "type",
+                "params" : {
+                    "atype" : "type"
+                }
+            }
+        }
     }
 }

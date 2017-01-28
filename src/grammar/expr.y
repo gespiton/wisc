@@ -1,9 +1,27 @@
 expr:
-expr PLUS expr { operator_do("+", $1, $3); }
-| expr MINUS expr { operator_do("-", $1, $3); }
-| expr MULT expr { operator_do("*", $1, $3); }
-| expr DIVIDE expr { operator_do("/", $1, $3); }
-| expr MODULUS expr { operator_do("*", $1, $3); }
+expr AND expr { $$ = expr_logic("&&", $1, $3); }
+| expr OR expr { $$ = expr_logic("||", $1, $3); }
+| expr EQ expr { $$ = operator_do("==", $1, $3); }
+| expr NE expr { $$ = operator_do("!=", $1, $3); }
+
+| expr GT expr { $$ = operator_do(">", $1, $3); }
+| expr GE expr { $$ = operator_do(">=", $1, $3); }
+| expr LT expr { $$ = operator_do("<", $1, $3); }
+| expr LE expr { $$ = operator_do("<=", $1, $3); }
+
+| expr PLUS expr { $$ = operator_do("+", $1, $3); }
+| expr MINUS expr { $$ = operator_do("-", $1, $3); }
+| expr MULT expr { $$ = operator_do("*", $1, $3); }
+| expr DIVIDE expr { $$ = operator_do("/", $1, $3); }
+| expr MODULUS expr { $$ = operator_do("*", $1, $3); }
+
+| RPAREN expr LPAREN {
+    $$ = $2;
+    if ($$ != NULL) {
+        $$->name = merge(3, "(", $$->name, ")");
+        $$->value = merge(3, "(", $$->value, ")");
+    }
+}
 
 | STRING {
     $$ = expr_create(
@@ -45,9 +63,13 @@ expr PLUS expr { operator_do("+", $1, $3); }
 }
 
 | funcExpr { $$ = $1; }
+| arrayExpr { $$ = $1; }
+| dictExpr { $$ = $1; }
 ;
 
 exprList: { $$ = NULL; }
-| exprList list expr { $$ = expr_push($1, $3); }
+| exprList lists expr { $$ = expr_push($1, $3); }
 | expr { $$ = $1; }
+| endls exprList { $$ = $2; }
+| exprList endls { $$ = $1; }
 ;

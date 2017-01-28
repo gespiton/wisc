@@ -194,6 +194,7 @@
             "gname" : ["char", "\"\""],
             "type" : ["type", "NULL"],
             "expr" : ["expr", "NULL"],
+            "read_only" : ["int", "0"],
 
             "location" : ["location", "NULL"],
             "length" : ["int", "1"],
@@ -318,6 +319,14 @@
                     "params" : "expr",
                     "location" : "struct location"
                 }
+            },
+            "bracket" : {
+                "return" : "iden",
+                "params" : {
+                    "target" : "iden",
+                    "value" : "expr",
+                    "location" : "struct location"
+                }
             }
         }
     },
@@ -392,6 +401,14 @@
                 "return" : "char",
                 "params" : {
                     "elist" : "expr"
+                }
+            },
+            "logic" : {
+                "return" : "expr",
+                "params" : {
+                    "symbol" : "char",
+                    "left" : "expr",
+                    "right" : "expr"
                 }
             },
             "to_type" : {

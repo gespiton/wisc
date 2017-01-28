@@ -1,5 +1,5 @@
 defineSwitch:
-SWITCH RPAREN expr LPAREN {
+SWITCH LPAREN expr RPAREN {
     if (parsing_step == DEFINE) space_create();
     else if (parsing_step == STAT) space_next();
 } switchSpace {
@@ -19,7 +19,7 @@ switchStats switchStat { ; }
 
 switchStat: { ; }
 | endls { ; }
-| CASE RPAREN expr LPAREN {
+| CASE LPAREN expr RPAREN {
     if (parsing_step == DEFINE) {
         space_create();
         current_space->loop = 1;

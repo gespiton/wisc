@@ -1,6 +1,8 @@
 defineType:
 name { $$ = type_create($1, stype_blank()); }
 | funcType { $$ = $1; }
+| arrayType { $$ = $1; }
+| dictType { $$ = $1; }
 ;
 
 typeListP:

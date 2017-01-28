@@ -10,4 +10,6 @@ paramListP list defineParam { $$ = param_push($1, $3); }
 
 paramList: { $$ = NULL; }
 | paramListP { $$ = $1; }
+| endls paramList { $$ = $2; }
+| paramList endls { $$ = $1; }
 ;

@@ -11,6 +11,8 @@
         "type_number" : "\"number\"",
         "type_string" : "\"string\"",
         "type_function" : "\"function\"",
+        "type_array" : "\"array\"",
+        "type_dict" : "\"dictionary\"",
 
         "color_error" : "\"\\x1b[31m\"",
         "color_note" : "\"\\x1b[36m\"",
@@ -37,7 +39,14 @@
         "continue_not_allow_here" : 114,
 
         "cannot_load_init" : 115,
-        "cannot_operator_with" : 116
+        "cannot_operator_with" : 116,
+
+        "define_array_type_failed" : 117,
+        "define_dict_type_failed" : 118,
+        "cannot_getting_member" : 119,
+        "array_getting_member" : 120,
+        "dictionary_getting_member" : 121,
+        "assignment_constant_var" : 122
     },
     "params" : {
         "inited" : ["int", "0"],
@@ -65,7 +74,7 @@
     "struct" : {
         "list" : {
             "struct" : {
-                "name" : ["char", "''"],
+                "name" : ["char", "\"\""],
                 "length" : ["int", "1"],
                 "next" : ["list", "NULL"]
             },
@@ -81,6 +90,30 @@
                     "params" : {
                         "root" : "list",
                         "sub" : "list"
+                    }
+                }
+            }
+        },
+        "dictlist" : {
+            "struct" : {
+                "name" : ["char", "\"\""],
+                "expr" : ["expr", "NULL"],
+                "length" : ["int", "1"],
+                "next" : ["dictlist", "NULL"]
+            },
+            "action" : {
+                "create" : {
+                    "return" : "dictlist",
+                    "params" : {
+                        "name" : "char",
+                        "expr" : "expr"
+                    }
+                },
+                "push" : {
+                    "return" : "dictlist",
+                    "params" : {
+                        "root" : "dictlist",
+                        "sub" : "dictlist"
                     }
                 }
             }

@@ -13,6 +13,7 @@ function gt(type) {
 }
 
 function processCommand(command, type, member, space) {
+    member = JSON.parse(JSON.stringify(member));
     var split = command.split(' ');
     if (split[1] == 'malloc') {
         return `${type}* ${split[2]} = (${type}*)malloc(sizeof(${type}));`;
@@ -20,11 +21,12 @@ function processCommand(command, type, member, space) {
         var returnString = `${type}* ${split[2]} = (${type}*)malloc(sizeof(${type}));\n`;
         // Building member dictionary object
         for (var i in member) member[i] = member[i][1];
-        for (var i = 3; i < split.length; i++)
+        for (var i = 3; i < split.length; i++) {
             if (member[split[i]] && split[i + 1] != undefined) {
                 member[split[i]] = split[i + 1];
                 i ++;
             }
+        }
         for (var i in member)
             returnString += `    ${space}${split[2]}->${i} = ${member[i]};\n`;
         return returnString.substring(0, returnString.length - 1);

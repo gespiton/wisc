@@ -5,9 +5,7 @@ if (target->type->stype->func == NULL) {
     return NULL;
 }
 
-char* name = "";
-char* gname = "";
-type* call_type = NULL;
+# new niden location location_plus(target->location,location)
 if (target->attach != NULL) {
     var* cvar = target->attach;
     int fail = 0;
@@ -33,15 +31,15 @@ if (target->attach != NULL) {
         }
         return NULL;
     } else {
-        name = merge(4, iden_name(target), "(", expr_name(params), ")");
-        gname = merge(4, iden_gname(target), "(", expr_string(params), ")");
-        call_type = cvar->type->stype->func->return_type;
+        niden->name = merge(4, iden_name(target), "(", expr_name(params), ")");
+        niden->gname = merge(4, iden_gname(target), "(", expr_string(params), ")");
+        niden->type = cvar->type->stype->func->return_type;
     }
 } else {
     if (!type_compare_list(param_to_type(target->type->stype->func->params_list), expr_to_type(params))) {
-        name = merge(4, iden_name(target), "(", expr_name(params), ")");
-        gname = merge(4, iden_gname(target), "(", expr_string(params), ")");
-        call_type = target->type->stype->func->return_type;
+        niden->name = merge(4, iden_name(target), "(", expr_name(params), ")");
+        niden->gname = merge(4, iden_gname(target), "(", expr_string(params), ")");
+        niden->type = target->type->stype->func->return_type;
     } else {
         error(CALLING_FUNC_FAILED,
             merge(3, "Calling function failed, passing params ", token(merge(3, "(", type_string(expr_to_type(params)), ")")), " does not match"),
@@ -49,5 +47,4 @@ if (target->attach != NULL) {
         return NULL;
     }
 }
-# new niden name name type call_type location location_plus(target->location,location) gname gname attach NULL
 return niden;

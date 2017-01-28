@@ -7,6 +7,7 @@
                             col_number += yyleng;
 
     char* on_string;
+    location* string_location;
 %}
 
 %x STRINGQ
@@ -14,20 +15,31 @@
 
 %%
 
-";"                         { return SEMICOLON; }
-":"                         { return COLON; }
-","                         { return COMMA; }
-"="                         { return ASSIGN; }
-"("                         { return RPAREN; }
-")"                         { return LPAREN; }
-"{"                         { return RBRACE; }
-"}"                         { return LBRACE; }
+";"                         { yylval.location = current_location; return SEMICOLON; }
+":"                         { yylval.location = current_location; return COLON; }
+","                         { yylval.location = current_location; return COMMA; }
+"="                         { yylval.location = current_location; return ASSIGN; }
+"("                         { yylval.location = current_location; return LPAREN; }
+")"                         { yylval.location = current_location; return RPAREN; }
+"{"                         { yylval.location = current_location; return LBRACE; }
+"}"                         { yylval.location = current_location; return RBRACE; }
+"[]"                        { yylval.location = current_location; return BRACKET; }
+"["                         { yylval.location = current_location; return LBRACKET; }
+"]"                         { yylval.location = current_location; return RBRACKET; }
 
-"+"                         { return PLUS; }
-"-"                         { return MINUS; }
-"*"                         { return MULT; }
-"/"                         { return DIVIDE; }
-"%"                         { return MODULUS; }
+"=="                        { yylval.location = current_location; return EQ; }
+"!="                        { yylval.location = current_location; return NE; }
+"<"                         { yylval.location = current_location; return LT; }
+"<="                        { yylval.location = current_location; return LE; }
+">"                         { yylval.location = current_location; return GT; }
+">="                        { yylval.location = current_location; return GE; }
+"||"                        { yylval.location = current_location; return OR; }
+"&&"                        { yylval.location = current_location; return AND; }
+"+"                         { yylval.location = current_location; return PLUS; }
+"-"                         { yylval.location = current_location; return MINUS; }
+"*"                         { yylval.location = current_location; return MULT; }
+"/"                         { yylval.location = current_location; return DIVIDE; }
+"%"                         { yylval.location = current_location; return MODULUS; }
 
 "#init"                     { return DINIT; }
 "#end"                      { return DEND; }
@@ -43,6 +55,7 @@
 "break"                     { yylval.location = current_location; return BREAK; }
 "continue"                  { yylval.location = current_location; return CONTINUE; }
 "operator"                  { yylval.location = current_location; return OPERATOR; }
+"const"                     { yylval.location = current_location; return CONST; }
 
 "true"                      { return VALUE_BOOLEAN; }
 "false"                     { return VALUE_BOOLEAN; }
@@ -58,15 +71,15 @@
 \-[0-9]+\.[0-9]+             { return NUMBER; }
 \-\.[0-9]+                  { yylval.sval = concat("-0", &yylval.sval[1]); return NUMBER; }
 
-\"                          { BEGIN(STRINGQ); on_string = ""; }
-<STRINGQ>\"                 { BEGIN(INITIAL); yylval.sval = strdup(on_string); return STRING; }
-<STRINGQ>\n                 { BEGIN(INITIAL); yylval.sval = strdup(on_string); return STRING; }
+\"                          { BEGIN(STRINGQ); on_string = ""; string_location = current_location; }
+<STRINGQ>\"                 { BEGIN(INITIAL); yylval.sval = strdup(on_string); current_location = location_plus(string_location, current_location); return STRING; }
+<STRINGQ>\n                 { BEGIN(INITIAL); yylval.sval = strdup(on_string); current_location = location_plus(string_location, current_location); return STRING; }
 <STRINGQ>\\.                { on_string = concat(on_string, yytext); }
 <STRINGQ>.                  { on_string = concat(on_string, yytext); }
 
-\'                          { BEGIN(STRINGA); on_string = ""; }
-<STRINGA>\'                 { BEGIN(INITIAL); yylval.sval = strdup(on_string); return STRING; }
-<STRINGA>\n                 { BEGIN(INITIAL); yylval.sval = strdup(on_string); return STRING; }
+\'                          { BEGIN(STRINGA); on_string = ""; string_location = current_location; }
+<STRINGA>\'                 { BEGIN(INITIAL); yylval.sval = strdup(on_string); current_location = location_plus(string_location, current_location); return STRING; }
+<STRINGA>\n                 { BEGIN(INITIAL); yylval.sval = strdup(on_string); current_location = location_plus(string_location, current_location); return STRING; }
 <STRINGA>\"                 { on_string = concat(on_string, "\\\""); }
 <STRINGA>\\.                { on_string = concat(on_string, yytext); }
 <STRINGA>.                  { on_string = concat(on_string, yytext); }

@@ -1,5 +1,22 @@
 # Schedule
 
+## Schedule 6
+- [x] Array special type
+- [x] Array expression
+- [x] Dictionary special type
+- [x] Dictionary expression
+- [x] Logic operator
+- [x] Const variable
+- [x] Bracket identifier
+
+#### Error code
+- [x] #117: Cannot define a variable array type like this
+- [x] #118: Cannot define a variable array type like this
+- [x] #119: '{variable name}' is type '{type name}' cannot getting member
+- [x] #120: '{variable name}' is type '{type name}' only getting member by an int // array
+- [x] #121: '{variable name}' is type '{type name}' only getting member by an string // dictionary
+- [x] #122: '{variable name}' is constant variable cannot be assigned
+
 ## Schedule 5 (1/27/17)
 #### Purpose
 - [x] Operator system

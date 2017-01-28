@@ -6,7 +6,7 @@ ifPart { ; }
 ;
 
 ifPart:
-IF RPAREN expr LPAREN {
+IF LPAREN expr RPAREN {
     if (parsing_step == DEFINE) {
         space_create();
         current_space->loop = current_space->parent->loop;
@@ -26,7 +26,7 @@ elseIfParts elseIfPart { ; }
 | elseIfPart { ; }
 
 elseIfPart:
-ELSE IF RPAREN expr LPAREN {
+ELSE IF LPAREN expr RPAREN {
     if (parsing_step == DEFINE) {
         space_create();
         current_space->loop = current_space->parent->loop;

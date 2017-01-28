@@ -68,7 +68,7 @@ funcHeaderE {
 
 
 funcHeaderV:
-RPAREN paramList LPAREN {
+LPAREN paramList RPAREN {
     string* typeString = string_create(TYPE_VOID);
     typeString->location = NULL;
     $$ = func_create(type_create(typeString, NULL), $2);
@@ -78,7 +78,7 @@ RPAREN paramList LPAREN {
 ;
 
 funcHeaderE:
-RPAREN { $<location>$ = current_location; } paramList LPAREN COLON defineType {
+LPAREN { $<location>$ = current_location; } paramList RPAREN COLON defineType {
     $$ = func_create($6, $3);
     if ($$ != NULL && $6 != NULL) {
         $$->location = location_plus($<location>2, $6->location);
@@ -87,7 +87,7 @@ RPAREN { $<location>$ = current_location; } paramList LPAREN COLON defineType {
 ;
 
 funcType:
-defineType COLON RPAREN typeList LPAREN {
+defineType COLON LPAREN typeList RPAREN {
     $$ = func_type(func_create($1, type_to_param($4)));
     if ($$ != NULL)
         $$->location = location_plus($1->location, current_location);
