@@ -4,4 +4,6 @@ if (!current_space->loop) {
     return "";
 }
 
+if (type) space_context(current_space, "continue;", 1);
+else space_context(current_space, "break;", 1);
 return "";

@@ -1,4 +1,3 @@
-if (parsing_step > DEFINE) return NULL;
 if (name == NULL) return NULL;
 
 if (file_search_structure(current_file, name->name) == NULL) {

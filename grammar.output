@@ -12,33 +12,35 @@ Terminals which are not used
 
 State 0 conflicts: 5 shift/reduce, 1 reduce/reduce
 State 7 conflicts: 1 shift/reduce
-State 19 conflicts: 10 shift/reduce
+State 19 conflicts: 10 shift/reduce, 2 reduce/reduce
 State 39 conflicts: 12 reduce/reduce
+State 50 conflicts: 2 shift/reduce
 State 64 conflicts: 1 shift/reduce
 State 73 conflicts: 2 shift/reduce
 State 74 conflicts: 11 shift/reduce
 State 81 conflicts: 2 shift/reduce
 State 84 conflicts: 1 shift/reduce
 State 89 conflicts: 11 shift/reduce
-State 105 conflicts: 1 shift/reduce
-State 110 conflicts: 1 shift/reduce
-State 111 conflicts: 2 shift/reduce
-State 115 conflicts: 11 shift/reduce
-State 133 conflicts: 1 shift/reduce
+State 104 conflicts: 1 shift/reduce
+State 109 conflicts: 1 shift/reduce
+State 110 conflicts: 2 shift/reduce
+State 114 conflicts: 11 shift/reduce
+State 132 conflicts: 1 shift/reduce
+State 138 conflicts: 10 shift/reduce
 State 139 conflicts: 1 shift/reduce
 State 151 conflicts: 1 shift/reduce
-State 158 conflicts: 15 reduce/reduce
-State 159 conflicts: 2 shift/reduce, 1 reduce/reduce
-State 162 conflicts: 1 shift/reduce, 1 reduce/reduce
-State 165 conflicts: 2 shift/reduce, 10 reduce/reduce
-State 167 conflicts: 1 shift/reduce, 10 reduce/reduce
-State 182 conflicts: 5 shift/reduce
+State 157 conflicts: 15 reduce/reduce
+State 158 conflicts: 2 shift/reduce, 1 reduce/reduce
+State 161 conflicts: 1 shift/reduce, 1 reduce/reduce
+State 164 conflicts: 2 shift/reduce, 10 reduce/reduce
+State 166 conflicts: 1 shift/reduce, 10 reduce/reduce
+State 181 conflicts: 5 shift/reduce
+State 185 conflicts: 1 shift/reduce
 State 186 conflicts: 1 shift/reduce
-State 187 conflicts: 1 shift/reduce
-State 231 conflicts: 3 shift/reduce
-State 240 conflicts: 1 shift/reduce
-State 241 conflicts: 4 shift/reduce
-State 252 conflicts: 1 shift/reduce
+State 230 conflicts: 3 shift/reduce
+State 239 conflicts: 1 shift/reduce
+State 240 conflicts: 4 shift/reduce
+State 251 conflicts: 1 shift/reduce
 
 
 Grammar
@@ -112,160 +114,164 @@ Grammar
 
    52 @1: /* empty */
 
-   53 defineFor: FOR LPAREN paramList @1 SEMICOLON expr SEMICOLON iteration RPAREN subSpace
+   53 @2: /* empty */
 
-   54 @2: /* empty */
+   54 defineFor: FOR LPAREN paramList @1 SEMICOLON expr SEMICOLON iteration RPAREN @2 subSpace
 
-   55 defineFunc: defineType name funcHeaderV @2 subSpace
+   55 @3: /* empty */
 
-   56 @3: /* empty */
+   56 defineFunc: defineType name funcHeaderV @3 subSpace
 
-   57 funcExpr: funcHeaderE @3 subSpace
+   57 @4: /* empty */
 
-   58 funcHeaderV: LPAREN paramList RPAREN
+   58 funcExpr: funcHeaderE @4 subSpace
 
-   59 @4: /* empty */
+   59 funcHeaderV: LPAREN paramList RPAREN
 
-   60 funcHeaderE: LPAREN @4 paramList RPAREN COLON defineType
+   60 @5: /* empty */
 
-   61 funcType: defineType COLON LPAREN typeList RPAREN
+   61 funcHeaderE: LPAREN @5 paramList RPAREN COLON defineType
 
-   62 defineIden: name
-   63           | idenFunc
-   64           | idenBracket
+   62 funcType: defineType COLON LPAREN typeList RPAREN
 
-   65 idenFunc: defineIden LPAREN exprList RPAREN
+   63 defineIden: name
+   64           | idenFunc
+   65           | idenBracket
 
-   66 idenBracket: defineIden LBRACKET expr RBRACKET
+   66 idenFunc: defineIden LPAREN exprList RPAREN
+   67         | defineIden LPAREN RPAREN
 
-   67 defineIf: ifPart
-   68         | ifPart elseIfParts
-   69         | ifPart elsePart
-   70         | ifPart elseIfParts elsePart
+   68 idenBracket: defineIden LBRACKET expr RBRACKET
 
-   71 @5: /* empty */
+   69 defineIf: ifPart
+   70         | ifPart elseIfParts
+   71         | ifPart elsePart
+   72         | ifPart elseIfParts elsePart
 
-   72 ifPart: IF LPAREN expr RPAREN @5 subSpace
+   73 @6: /* empty */
 
-   73 elseIfParts: elseIfParts elseIfPart
-   74            | elseIfPart
+   74 ifPart: IF LPAREN expr RPAREN @6 subSpace
 
-   75 @6: /* empty */
-
-   76 elseIfPart: ELSE IF LPAREN expr RPAREN @6 subSpace
+   75 elseIfParts: elseIfParts elseIfPart
+   76            | elseIfPart
 
    77 @7: /* empty */
 
-   78 elsePart: ELSE @7 subSpace
+   78 elseIfPart: ELSE IF LPAREN expr RPAREN @7 subSpace
 
-   79 init: DINIT endls initContext DEND endls
+   79 @8: /* empty */
 
-   80 initContext: initOperator
+   80 elsePart: ELSE @8 subSpace
 
-   81 initOperator: OPERATOR RBRACE initOperatorContexts LBRACE endls
+   81 init: DINIT endls initContext DEND
 
-   82 initOperatorContexts: initOperatorContexts initOperatorContext
-   83                     | initOperatorContext
+   82 initContext: initOperator
 
-   84 initOperatorContext: endls
-   85                    | defineType operator defineType ASSIGN name endls
+   83 initOperator: OPERATOR RBRACE initOperatorContexts LBRACE endls
 
-   86 assignment: defineIden ASSIGN expr
+   84 initOperatorContexts: initOperatorContexts initOperatorContext
+   85                     | initOperatorContext
 
-   87 iteration: assignment
+   86 initOperatorContext: endls
+   87                    | defineType operator defineType ASSIGN name endls
 
-   88 operator: PLUS
-   89         | MINUS
-   90         | MULT
-   91         | DIVIDE
-   92         | MODULUS
-   93         | EQ
-   94         | NE
-   95         | GT
-   96         | GE
-   97         | LT
-   98         | LE
+   88 assignment: /* empty */
+   89           | defineIden ASSIGN expr
 
-   99 defineParam: defineType name
-  100            | defineType name ASSIGN expr
+   90 iteration: assignment
+   91          | idenFunc
 
-  101 paramListP: paramListP list defineParam
-  102           | defineParam
+   92 operator: PLUS
+   93         | MINUS
+   94         | MULT
+   95         | DIVIDE
+   96         | MODULUS
+   97         | EQ
+   98         | NE
+   99         | GT
+  100         | GE
+  101         | LT
+  102         | LE
 
-  103 paramList: /* empty */
-  104          | paramListP
-  105          | endls paramList
-  106          | paramList endls
+  103 defineParam: defineType name
+  104            | defineType name ASSIGN expr
 
-  107 subSpace: LBRACE space RBRACE
-  108         | endls subSpace
+  105 paramListP: paramListP list defineParam
+  106           | defineParam
 
-  109 space: defineStats stats
+  107 paramList: /* empty */
+  108          | paramListP
+  109          | endls paramList
+  110          | paramList endls
 
-  110 controlSpace: RETURN expr
-  111             | RETURN
-  112             | BREAK
-  113             | CONTINUE
+  111 subSpace: LBRACE space RBRACE
+  112         | endls subSpace
 
-  114 stats: /* empty */
-  115      | stats stat
-  116      | stat
+  113 space: defineStats stats
 
-  117 stat: endc
-  118     | iteration endc
-  119     | controlSpace endc
-  120     | idenFunc endc
-  121     | defineIf endc
-  122     | defineWhile endc
-  123     | defineFor endc
-  124     | defineSwitch endc
+  114 controlSpace: RETURN expr
+  115             | RETURN
+  116             | BREAK
+  117             | CONTINUE
 
-  125 defineStats: /* empty */
-  126            | defineStats defineStat
-  127            | defineStat
+  118 stats: /* empty */
+  119      | stats stat
+  120      | stat
 
-  128 defineStat: endc
-  129           | defineFunc endc
-  130           | defineVariale endc
+  121 stat: endc
+  122     | iteration endc
+  123     | controlSpace endc
+  124     | defineIf endc
+  125     | defineWhile endc
+  126     | defineFor endc
+  127     | defineSwitch endc
 
-  131 @8: /* empty */
+  128 defineStats: /* empty */
+  129            | defineStats defineStat
+  130            | defineStat
 
-  132 defineSwitch: SWITCH LPAREN expr RPAREN @8 switchSpace
+  131 defineStat: endc
+  132           | defineFunc endc
+  133           | defineVariale endc
 
-  133 switchSpace: RBRACE switchStats LBRACE
-  134            | endls switchSpace
+  134 @9: /* empty */
 
-  135 switchStats: switchStats switchStat
-  136            | switchStat
+  135 defineSwitch: SWITCH LPAREN expr RPAREN @9 switchSpace
 
-  137 switchStat: /* empty */
-  138           | endls
+  136 switchSpace: LBRACE switchStats RBRACE
+  137            | endls switchSpace
 
-  139 @9: /* empty */
+  138 switchStats: switchStats switchStat
+  139            | switchStat
 
-  140 switchStat: CASE LPAREN expr RPAREN @9 subSpace
+  140 switchStat: /* empty */
+  141           | endls
 
-  141 @10: /* empty */
+  142 @10: /* empty */
 
-  142 switchStat: DEFAULT @10 subSpace
+  143 switchStat: CASE LPAREN expr RPAREN @10 subSpace
 
-  143 defineType: name
-  144           | funcType
-  145           | arrayType
-  146           | dictType
+  144 @11: /* empty */
 
-  147 typeListP: typeListP list defineType
-  148          | defineType
+  145 switchStat: DEFAULT @11 subSpace
 
-  149 typeList: /* empty */
-  150         | typeListP
+  146 defineType: name
+  147           | funcType
+  148           | arrayType
+  149           | dictType
 
-  151 defineVariale: paramListP
-  152              | CONST paramListP
+  150 typeListP: typeListP list defineType
+  151          | defineType
 
-  153 @11: /* empty */
+  152 typeList: /* empty */
+  153         | typeListP
 
-  154 defineWhile: WHILE LPAREN expr RPAREN @11 subSpace
+  154 defineVariale: paramListP
+  155              | CONST paramListP
+
+  156 @12: /* empty */
+
+  157 defineWhile: WHILE LPAREN expr RPAREN @12 subSpace
 
 
 Terminals, with rules where they appear
@@ -274,17 +280,17 @@ $end (0) 0
 error (256)
 OR (258) 25
 AND (259) 24
-NE (260) 27 94
-EQ (261) 26 93
-GE (262) 29 96
-GT (263) 28 95
-LE (264) 31 98
-LT (265) 30 97
-MINUS (266) 33 89
-PLUS (267) 32 88
-MODULUS (268) 36 92
-DIVIDE (269) 35 91
-MULT (270) 34 90
+NE (260) 27 98
+EQ (261) 26 97
+GE (262) 29 100
+GT (263) 28 99
+LE (264) 31 102
+LT (265) 30 101
+MINUS (266) 33 93
+PLUS (267) 32 92
+MODULUS (268) 36 96
+DIVIDE (269) 35 95
+MULT (270) 34 94
 NAME (271) 10
 ENDL (272) 1 2
 INT (273) 41
@@ -292,31 +298,31 @@ NUMBER (274) 42
 STRING (275) 38
 VALUE_BOOLEAN (276) 40
 VALUE_VOID (277) 39
-SEMICOLON (278) 3 53
-COLON (279) 60 61
-ASSIGN (280) 85 86 100
-RPAREN (281) 37 53 58 60 61 65 72 76 132 140 154
-LPAREN (282) 37 53 58 60 61 65 72 76 132 140 154
-RBRACE (283) 16 17 81 107 133
-LBRACE (284) 16 17 81 107 133
+SEMICOLON (278) 3 54
+COLON (279) 61 62
+ASSIGN (280) 87 89 104
+RPAREN (281) 37 54 59 61 62 66 67 74 78 135 143 157
+LPAREN (282) 37 54 59 61 62 66 67 74 78 135 143 157
+RBRACE (283) 16 17 83 111 136
+LBRACE (284) 16 17 83 111 136
 COMMA (285) 5
 BRACKET (286) 14
-RBRACKET (287) 15 66
-LBRACKET (288) 15 66
-DINIT (289) 79
-DEND (290) 79
-RETURN (291) 110 111
-IF (292) 72 76
-ELSE (293) 76 78
-FOR (294) 53
-WHILE (295) 154
-SWITCH (296) 132
-CASE (297) 140
-DEFAULT (298) 142
-BREAK (299) 112
-CONTINUE (300) 113
-OPERATOR (301) 81
-CONST (302) 152
+RBRACKET (287) 15 68
+LBRACKET (288) 15 68
+DINIT (289) 81
+DEND (290) 81
+RETURN (291) 114 115
+IF (292) 74 78
+ELSE (293) 78 80
+FOR (294) 54
+WHILE (295) 157
+SWITCH (296) 135
+CASE (297) 143
+DEFAULT (298) 145
+BREAK (299) 116
+CONTINUE (300) 117
+OPERATOR (301) 83
+CONST (302) 155
 EPLUS (303)
 DPLUS (304)
 EMINUS (305)
@@ -332,25 +338,24 @@ Nonterminals, with rules where they appear
 $accept (56)
     on left: 0
 endls (57)
-    on left: 1 2, on right: 1 4 6 9 21 22 50 51 79 81 84 85 105 106
-    108 134 138
+    on left: 1 2, on right: 1 4 6 9 21 22 50 51 81 83 86 87 109 110
+    112 137 141
 endc (58)
-    on left: 3 4, on right: 117 118 119 120 121 122 123 124 128 129
-    130
+    on left: 3 4, on right: 121 122 123 124 125 126 127 131 132 133
 list (59)
-    on left: 5 6, on right: 6 8 101 147
+    on left: 5 6, on right: 6 8 105 150
 lists (60)
     on left: 7 8 9, on right: 19 48
 name (61)
-    on left: 10, on right: 23 55 62 85 99 100 143
+    on left: 10, on right: 23 56 63 87 103 104 146
 program (62)
     on left: 11 12 13, on right: 0
 arrayType (63)
-    on left: 14, on right: 145
+    on left: 14, on right: 148
 arrayExpr (64)
     on left: 15, on right: 45
 dictType (65)
-    on left: 16, on right: 146
+    on left: 16, on right: 149
 dictExpr (66)
     on left: 17, on right: 46
 dictContext (67)
@@ -360,114 +365,116 @@ dictList (68)
 expr (69)
     on left: 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41
     42 43 44 45 46, on right: 23 24 25 26 27 28 29 30 31 32 33 34 35
-    36 37 48 49 53 66 72 76 86 100 110 132 140 154
+    36 37 48 49 54 68 74 78 89 104 114 135 143 157
 exprList (70)
-    on left: 47 48 49 50 51, on right: 15 48 50 51 65
+    on left: 47 48 49 50 51, on right: 15 48 50 51 66
 defineFor (71)
-    on left: 53, on right: 123
+    on left: 54, on right: 126
 @1 (72)
-    on left: 52, on right: 53
-defineFunc (73)
-    on left: 55, on right: 129
-@2 (74)
-    on left: 54, on right: 55
-funcExpr (75)
-    on left: 57, on right: 44
-@3 (76)
-    on left: 56, on right: 57
-funcHeaderV (77)
-    on left: 58, on right: 55
-funcHeaderE (78)
-    on left: 60, on right: 57
-@4 (79)
-    on left: 59, on right: 60
-funcType (80)
-    on left: 61, on right: 144
-defineIden (81)
-    on left: 62 63 64, on right: 43 65 66 86
-idenFunc (82)
-    on left: 65, on right: 63 120
-idenBracket (83)
-    on left: 66, on right: 64
-defineIf (84)
-    on left: 67 68 69 70, on right: 121
-ifPart (85)
-    on left: 72, on right: 67 68 69 70
-@5 (86)
-    on left: 71, on right: 72
-elseIfParts (87)
-    on left: 73 74, on right: 68 70 73
-elseIfPart (88)
-    on left: 76, on right: 73 74
-@6 (89)
-    on left: 75, on right: 76
-elsePart (90)
-    on left: 78, on right: 69 70
-@7 (91)
+    on left: 52, on right: 54
+@2 (73)
+    on left: 53, on right: 54
+defineFunc (74)
+    on left: 56, on right: 132
+@3 (75)
+    on left: 55, on right: 56
+funcExpr (76)
+    on left: 58, on right: 44
+@4 (77)
+    on left: 57, on right: 58
+funcHeaderV (78)
+    on left: 59, on right: 56
+funcHeaderE (79)
+    on left: 61, on right: 58
+@5 (80)
+    on left: 60, on right: 61
+funcType (81)
+    on left: 62, on right: 147
+defineIden (82)
+    on left: 63 64 65, on right: 43 66 67 68 89
+idenFunc (83)
+    on left: 66 67, on right: 64 91
+idenBracket (84)
+    on left: 68, on right: 65
+defineIf (85)
+    on left: 69 70 71 72, on right: 124
+ifPart (86)
+    on left: 74, on right: 69 70 71 72
+@6 (87)
+    on left: 73, on right: 74
+elseIfParts (88)
+    on left: 75 76, on right: 70 72 75
+elseIfPart (89)
+    on left: 78, on right: 75 76
+@7 (90)
     on left: 77, on right: 78
-init (92)
-    on left: 79, on right: 12
-initContext (93)
-    on left: 80, on right: 79
-initOperator (94)
-    on left: 81, on right: 80
-initOperatorContexts (95)
-    on left: 82 83, on right: 81 82
-initOperatorContext (96)
-    on left: 84 85, on right: 82 83
-assignment (97)
-    on left: 86, on right: 87
-iteration (98)
-    on left: 87, on right: 53 118
-operator (99)
-    on left: 88 89 90 91 92 93 94 95 96 97 98, on right: 85
-defineParam (100)
-    on left: 99 100, on right: 101 102
-paramListP (101)
-    on left: 101 102, on right: 101 104 151 152
-paramList (102)
-    on left: 103 104 105 106, on right: 53 58 60 105 106
-subSpace (103)
-    on left: 107 108, on right: 53 55 57 72 76 78 108 140 142 154
-space (104)
-    on left: 109, on right: 13 107
-controlSpace (105)
-    on left: 110 111 112 113, on right: 119
-stats (106)
-    on left: 114 115 116, on right: 109 115
-stat (107)
-    on left: 117 118 119 120 121 122 123 124, on right: 115 116
-defineStats (108)
-    on left: 125 126 127, on right: 109 126
-defineStat (109)
-    on left: 128 129 130, on right: 126 127
-defineSwitch (110)
-    on left: 132, on right: 124
-@8 (111)
-    on left: 131, on right: 132
-switchSpace (112)
-    on left: 133 134, on right: 132 134
-switchStats (113)
-    on left: 135 136, on right: 133 135
-switchStat (114)
-    on left: 137 138 140 142, on right: 135 136
-@9 (115)
-    on left: 139, on right: 140
+elsePart (91)
+    on left: 80, on right: 71 72
+@8 (92)
+    on left: 79, on right: 80
+init (93)
+    on left: 81, on right: 12
+initContext (94)
+    on left: 82, on right: 81
+initOperator (95)
+    on left: 83, on right: 82
+initOperatorContexts (96)
+    on left: 84 85, on right: 83 84
+initOperatorContext (97)
+    on left: 86 87, on right: 84 85
+assignment (98)
+    on left: 88 89, on right: 90
+iteration (99)
+    on left: 90 91, on right: 54 122
+operator (100)
+    on left: 92 93 94 95 96 97 98 99 100 101 102, on right: 87
+defineParam (101)
+    on left: 103 104, on right: 105 106
+paramListP (102)
+    on left: 105 106, on right: 105 108 154 155
+paramList (103)
+    on left: 107 108 109 110, on right: 54 59 61 109 110
+subSpace (104)
+    on left: 111 112, on right: 54 56 58 74 78 80 112 143 145 157
+space (105)
+    on left: 113, on right: 13 111
+controlSpace (106)
+    on left: 114 115 116 117, on right: 123
+stats (107)
+    on left: 118 119 120, on right: 113 119
+stat (108)
+    on left: 121 122 123 124 125 126 127, on right: 119 120
+defineStats (109)
+    on left: 128 129 130, on right: 113 129
+defineStat (110)
+    on left: 131 132 133, on right: 129 130
+defineSwitch (111)
+    on left: 135, on right: 127
+@9 (112)
+    on left: 134, on right: 135
+switchSpace (113)
+    on left: 136 137, on right: 135 137
+switchStats (114)
+    on left: 138 139, on right: 136 138
+switchStat (115)
+    on left: 140 141 143 145, on right: 138 139
 @10 (116)
-    on left: 141, on right: 142
-defineType (117)
-    on left: 143 144 145 146, on right: 14 16 55 60 61 85 99 100 147
-    148
-typeListP (118)
-    on left: 147 148, on right: 147 150
-typeList (119)
-    on left: 149 150, on right: 61
-defineVariale (120)
-    on left: 151 152, on right: 130
-defineWhile (121)
-    on left: 154, on right: 122
-@11 (122)
-    on left: 153, on right: 154
+    on left: 142, on right: 143
+@11 (117)
+    on left: 144, on right: 145
+defineType (118)
+    on left: 146 147 148 149, on right: 14 16 56 61 62 87 103 104 150
+    151
+typeListP (119)
+    on left: 150 151, on right: 150 153
+typeList (120)
+    on left: 152 153, on right: 62
+defineVariale (121)
+    on left: 154 155, on right: 133
+defineWhile (122)
+    on left: 157, on right: 125
+@12 (123)
+    on left: 156, on right: 157
 
 
 state 0
@@ -482,13 +489,13 @@ state 0
     CONST      shift, and go to state 6
 
     $end       reduce using rule 11 (program)
-    $end       [reduce using rule 125 (defineStats)]
-    NAME       [reduce using rule 125 (defineStats)]
-    ENDL       [reduce using rule 125 (defineStats)]
-    SEMICOLON  [reduce using rule 125 (defineStats)]
-    LBRACE     [reduce using rule 125 (defineStats)]
-    CONST      [reduce using rule 125 (defineStats)]
-    $default   reduce using rule 125 (defineStats)
+    $end       [reduce using rule 128 (defineStats)]
+    NAME       [reduce using rule 128 (defineStats)]
+    ENDL       [reduce using rule 128 (defineStats)]
+    SEMICOLON  [reduce using rule 128 (defineStats)]
+    LBRACE     [reduce using rule 128 (defineStats)]
+    CONST      [reduce using rule 128 (defineStats)]
+    $default   reduce using rule 128 (defineStats)
 
     endls          go to state 7
     endc           go to state 8
@@ -545,7 +552,7 @@ state 4
 
 state 5
 
-   79 init: DINIT . endls initContext DEND endls
+   81 init: DINIT . endls initContext DEND
 
     ENDL  shift, and go to state 2
 
@@ -554,7 +561,7 @@ state 5
 
 state 6
 
-  152 defineVariale: CONST . paramListP
+  155 defineVariale: CONST . paramListP
 
     NAME    shift, and go to state 1
     LBRACE  shift, and go to state 4
@@ -581,16 +588,16 @@ state 7
 
 state 8
 
-  128 defineStat: endc .
+  131 defineStat: endc .
 
-    $default  reduce using rule 128 (defineStat)
+    $default  reduce using rule 131 (defineStat)
 
 
 state 9
 
-  143 defineType: name .
+  146 defineType: name .
 
-    $default  reduce using rule 143 (defineType)
+    $default  reduce using rule 146 (defineType)
 
 
 state 10
@@ -602,21 +609,21 @@ state 10
 
 state 11
 
-  145 defineType: arrayType .
+  148 defineType: arrayType .
 
-    $default  reduce using rule 145 (defineType)
+    $default  reduce using rule 148 (defineType)
 
 
 state 12
 
-  146 defineType: dictType .
+  149 defineType: dictType .
 
-    $default  reduce using rule 146 (defineType)
+    $default  reduce using rule 149 (defineType)
 
 
 state 13
 
-  129 defineStat: defineFunc . endc
+  132 defineStat: defineFunc . endc
 
     ENDL       shift, and go to state 2
     SEMICOLON  shift, and go to state 3
@@ -627,9 +634,9 @@ state 13
 
 state 14
 
-  144 defineType: funcType .
+  147 defineType: funcType .
 
-    $default  reduce using rule 144 (defineType)
+    $default  reduce using rule 147 (defineType)
 
 
 state 15
@@ -641,19 +648,19 @@ state 15
 
 state 16
 
-  102 paramListP: defineParam .
+  106 paramListP: defineParam .
 
-    $default  reduce using rule 102 (paramListP)
+    $default  reduce using rule 106 (paramListP)
 
 
 state 17
 
-  101 paramListP: paramListP . list defineParam
-  151 defineVariale: paramListP .
+  105 paramListP: paramListP . list defineParam
+  154 defineVariale: paramListP .
 
     COMMA  shift, and go to state 30
 
-    $default  reduce using rule 151 (defineVariale)
+    $default  reduce using rule 154 (defineVariale)
 
     list  go to state 31
 
@@ -667,8 +674,8 @@ state 18
 
 state 19
 
-  109 space: defineStats . stats
-  126 defineStats: defineStats . defineStat
+  113 space: defineStats . stats
+  129 defineStats: defineStats . defineStat
 
     NAME       shift, and go to state 1
     ENDL       shift, and go to state 2
@@ -683,17 +690,19 @@ state 19
     CONTINUE   shift, and go to state 38
     CONST      shift, and go to state 6
 
-    NAME       [reduce using rule 114 (stats)]
-    ENDL       [reduce using rule 114 (stats)]
-    SEMICOLON  [reduce using rule 114 (stats)]
-    RETURN     [reduce using rule 114 (stats)]
-    IF         [reduce using rule 114 (stats)]
-    FOR        [reduce using rule 114 (stats)]
-    WHILE      [reduce using rule 114 (stats)]
-    SWITCH     [reduce using rule 114 (stats)]
-    BREAK      [reduce using rule 114 (stats)]
-    CONTINUE   [reduce using rule 114 (stats)]
-    $default   reduce using rule 114 (stats)
+    NAME       [reduce using rule 118 (stats)]
+    ENDL       [reduce using rule 88 (assignment)]
+    ENDL       [reduce using rule 118 (stats)]
+    SEMICOLON  [reduce using rule 88 (assignment)]
+    SEMICOLON  [reduce using rule 118 (stats)]
+    RETURN     [reduce using rule 118 (stats)]
+    IF         [reduce using rule 118 (stats)]
+    FOR        [reduce using rule 118 (stats)]
+    WHILE      [reduce using rule 118 (stats)]
+    SWITCH     [reduce using rule 118 (stats)]
+    BREAK      [reduce using rule 118 (stats)]
+    CONTINUE   [reduce using rule 118 (stats)]
+    $default   reduce using rule 118 (stats)
 
     endls          go to state 7
     endc           go to state 39
@@ -724,18 +733,18 @@ state 19
 
 state 20
 
-  127 defineStats: defineStat .
+  130 defineStats: defineStat .
 
-    $default  reduce using rule 127 (defineStats)
+    $default  reduce using rule 130 (defineStats)
 
 
 state 21
 
    14 arrayType: defineType . BRACKET
-   55 defineFunc: defineType . name funcHeaderV @2 subSpace
-   61 funcType: defineType . COLON LPAREN typeList RPAREN
-   99 defineParam: defineType . name
-  100            | defineType . name ASSIGN expr
+   56 defineFunc: defineType . name funcHeaderV @3 subSpace
+   62 funcType: defineType . COLON LPAREN typeList RPAREN
+  103 defineParam: defineType . name
+  104            | defineType . name ASSIGN expr
 
     NAME     shift, and go to state 1
     COLON    shift, and go to state 55
@@ -746,7 +755,7 @@ state 21
 
 state 22
 
-  130 defineStat: defineVariale . endc
+  133 defineStat: defineVariale . endc
 
     ENDL       shift, and go to state 2
     SEMICOLON  shift, and go to state 3
@@ -759,7 +768,7 @@ state 23
 
    14 arrayType: defineType . BRACKET
    16 dictType: LBRACE defineType . RBRACE
-   61 funcType: defineType . COLON LPAREN typeList RPAREN
+   62 funcType: defineType . COLON LPAREN typeList RPAREN
 
     COLON    shift, and go to state 55
     RBRACE   shift, and go to state 59
@@ -769,7 +778,7 @@ state 23
 state 24
 
     1 endls: endls . ENDL
-   79 init: DINIT endls . initContext DEND endls
+   81 init: DINIT endls . initContext DEND
 
     ENDL      shift, and go to state 27
     OPERATOR  shift, and go to state 60
@@ -780,12 +789,12 @@ state 24
 
 state 25
 
-  101 paramListP: paramListP . list defineParam
-  152 defineVariale: CONST paramListP .
+  105 paramListP: paramListP . list defineParam
+  155 defineVariale: CONST paramListP .
 
     COMMA  shift, and go to state 30
 
-    $default  reduce using rule 152 (defineVariale)
+    $default  reduce using rule 155 (defineVariale)
 
     list  go to state 31
 
@@ -793,9 +802,9 @@ state 25
 state 26
 
    14 arrayType: defineType . BRACKET
-   61 funcType: defineType . COLON LPAREN typeList RPAREN
-   99 defineParam: defineType . name
-  100            | defineType . name ASSIGN expr
+   62 funcType: defineType . COLON LPAREN typeList RPAREN
+  103 defineParam: defineType . name
+  104            | defineType . name ASSIGN expr
 
     NAME     shift, and go to state 1
     COLON    shift, and go to state 55
@@ -820,9 +829,9 @@ state 28
 
 state 29
 
-  129 defineStat: defineFunc endc .
+  132 defineStat: defineFunc endc .
 
-    $default  reduce using rule 129 (defineStat)
+    $default  reduce using rule 132 (defineStat)
 
 
 state 30
@@ -835,7 +844,7 @@ state 30
 state 31
 
     6 list: list . endls
-  101 paramListP: paramListP list . defineParam
+  105 paramListP: paramListP list . defineParam
 
     NAME    shift, and go to state 1
     ENDL    shift, and go to state 2
@@ -852,8 +861,8 @@ state 31
 
 state 32
 
-  110 controlSpace: RETURN . expr
-  111             | RETURN .
+  114 controlSpace: RETURN . expr
+  115             | RETURN .
 
     NAME           shift, and go to state 1
     INT            shift, and go to state 66
@@ -866,7 +875,7 @@ state 32
     LBRACE         shift, and go to state 73
     LBRACKET       shift, and go to state 74
 
-    $default  reduce using rule 111 (controlSpace)
+    $default  reduce using rule 115 (controlSpace)
 
     name         go to state 75
     arrayExpr    go to state 76
@@ -881,94 +890,94 @@ state 32
 
 state 33
 
-   72 ifPart: IF . LPAREN expr RPAREN @5 subSpace
+   74 ifPart: IF . LPAREN expr RPAREN @6 subSpace
 
     LPAREN  shift, and go to state 83
 
 
 state 34
 
-   53 defineFor: FOR . LPAREN paramList @1 SEMICOLON expr SEMICOLON iteration RPAREN subSpace
+   54 defineFor: FOR . LPAREN paramList @1 SEMICOLON expr SEMICOLON iteration RPAREN @2 subSpace
 
     LPAREN  shift, and go to state 84
 
 
 state 35
 
-  154 defineWhile: WHILE . LPAREN expr RPAREN @11 subSpace
+  157 defineWhile: WHILE . LPAREN expr RPAREN @12 subSpace
 
     LPAREN  shift, and go to state 85
 
 
 state 36
 
-  132 defineSwitch: SWITCH . LPAREN expr RPAREN @8 switchSpace
+  135 defineSwitch: SWITCH . LPAREN expr RPAREN @9 switchSpace
 
     LPAREN  shift, and go to state 86
 
 
 state 37
 
-  112 controlSpace: BREAK .
+  116 controlSpace: BREAK .
 
-    $default  reduce using rule 112 (controlSpace)
+    $default  reduce using rule 116 (controlSpace)
 
 
 state 38
 
-  113 controlSpace: CONTINUE .
+  117 controlSpace: CONTINUE .
 
-    $default  reduce using rule 113 (controlSpace)
+    $default  reduce using rule 117 (controlSpace)
 
 
 state 39
 
-  117 stat: endc .
-  128 defineStat: endc .
+  121 stat: endc .
+  131 defineStat: endc .
 
-    $end       reduce using rule 117 (stat)
-    $end       [reduce using rule 128 (defineStat)]
-    NAME       reduce using rule 117 (stat)
-    NAME       [reduce using rule 128 (defineStat)]
-    ENDL       reduce using rule 117 (stat)
-    ENDL       [reduce using rule 128 (defineStat)]
-    SEMICOLON  reduce using rule 117 (stat)
-    SEMICOLON  [reduce using rule 128 (defineStat)]
-    RBRACE     reduce using rule 117 (stat)
-    RBRACE     [reduce using rule 128 (defineStat)]
-    LBRACE     reduce using rule 128 (defineStat)
-    RETURN     reduce using rule 117 (stat)
-    RETURN     [reduce using rule 128 (defineStat)]
-    IF         reduce using rule 117 (stat)
-    IF         [reduce using rule 128 (defineStat)]
-    FOR        reduce using rule 117 (stat)
-    FOR        [reduce using rule 128 (defineStat)]
-    WHILE      reduce using rule 117 (stat)
-    WHILE      [reduce using rule 128 (defineStat)]
-    SWITCH     reduce using rule 117 (stat)
-    SWITCH     [reduce using rule 128 (defineStat)]
-    BREAK      reduce using rule 117 (stat)
-    BREAK      [reduce using rule 128 (defineStat)]
-    CONTINUE   reduce using rule 117 (stat)
-    CONTINUE   [reduce using rule 128 (defineStat)]
-    CONST      reduce using rule 128 (defineStat)
-    $default   reduce using rule 117 (stat)
+    $end       reduce using rule 121 (stat)
+    $end       [reduce using rule 131 (defineStat)]
+    NAME       reduce using rule 121 (stat)
+    NAME       [reduce using rule 131 (defineStat)]
+    ENDL       reduce using rule 121 (stat)
+    ENDL       [reduce using rule 131 (defineStat)]
+    SEMICOLON  reduce using rule 121 (stat)
+    SEMICOLON  [reduce using rule 131 (defineStat)]
+    RBRACE     reduce using rule 121 (stat)
+    RBRACE     [reduce using rule 131 (defineStat)]
+    LBRACE     reduce using rule 131 (defineStat)
+    RETURN     reduce using rule 121 (stat)
+    RETURN     [reduce using rule 131 (defineStat)]
+    IF         reduce using rule 121 (stat)
+    IF         [reduce using rule 131 (defineStat)]
+    FOR        reduce using rule 121 (stat)
+    FOR        [reduce using rule 131 (defineStat)]
+    WHILE      reduce using rule 121 (stat)
+    WHILE      [reduce using rule 131 (defineStat)]
+    SWITCH     reduce using rule 121 (stat)
+    SWITCH     [reduce using rule 131 (defineStat)]
+    BREAK      reduce using rule 121 (stat)
+    BREAK      [reduce using rule 131 (defineStat)]
+    CONTINUE   reduce using rule 121 (stat)
+    CONTINUE   [reduce using rule 131 (defineStat)]
+    CONST      reduce using rule 131 (defineStat)
+    $default   reduce using rule 121 (stat)
 
 
 state 40
 
-   62 defineIden: name .
-  143 defineType: name .
+   63 defineIden: name .
+  146 defineType: name .
 
-    NAME      reduce using rule 143 (defineType)
-    COLON     reduce using rule 143 (defineType)
-    BRACKET   reduce using rule 143 (defineType)
-    $default  reduce using rule 62 (defineIden)
+    NAME      reduce using rule 146 (defineType)
+    COLON     reduce using rule 146 (defineType)
+    BRACKET   reduce using rule 146 (defineType)
+    $default  reduce using rule 63 (defineIden)
 
 
 state 41
 
-  123 stat: defineFor . endc
+  126 stat: defineFor . endc
 
     ENDL       shift, and go to state 2
     SEMICOLON  shift, and go to state 3
@@ -979,9 +988,10 @@ state 41
 
 state 42
 
-   65 idenFunc: defineIden . LPAREN exprList RPAREN
-   66 idenBracket: defineIden . LBRACKET expr RBRACKET
-   86 assignment: defineIden . ASSIGN expr
+   66 idenFunc: defineIden . LPAREN exprList RPAREN
+   67         | defineIden . LPAREN RPAREN
+   68 idenBracket: defineIden . LBRACKET expr RBRACKET
+   89 assignment: defineIden . ASSIGN expr
 
     ASSIGN    shift, and go to state 88
     LPAREN    shift, and go to state 89
@@ -990,62 +1000,70 @@ state 42
 
 state 43
 
-   63 defineIden: idenFunc .
-  120 stat: idenFunc . endc
+   64 defineIden: idenFunc .
+   91 iteration: idenFunc .
+
+    ENDL       reduce using rule 91 (iteration)
+    SEMICOLON  reduce using rule 91 (iteration)
+    RPAREN     reduce using rule 91 (iteration)
+    $default   reduce using rule 64 (defineIden)
+
+
+state 44
+
+   65 defineIden: idenBracket .
+
+    $default  reduce using rule 65 (defineIden)
+
+
+state 45
+
+  124 stat: defineIf . endc
 
     ENDL       shift, and go to state 2
     SEMICOLON  shift, and go to state 3
-
-    $default  reduce using rule 63 (defineIden)
 
     endls  go to state 7
     endc   go to state 91
 
 
-state 44
+state 46
 
-   64 defineIden: idenBracket .
+   69 defineIf: ifPart .
+   70         | ifPart . elseIfParts
+   71         | ifPart . elsePart
+   72         | ifPart . elseIfParts elsePart
 
-    $default  reduce using rule 64 (defineIden)
+    ELSE  shift, and go to state 92
+
+    $default  reduce using rule 69 (defineIf)
+
+    elseIfParts  go to state 93
+    elseIfPart   go to state 94
+    elsePart     go to state 95
 
 
-state 45
+state 47
 
-  121 stat: defineIf . endc
+   90 iteration: assignment .
+
+    $default  reduce using rule 90 (iteration)
+
+
+state 48
+
+  122 stat: iteration . endc
 
     ENDL       shift, and go to state 2
     SEMICOLON  shift, and go to state 3
 
     endls  go to state 7
-    endc   go to state 92
+    endc   go to state 96
 
 
-state 46
+state 49
 
-   67 defineIf: ifPart .
-   68         | ifPart . elseIfParts
-   69         | ifPart . elsePart
-   70         | ifPart . elseIfParts elsePart
-
-    ELSE  shift, and go to state 93
-
-    $default  reduce using rule 67 (defineIf)
-
-    elseIfParts  go to state 94
-    elseIfPart   go to state 95
-    elsePart     go to state 96
-
-
-state 47
-
-   87 iteration: assignment .
-
-    $default  reduce using rule 87 (iteration)
-
-
-state 48
-
-  118 stat: iteration . endc
+  123 stat: controlSpace . endc
 
     ENDL       shift, and go to state 2
     SEMICOLON  shift, and go to state 3
@@ -1054,21 +1072,10 @@ state 48
     endc   go to state 97
 
 
-state 49
-
-  119 stat: controlSpace . endc
-
-    ENDL       shift, and go to state 2
-    SEMICOLON  shift, and go to state 3
-
-    endls  go to state 7
-    endc   go to state 98
-
-
 state 50
 
-  109 space: defineStats stats .
-  115 stats: stats . stat
+  113 space: defineStats stats .
+  119 stats: stats . stat
 
     NAME       shift, and go to state 1
     ENDL       shift, and go to state 2
@@ -1081,10 +1088,12 @@ state 50
     BREAK      shift, and go to state 37
     CONTINUE   shift, and go to state 38
 
-    $default  reduce using rule 109 (space)
+    ENDL       [reduce using rule 88 (assignment)]
+    SEMICOLON  [reduce using rule 88 (assignment)]
+    $default   reduce using rule 113 (space)
 
     endls         go to state 7
-    endc          go to state 99
+    endc          go to state 98
     name          go to state 75
     defineFor     go to state 41
     defineIden    go to state 42
@@ -1095,28 +1104,39 @@ state 50
     assignment    go to state 47
     iteration     go to state 48
     controlSpace  go to state 49
-    stat          go to state 100
+    stat          go to state 99
     defineSwitch  go to state 53
     defineWhile   go to state 54
 
 
 state 51
 
-  116 stats: stat .
+  120 stats: stat .
 
-    $default  reduce using rule 116 (stats)
+    $default  reduce using rule 120 (stats)
 
 
 state 52
 
-  126 defineStats: defineStats defineStat .
+  129 defineStats: defineStats defineStat .
 
-    $default  reduce using rule 126 (defineStats)
+    $default  reduce using rule 129 (defineStats)
 
 
 state 53
 
-  124 stat: defineSwitch . endc
+  127 stat: defineSwitch . endc
+
+    ENDL       shift, and go to state 2
+    SEMICOLON  shift, and go to state 3
+
+    endls  go to state 7
+    endc   go to state 100
+
+
+state 54
+
+  125 stat: defineWhile . endc
 
     ENDL       shift, and go to state 2
     SEMICOLON  shift, and go to state 3
@@ -1125,22 +1145,11 @@ state 53
     endc   go to state 101
 
 
-state 54
-
-  122 stat: defineWhile . endc
-
-    ENDL       shift, and go to state 2
-    SEMICOLON  shift, and go to state 3
-
-    endls  go to state 7
-    endc   go to state 102
-
-
 state 55
 
-   61 funcType: defineType COLON . LPAREN typeList RPAREN
+   62 funcType: defineType COLON . LPAREN typeList RPAREN
 
-    LPAREN  shift, and go to state 103
+    LPAREN  shift, and go to state 102
 
 
 state 56
@@ -1152,23 +1161,23 @@ state 56
 
 state 57
 
-   55 defineFunc: defineType name . funcHeaderV @2 subSpace
-   99 defineParam: defineType name .
-  100            | defineType name . ASSIGN expr
+   56 defineFunc: defineType name . funcHeaderV @3 subSpace
+  103 defineParam: defineType name .
+  104            | defineType name . ASSIGN expr
 
-    ASSIGN  shift, and go to state 104
-    LPAREN  shift, and go to state 105
+    ASSIGN  shift, and go to state 103
+    LPAREN  shift, and go to state 104
 
-    $default  reduce using rule 99 (defineParam)
+    $default  reduce using rule 103 (defineParam)
 
-    funcHeaderV  go to state 106
+    funcHeaderV  go to state 105
 
 
 state 58
 
-  130 defineStat: defineVariale endc .
+  133 defineStat: defineVariale endc .
 
-    $default  reduce using rule 130 (defineStat)
+    $default  reduce using rule 133 (defineStat)
 
 
 state 59
@@ -1180,33 +1189,33 @@ state 59
 
 state 60
 
-   81 initOperator: OPERATOR . RBRACE initOperatorContexts LBRACE endls
+   83 initOperator: OPERATOR . RBRACE initOperatorContexts LBRACE endls
 
-    RBRACE  shift, and go to state 107
+    RBRACE  shift, and go to state 106
 
 
 state 61
 
-   79 init: DINIT endls initContext . DEND endls
+   81 init: DINIT endls initContext . DEND
 
-    DEND  shift, and go to state 108
+    DEND  shift, and go to state 107
 
 
 state 62
 
-   80 initContext: initOperator .
+   82 initContext: initOperator .
 
-    $default  reduce using rule 80 (initContext)
+    $default  reduce using rule 82 (initContext)
 
 
 state 63
 
-   99 defineParam: defineType name .
-  100            | defineType name . ASSIGN expr
+  103 defineParam: defineType name .
+  104            | defineType name . ASSIGN expr
 
-    ASSIGN  shift, and go to state 104
+    ASSIGN  shift, and go to state 103
 
-    $default  reduce using rule 99 (defineParam)
+    $default  reduce using rule 103 (defineParam)
 
 
 state 64
@@ -1222,9 +1231,9 @@ state 64
 
 state 65
 
-  101 paramListP: paramListP list defineParam .
+  105 paramListP: paramListP list defineParam .
 
-    $default  reduce using rule 101 (paramListP)
+    $default  reduce using rule 105 (paramListP)
 
 
 state 66
@@ -1280,7 +1289,7 @@ state 71
     name         go to state 75
     arrayExpr    go to state 76
     dictExpr     go to state 77
-    expr         go to state 109
+    expr         go to state 108
     funcExpr     go to state 79
     funcHeaderE  go to state 80
     defineIden   go to state 81
@@ -1290,11 +1299,11 @@ state 71
 
 state 72
 
-   60 funcHeaderE: LPAREN . @4 paramList RPAREN COLON defineType
+   61 funcHeaderE: LPAREN . @5 paramList RPAREN COLON defineType
 
-    $default  reduce using rule 59 (@4)
+    $default  reduce using rule 60 (@5)
 
-    @4  go to state 110
+    @5  go to state 109
 
 
 state 73
@@ -1308,10 +1317,10 @@ state 73
     ENDL      [reduce using rule 18 (dictContext)]
     $default  reduce using rule 18 (dictContext)
 
-    endls        go to state 111
-    name         go to state 112
-    dictContext  go to state 113
-    dictList     go to state 114
+    endls        go to state 110
+    name         go to state 111
+    dictContext  go to state 112
+    dictList     go to state 113
 
 
 state 74
@@ -1343,12 +1352,12 @@ state 74
     LBRACKET       [reduce using rule 47 (exprList)]
     $default       reduce using rule 47 (exprList)
 
-    endls        go to state 115
+    endls        go to state 114
     name         go to state 75
     arrayExpr    go to state 76
     dictExpr     go to state 77
-    expr         go to state 116
-    exprList     go to state 117
+    expr         go to state 115
+    exprList     go to state 116
     funcExpr     go to state 79
     funcHeaderE  go to state 80
     defineIden   go to state 81
@@ -1358,9 +1367,9 @@ state 74
 
 state 75
 
-   62 defineIden: name .
+   63 defineIden: name .
 
-    $default  reduce using rule 62 (defineIden)
+    $default  reduce using rule 63 (defineIden)
 
 
 state 76
@@ -1392,23 +1401,23 @@ state 78
    34     | expr . MULT expr
    35     | expr . DIVIDE expr
    36     | expr . MODULUS expr
-  110 controlSpace: RETURN expr .
+  114 controlSpace: RETURN expr .
 
-    OR       shift, and go to state 118
-    AND      shift, and go to state 119
-    NE       shift, and go to state 120
-    EQ       shift, and go to state 121
-    GE       shift, and go to state 122
-    GT       shift, and go to state 123
-    LE       shift, and go to state 124
-    LT       shift, and go to state 125
-    MINUS    shift, and go to state 126
-    PLUS     shift, and go to state 127
-    MODULUS  shift, and go to state 128
-    DIVIDE   shift, and go to state 129
-    MULT     shift, and go to state 130
+    OR       shift, and go to state 117
+    AND      shift, and go to state 118
+    NE       shift, and go to state 119
+    EQ       shift, and go to state 120
+    GE       shift, and go to state 121
+    GT       shift, and go to state 122
+    LE       shift, and go to state 123
+    LT       shift, and go to state 124
+    MINUS    shift, and go to state 125
+    PLUS     shift, and go to state 126
+    MODULUS  shift, and go to state 127
+    DIVIDE   shift, and go to state 128
+    MULT     shift, and go to state 129
 
-    $default  reduce using rule 110 (controlSpace)
+    $default  reduce using rule 114 (controlSpace)
 
 
 state 79
@@ -1420,18 +1429,19 @@ state 79
 
 state 80
 
-   57 funcExpr: funcHeaderE . @3 subSpace
+   58 funcExpr: funcHeaderE . @4 subSpace
 
-    $default  reduce using rule 56 (@3)
+    $default  reduce using rule 57 (@4)
 
-    @3  go to state 131
+    @4  go to state 130
 
 
 state 81
 
    43 expr: defineIden .
-   65 idenFunc: defineIden . LPAREN exprList RPAREN
-   66 idenBracket: defineIden . LBRACKET expr RBRACKET
+   66 idenFunc: defineIden . LPAREN exprList RPAREN
+   67         | defineIden . LPAREN RPAREN
+   68 idenBracket: defineIden . LBRACKET expr RBRACKET
 
     LPAREN    shift, and go to state 89
     LBRACKET  shift, and go to state 90
@@ -1443,14 +1453,14 @@ state 81
 
 state 82
 
-   63 defineIden: idenFunc .
+   64 defineIden: idenFunc .
 
-    $default  reduce using rule 63 (defineIden)
+    $default  reduce using rule 64 (defineIden)
 
 
 state 83
 
-   72 ifPart: IF LPAREN . expr RPAREN @5 subSpace
+   74 ifPart: IF LPAREN . expr RPAREN @6 subSpace
 
     NAME           shift, and go to state 1
     INT            shift, and go to state 66
@@ -1466,7 +1476,7 @@ state 83
     name         go to state 75
     arrayExpr    go to state 76
     dictExpr     go to state 77
-    expr         go to state 132
+    expr         go to state 131
     funcExpr     go to state 79
     funcHeaderE  go to state 80
     defineIden   go to state 81
@@ -1476,29 +1486,55 @@ state 83
 
 state 84
 
-   53 defineFor: FOR LPAREN . paramList @1 SEMICOLON expr SEMICOLON iteration RPAREN subSpace
+   54 defineFor: FOR LPAREN . paramList @1 SEMICOLON expr SEMICOLON iteration RPAREN @2 subSpace
 
     NAME    shift, and go to state 1
     ENDL    shift, and go to state 2
     LBRACE  shift, and go to state 4
 
-    ENDL      [reduce using rule 103 (paramList)]
-    $default  reduce using rule 103 (paramList)
+    ENDL      [reduce using rule 107 (paramList)]
+    $default  reduce using rule 107 (paramList)
 
-    endls        go to state 133
+    endls        go to state 132
     name         go to state 9
     arrayType    go to state 11
     dictType     go to state 12
     funcType     go to state 14
     defineParam  go to state 16
-    paramListP   go to state 134
-    paramList    go to state 135
+    paramListP   go to state 133
+    paramList    go to state 134
     defineType   go to state 26
 
 
 state 85
 
-  154 defineWhile: WHILE LPAREN . expr RPAREN @11 subSpace
+  157 defineWhile: WHILE LPAREN . expr RPAREN @12 subSpace
+
+    NAME           shift, and go to state 1
+    INT            shift, and go to state 66
+    NUMBER         shift, and go to state 67
+    STRING         shift, and go to state 68
+    VALUE_BOOLEAN  shift, and go to state 69
+    VALUE_VOID     shift, and go to state 70
+    RPAREN         shift, and go to state 71
+    LPAREN         shift, and go to state 72
+    LBRACE         shift, and go to state 73
+    LBRACKET       shift, and go to state 74
+
+    name         go to state 75
+    arrayExpr    go to state 76
+    dictExpr     go to state 77
+    expr         go to state 135
+    funcExpr     go to state 79
+    funcHeaderE  go to state 80
+    defineIden   go to state 81
+    idenFunc     go to state 82
+    idenBracket  go to state 44
+
+
+state 86
+
+  135 defineSwitch: SWITCH LPAREN . expr RPAREN @9 switchSpace
 
     NAME           shift, and go to state 1
     INT            shift, and go to state 66
@@ -1522,9 +1558,16 @@ state 85
     idenBracket  go to state 44
 
 
-state 86
+state 87
 
-  132 defineSwitch: SWITCH LPAREN . expr RPAREN @8 switchSpace
+  126 stat: defineFor endc .
+
+    $default  reduce using rule 126 (stat)
+
+
+state 88
+
+   89 assignment: defineIden ASSIGN . expr
 
     NAME           shift, and go to state 1
     INT            shift, and go to state 66
@@ -1548,42 +1591,10 @@ state 86
     idenBracket  go to state 44
 
 
-state 87
-
-  123 stat: defineFor endc .
-
-    $default  reduce using rule 123 (stat)
-
-
-state 88
-
-   86 assignment: defineIden ASSIGN . expr
-
-    NAME           shift, and go to state 1
-    INT            shift, and go to state 66
-    NUMBER         shift, and go to state 67
-    STRING         shift, and go to state 68
-    VALUE_BOOLEAN  shift, and go to state 69
-    VALUE_VOID     shift, and go to state 70
-    RPAREN         shift, and go to state 71
-    LPAREN         shift, and go to state 72
-    LBRACE         shift, and go to state 73
-    LBRACKET       shift, and go to state 74
-
-    name         go to state 75
-    arrayExpr    go to state 76
-    dictExpr     go to state 77
-    expr         go to state 138
-    funcExpr     go to state 79
-    funcHeaderE  go to state 80
-    defineIden   go to state 81
-    idenFunc     go to state 82
-    idenBracket  go to state 44
-
-
 state 89
 
-   65 idenFunc: defineIden LPAREN . exprList RPAREN
+   66 idenFunc: defineIden LPAREN . exprList RPAREN
+   67         | defineIden LPAREN . RPAREN
 
     NAME           shift, and go to state 1
     ENDL           shift, and go to state 2
@@ -1592,7 +1603,7 @@ state 89
     STRING         shift, and go to state 68
     VALUE_BOOLEAN  shift, and go to state 69
     VALUE_VOID     shift, and go to state 70
-    RPAREN         shift, and go to state 71
+    RPAREN         shift, and go to state 138
     LPAREN         shift, and go to state 72
     LBRACE         shift, and go to state 73
     LBRACKET       shift, and go to state 74
@@ -1610,11 +1621,11 @@ state 89
     LBRACKET       [reduce using rule 47 (exprList)]
     $default       reduce using rule 47 (exprList)
 
-    endls        go to state 115
+    endls        go to state 114
     name         go to state 75
     arrayExpr    go to state 76
     dictExpr     go to state 77
-    expr         go to state 116
+    expr         go to state 115
     exprList     go to state 139
     funcExpr     go to state 79
     funcHeaderE  go to state 80
@@ -1625,7 +1636,7 @@ state 89
 
 state 90
 
-   66 idenBracket: defineIden LBRACKET . expr RBRACKET
+   68 idenBracket: defineIden LBRACKET . expr RBRACKET
 
     NAME           shift, and go to state 1
     INT            shift, and go to state 66
@@ -1651,108 +1662,101 @@ state 90
 
 state 91
 
-  120 stat: idenFunc endc .
+  124 stat: defineIf endc .
 
-    $default  reduce using rule 120 (stat)
+    $default  reduce using rule 124 (stat)
 
 
 state 92
 
-  121 stat: defineIf endc .
+   78 elseIfPart: ELSE . IF LPAREN expr RPAREN @7 subSpace
+   80 elsePart: ELSE . @8 subSpace
 
-    $default  reduce using rule 121 (stat)
+    IF  shift, and go to state 141
+
+    $default  reduce using rule 79 (@8)
+
+    @8  go to state 142
 
 
 state 93
 
-   76 elseIfPart: ELSE . IF LPAREN expr RPAREN @6 subSpace
-   78 elsePart: ELSE . @7 subSpace
+   70 defineIf: ifPart elseIfParts .
+   72         | ifPart elseIfParts . elsePart
+   75 elseIfParts: elseIfParts . elseIfPart
 
-    IF  shift, and go to state 141
+    ELSE  shift, and go to state 92
 
-    $default  reduce using rule 77 (@7)
-
-    @7  go to state 142
-
-
-state 94
-
-   68 defineIf: ifPart elseIfParts .
-   70         | ifPart elseIfParts . elsePart
-   73 elseIfParts: elseIfParts . elseIfPart
-
-    ELSE  shift, and go to state 93
-
-    $default  reduce using rule 68 (defineIf)
+    $default  reduce using rule 70 (defineIf)
 
     elseIfPart  go to state 143
     elsePart    go to state 144
 
 
+state 94
+
+   76 elseIfParts: elseIfPart .
+
+    $default  reduce using rule 76 (elseIfParts)
+
+
 state 95
 
-   74 elseIfParts: elseIfPart .
+   71 defineIf: ifPart elsePart .
 
-    $default  reduce using rule 74 (elseIfParts)
+    $default  reduce using rule 71 (defineIf)
 
 
 state 96
 
-   69 defineIf: ifPart elsePart .
-
-    $default  reduce using rule 69 (defineIf)
-
-
-state 97
-
-  118 stat: iteration endc .
-
-    $default  reduce using rule 118 (stat)
-
-
-state 98
-
-  119 stat: controlSpace endc .
-
-    $default  reduce using rule 119 (stat)
-
-
-state 99
-
-  117 stat: endc .
-
-    $default  reduce using rule 117 (stat)
-
-
-state 100
-
-  115 stats: stats stat .
-
-    $default  reduce using rule 115 (stats)
-
-
-state 101
-
-  124 stat: defineSwitch endc .
-
-    $default  reduce using rule 124 (stat)
-
-
-state 102
-
-  122 stat: defineWhile endc .
+  122 stat: iteration endc .
 
     $default  reduce using rule 122 (stat)
 
 
-state 103
+state 97
 
-   61 funcType: defineType COLON LPAREN . typeList RPAREN
+  123 stat: controlSpace endc .
+
+    $default  reduce using rule 123 (stat)
+
+
+state 98
+
+  121 stat: endc .
+
+    $default  reduce using rule 121 (stat)
+
+
+state 99
+
+  119 stats: stats stat .
+
+    $default  reduce using rule 119 (stats)
+
+
+state 100
+
+  127 stat: defineSwitch endc .
+
+    $default  reduce using rule 127 (stat)
+
+
+state 101
+
+  125 stat: defineWhile endc .
+
+    $default  reduce using rule 125 (stat)
+
+
+state 102
+
+   62 funcType: defineType COLON LPAREN . typeList RPAREN
 
     NAME    shift, and go to state 1
     LBRACE  shift, and go to state 4
 
-    $default  reduce using rule 149 (typeList)
+    $default  reduce using rule 152 (typeList)
 
     name        go to state 9
     arrayType   go to state 11
@@ -1763,9 +1767,9 @@ state 103
     typeList    go to state 147
 
 
-state 104
+state 103
 
-  100 defineParam: defineType name ASSIGN . expr
+  104 defineParam: defineType name ASSIGN . expr
 
     NAME           shift, and go to state 1
     INT            shift, and go to state 66
@@ -1789,40 +1793,40 @@ state 104
     idenBracket  go to state 44
 
 
-state 105
+state 104
 
-   58 funcHeaderV: LPAREN . paramList RPAREN
+   59 funcHeaderV: LPAREN . paramList RPAREN
 
     NAME    shift, and go to state 1
     ENDL    shift, and go to state 2
     LBRACE  shift, and go to state 4
 
-    ENDL      [reduce using rule 103 (paramList)]
-    $default  reduce using rule 103 (paramList)
+    ENDL      [reduce using rule 107 (paramList)]
+    $default  reduce using rule 107 (paramList)
 
-    endls        go to state 133
+    endls        go to state 132
     name         go to state 9
     arrayType    go to state 11
     dictType     go to state 12
     funcType     go to state 14
     defineParam  go to state 16
-    paramListP   go to state 134
+    paramListP   go to state 133
     paramList    go to state 149
     defineType   go to state 26
 
 
+state 105
+
+   56 defineFunc: defineType name funcHeaderV . @3 subSpace
+
+    $default  reduce using rule 55 (@3)
+
+    @3  go to state 150
+
+
 state 106
 
-   55 defineFunc: defineType name funcHeaderV . @2 subSpace
-
-    $default  reduce using rule 54 (@2)
-
-    @2  go to state 150
-
-
-state 107
-
-   81 initOperator: OPERATOR RBRACE . initOperatorContexts LBRACE endls
+   83 initOperator: OPERATOR RBRACE . initOperatorContexts LBRACE endls
 
     NAME    shift, and go to state 1
     ENDL    shift, and go to state 2
@@ -1838,16 +1842,14 @@ state 107
     defineType            go to state 154
 
 
+state 107
+
+   81 init: DINIT endls initContext DEND .
+
+    $default  reduce using rule 81 (init)
+
+
 state 108
-
-   79 init: DINIT endls initContext DEND . endls
-
-    ENDL  shift, and go to state 2
-
-    endls  go to state 155
-
-
-state 109
 
    24 expr: expr . AND expr
    25     | expr . OR expr
@@ -1864,63 +1866,63 @@ state 109
    36     | expr . MODULUS expr
    37     | RPAREN expr . LPAREN
 
-    OR       shift, and go to state 118
-    AND      shift, and go to state 119
-    NE       shift, and go to state 120
-    EQ       shift, and go to state 121
-    GE       shift, and go to state 122
-    GT       shift, and go to state 123
-    LE       shift, and go to state 124
-    LT       shift, and go to state 125
-    MINUS    shift, and go to state 126
-    PLUS     shift, and go to state 127
-    MODULUS  shift, and go to state 128
-    DIVIDE   shift, and go to state 129
-    MULT     shift, and go to state 130
-    LPAREN   shift, and go to state 156
+    OR       shift, and go to state 117
+    AND      shift, and go to state 118
+    NE       shift, and go to state 119
+    EQ       shift, and go to state 120
+    GE       shift, and go to state 121
+    GT       shift, and go to state 122
+    LE       shift, and go to state 123
+    LT       shift, and go to state 124
+    MINUS    shift, and go to state 125
+    PLUS     shift, and go to state 126
+    MODULUS  shift, and go to state 127
+    DIVIDE   shift, and go to state 128
+    MULT     shift, and go to state 129
+    LPAREN   shift, and go to state 155
 
 
-state 110
+state 109
 
-   60 funcHeaderE: LPAREN @4 . paramList RPAREN COLON defineType
+   61 funcHeaderE: LPAREN @5 . paramList RPAREN COLON defineType
 
     NAME    shift, and go to state 1
     ENDL    shift, and go to state 2
     LBRACE  shift, and go to state 4
 
-    ENDL      [reduce using rule 103 (paramList)]
-    $default  reduce using rule 103 (paramList)
+    ENDL      [reduce using rule 107 (paramList)]
+    $default  reduce using rule 107 (paramList)
 
-    endls        go to state 133
+    endls        go to state 132
     name         go to state 9
     arrayType    go to state 11
     dictType     go to state 12
     funcType     go to state 14
     defineParam  go to state 16
-    paramListP   go to state 134
-    paramList    go to state 157
+    paramListP   go to state 133
+    paramList    go to state 156
     defineType   go to state 26
 
 
-state 111
+state 110
 
     1 endls: endls . ENDL
    21 dictContext: endls . dictContext
 
     NAME  shift, and go to state 1
-    ENDL  shift, and go to state 158
+    ENDL  shift, and go to state 157
 
     NAME      [reduce using rule 18 (dictContext)]
     ENDL      [reduce using rule 18 (dictContext)]
     $default  reduce using rule 18 (dictContext)
 
-    endls        go to state 111
-    name         go to state 112
-    dictContext  go to state 159
-    dictList     go to state 114
+    endls        go to state 110
+    name         go to state 111
+    dictContext  go to state 158
+    dictList     go to state 113
 
 
-state 112
+state 111
 
    23 dictList: name . expr
 
@@ -1938,7 +1940,7 @@ state 112
     name         go to state 75
     arrayExpr    go to state 76
     dictExpr     go to state 77
-    expr         go to state 160
+    expr         go to state 159
     funcExpr     go to state 79
     funcHeaderE  go to state 80
     defineIden   go to state 81
@@ -1946,37 +1948,37 @@ state 112
     idenBracket  go to state 44
 
 
-state 113
+state 112
 
    17 dictExpr: LBRACE dictContext . RBRACE
    19 dictContext: dictContext . lists dictList
    22            | dictContext . endls
 
     ENDL    shift, and go to state 2
-    RBRACE  shift, and go to state 161
+    RBRACE  shift, and go to state 160
     COMMA   shift, and go to state 30
 
     $default  reduce using rule 7 (lists)
 
-    endls  go to state 162
-    list   go to state 163
-    lists  go to state 164
+    endls  go to state 161
+    list   go to state 162
+    lists  go to state 163
 
 
-state 114
+state 113
 
    20 dictContext: dictList .
 
     $default  reduce using rule 20 (dictContext)
 
 
-state 115
+state 114
 
     1 endls: endls . ENDL
    50 exprList: endls . exprList
 
     NAME           shift, and go to state 1
-    ENDL           shift, and go to state 158
+    ENDL           shift, and go to state 157
     INT            shift, and go to state 66
     NUMBER         shift, and go to state 67
     STRING         shift, and go to state 68
@@ -2000,12 +2002,12 @@ state 115
     LBRACKET       [reduce using rule 47 (exprList)]
     $default       reduce using rule 47 (exprList)
 
-    endls        go to state 115
+    endls        go to state 114
     name         go to state 75
     arrayExpr    go to state 76
     dictExpr     go to state 77
-    expr         go to state 116
-    exprList     go to state 165
+    expr         go to state 115
+    exprList     go to state 164
     funcExpr     go to state 79
     funcHeaderE  go to state 80
     defineIden   go to state 81
@@ -2013,7 +2015,7 @@ state 115
     idenBracket  go to state 44
 
 
-state 116
+state 115
 
    24 expr: expr . AND expr
    25     | expr . OR expr
@@ -2030,24 +2032,24 @@ state 116
    36     | expr . MODULUS expr
    49 exprList: expr .
 
-    OR       shift, and go to state 118
-    AND      shift, and go to state 119
-    NE       shift, and go to state 120
-    EQ       shift, and go to state 121
-    GE       shift, and go to state 122
-    GT       shift, and go to state 123
-    LE       shift, and go to state 124
-    LT       shift, and go to state 125
-    MINUS    shift, and go to state 126
-    PLUS     shift, and go to state 127
-    MODULUS  shift, and go to state 128
-    DIVIDE   shift, and go to state 129
-    MULT     shift, and go to state 130
+    OR       shift, and go to state 117
+    AND      shift, and go to state 118
+    NE       shift, and go to state 119
+    EQ       shift, and go to state 120
+    GE       shift, and go to state 121
+    GT       shift, and go to state 122
+    LE       shift, and go to state 123
+    LT       shift, and go to state 124
+    MINUS    shift, and go to state 125
+    PLUS     shift, and go to state 126
+    MODULUS  shift, and go to state 127
+    DIVIDE   shift, and go to state 128
+    MULT     shift, and go to state 129
 
     $default  reduce using rule 49 (exprList)
 
 
-state 117
+state 116
 
    15 arrayExpr: LBRACKET exprList . RBRACKET
    48 exprList: exprList . lists expr
@@ -2055,18 +2057,44 @@ state 117
 
     ENDL      shift, and go to state 2
     COMMA     shift, and go to state 30
-    RBRACKET  shift, and go to state 166
+    RBRACKET  shift, and go to state 165
 
     $default  reduce using rule 7 (lists)
 
-    endls  go to state 167
-    list   go to state 163
-    lists  go to state 168
+    endls  go to state 166
+    list   go to state 162
+    lists  go to state 167
+
+
+state 117
+
+   25 expr: expr OR . expr
+
+    NAME           shift, and go to state 1
+    INT            shift, and go to state 66
+    NUMBER         shift, and go to state 67
+    STRING         shift, and go to state 68
+    VALUE_BOOLEAN  shift, and go to state 69
+    VALUE_VOID     shift, and go to state 70
+    RPAREN         shift, and go to state 71
+    LPAREN         shift, and go to state 72
+    LBRACE         shift, and go to state 73
+    LBRACKET       shift, and go to state 74
+
+    name         go to state 75
+    arrayExpr    go to state 76
+    dictExpr     go to state 77
+    expr         go to state 168
+    funcExpr     go to state 79
+    funcHeaderE  go to state 80
+    defineIden   go to state 81
+    idenFunc     go to state 82
+    idenBracket  go to state 44
 
 
 state 118
 
-   25 expr: expr OR . expr
+   24 expr: expr AND . expr
 
     NAME           shift, and go to state 1
     INT            shift, and go to state 66
@@ -2092,7 +2120,7 @@ state 118
 
 state 119
 
-   24 expr: expr AND . expr
+   27 expr: expr NE . expr
 
     NAME           shift, and go to state 1
     INT            shift, and go to state 66
@@ -2118,7 +2146,7 @@ state 119
 
 state 120
 
-   27 expr: expr NE . expr
+   26 expr: expr EQ . expr
 
     NAME           shift, and go to state 1
     INT            shift, and go to state 66
@@ -2144,7 +2172,7 @@ state 120
 
 state 121
 
-   26 expr: expr EQ . expr
+   29 expr: expr GE . expr
 
     NAME           shift, and go to state 1
     INT            shift, and go to state 66
@@ -2170,7 +2198,7 @@ state 121
 
 state 122
 
-   29 expr: expr GE . expr
+   28 expr: expr GT . expr
 
     NAME           shift, and go to state 1
     INT            shift, and go to state 66
@@ -2196,7 +2224,7 @@ state 122
 
 state 123
 
-   28 expr: expr GT . expr
+   31 expr: expr LE . expr
 
     NAME           shift, and go to state 1
     INT            shift, and go to state 66
@@ -2222,7 +2250,7 @@ state 123
 
 state 124
 
-   31 expr: expr LE . expr
+   30 expr: expr LT . expr
 
     NAME           shift, and go to state 1
     INT            shift, and go to state 66
@@ -2248,7 +2276,7 @@ state 124
 
 state 125
 
-   30 expr: expr LT . expr
+   33 expr: expr MINUS . expr
 
     NAME           shift, and go to state 1
     INT            shift, and go to state 66
@@ -2274,7 +2302,7 @@ state 125
 
 state 126
 
-   33 expr: expr MINUS . expr
+   32 expr: expr PLUS . expr
 
     NAME           shift, and go to state 1
     INT            shift, and go to state 66
@@ -2300,7 +2328,7 @@ state 126
 
 state 127
 
-   32 expr: expr PLUS . expr
+   36 expr: expr MODULUS . expr
 
     NAME           shift, and go to state 1
     INT            shift, and go to state 66
@@ -2326,7 +2354,7 @@ state 127
 
 state 128
 
-   36 expr: expr MODULUS . expr
+   35 expr: expr DIVIDE . expr
 
     NAME           shift, and go to state 1
     INT            shift, and go to state 66
@@ -2352,7 +2380,7 @@ state 128
 
 state 129
 
-   35 expr: expr DIVIDE . expr
+   34 expr: expr MULT . expr
 
     NAME           shift, and go to state 1
     INT            shift, and go to state 66
@@ -2378,42 +2406,16 @@ state 129
 
 state 130
 
-   34 expr: expr MULT . expr
+   58 funcExpr: funcHeaderE @4 . subSpace
 
-    NAME           shift, and go to state 1
-    INT            shift, and go to state 66
-    NUMBER         shift, and go to state 67
-    STRING         shift, and go to state 68
-    VALUE_BOOLEAN  shift, and go to state 69
-    VALUE_VOID     shift, and go to state 70
-    RPAREN         shift, and go to state 71
-    LPAREN         shift, and go to state 72
-    LBRACE         shift, and go to state 73
-    LBRACKET       shift, and go to state 74
+    ENDL    shift, and go to state 2
+    LBRACE  shift, and go to state 181
 
-    name         go to state 75
-    arrayExpr    go to state 76
-    dictExpr     go to state 77
-    expr         go to state 181
-    funcExpr     go to state 79
-    funcHeaderE  go to state 80
-    defineIden   go to state 81
-    idenFunc     go to state 82
-    idenBracket  go to state 44
+    endls     go to state 182
+    subSpace  go to state 183
 
 
 state 131
-
-   57 funcExpr: funcHeaderE @3 . subSpace
-
-    ENDL    shift, and go to state 2
-    LBRACE  shift, and go to state 182
-
-    endls     go to state 183
-    subSpace  go to state 184
-
-
-state 132
 
    24 expr: expr . AND expr
    25     | expr . OR expr
@@ -2428,70 +2430,103 @@ state 132
    34     | expr . MULT expr
    35     | expr . DIVIDE expr
    36     | expr . MODULUS expr
-   72 ifPart: IF LPAREN expr . RPAREN @5 subSpace
+   74 ifPart: IF LPAREN expr . RPAREN @6 subSpace
 
-    OR       shift, and go to state 118
-    AND      shift, and go to state 119
-    NE       shift, and go to state 120
-    EQ       shift, and go to state 121
-    GE       shift, and go to state 122
-    GT       shift, and go to state 123
-    LE       shift, and go to state 124
-    LT       shift, and go to state 125
-    MINUS    shift, and go to state 126
-    PLUS     shift, and go to state 127
-    MODULUS  shift, and go to state 128
-    DIVIDE   shift, and go to state 129
-    MULT     shift, and go to state 130
-    RPAREN   shift, and go to state 185
+    OR       shift, and go to state 117
+    AND      shift, and go to state 118
+    NE       shift, and go to state 119
+    EQ       shift, and go to state 120
+    GE       shift, and go to state 121
+    GT       shift, and go to state 122
+    LE       shift, and go to state 123
+    LT       shift, and go to state 124
+    MINUS    shift, and go to state 125
+    PLUS     shift, and go to state 126
+    MODULUS  shift, and go to state 127
+    DIVIDE   shift, and go to state 128
+    MULT     shift, and go to state 129
+    RPAREN   shift, and go to state 184
 
 
-state 133
+state 132
 
     1 endls: endls . ENDL
-  105 paramList: endls . paramList
+  109 paramList: endls . paramList
 
     NAME    shift, and go to state 1
-    ENDL    shift, and go to state 158
+    ENDL    shift, and go to state 157
     LBRACE  shift, and go to state 4
 
-    ENDL      [reduce using rule 103 (paramList)]
-    $default  reduce using rule 103 (paramList)
+    ENDL      [reduce using rule 107 (paramList)]
+    $default  reduce using rule 107 (paramList)
 
-    endls        go to state 133
+    endls        go to state 132
     name         go to state 9
     arrayType    go to state 11
     dictType     go to state 12
     funcType     go to state 14
     defineParam  go to state 16
-    paramListP   go to state 134
-    paramList    go to state 186
+    paramListP   go to state 133
+    paramList    go to state 185
     defineType   go to state 26
 
 
-state 134
+state 133
 
-  101 paramListP: paramListP . list defineParam
-  104 paramList: paramListP .
+  105 paramListP: paramListP . list defineParam
+  108 paramList: paramListP .
 
     COMMA  shift, and go to state 30
 
-    $default  reduce using rule 104 (paramList)
+    $default  reduce using rule 108 (paramList)
 
     list  go to state 31
 
 
-state 135
+state 134
 
-   53 defineFor: FOR LPAREN paramList . @1 SEMICOLON expr SEMICOLON iteration RPAREN subSpace
-  106 paramList: paramList . endls
+   54 defineFor: FOR LPAREN paramList . @1 SEMICOLON expr SEMICOLON iteration RPAREN @2 subSpace
+  110 paramList: paramList . endls
 
     ENDL  shift, and go to state 2
 
     $default  reduce using rule 52 (@1)
 
-    endls  go to state 187
-    @1     go to state 188
+    endls  go to state 186
+    @1     go to state 187
+
+
+state 135
+
+   24 expr: expr . AND expr
+   25     | expr . OR expr
+   26     | expr . EQ expr
+   27     | expr . NE expr
+   28     | expr . GT expr
+   29     | expr . GE expr
+   30     | expr . LT expr
+   31     | expr . LE expr
+   32     | expr . PLUS expr
+   33     | expr . MINUS expr
+   34     | expr . MULT expr
+   35     | expr . DIVIDE expr
+   36     | expr . MODULUS expr
+  157 defineWhile: WHILE LPAREN expr . RPAREN @12 subSpace
+
+    OR       shift, and go to state 117
+    AND      shift, and go to state 118
+    NE       shift, and go to state 119
+    EQ       shift, and go to state 120
+    GE       shift, and go to state 121
+    GT       shift, and go to state 122
+    LE       shift, and go to state 123
+    LT       shift, and go to state 124
+    MINUS    shift, and go to state 125
+    PLUS     shift, and go to state 126
+    MODULUS  shift, and go to state 127
+    DIVIDE   shift, and go to state 128
+    MULT     shift, and go to state 129
+    RPAREN   shift, and go to state 188
 
 
 state 136
@@ -2509,21 +2544,21 @@ state 136
    34     | expr . MULT expr
    35     | expr . DIVIDE expr
    36     | expr . MODULUS expr
-  154 defineWhile: WHILE LPAREN expr . RPAREN @11 subSpace
+  135 defineSwitch: SWITCH LPAREN expr . RPAREN @9 switchSpace
 
-    OR       shift, and go to state 118
-    AND      shift, and go to state 119
-    NE       shift, and go to state 120
-    EQ       shift, and go to state 121
-    GE       shift, and go to state 122
-    GT       shift, and go to state 123
-    LE       shift, and go to state 124
-    LT       shift, and go to state 125
-    MINUS    shift, and go to state 126
-    PLUS     shift, and go to state 127
-    MODULUS  shift, and go to state 128
-    DIVIDE   shift, and go to state 129
-    MULT     shift, and go to state 130
+    OR       shift, and go to state 117
+    AND      shift, and go to state 118
+    NE       shift, and go to state 119
+    EQ       shift, and go to state 120
+    GE       shift, and go to state 121
+    GT       shift, and go to state 122
+    LE       shift, and go to state 123
+    LT       shift, and go to state 124
+    MINUS    shift, and go to state 125
+    PLUS     shift, and go to state 126
+    MODULUS  shift, and go to state 127
+    DIVIDE   shift, and go to state 128
+    MULT     shift, and go to state 129
     RPAREN   shift, and go to state 189
 
 
@@ -2542,74 +2577,80 @@ state 137
    34     | expr . MULT expr
    35     | expr . DIVIDE expr
    36     | expr . MODULUS expr
-  132 defineSwitch: SWITCH LPAREN expr . RPAREN @8 switchSpace
+   89 assignment: defineIden ASSIGN expr .
 
-    OR       shift, and go to state 118
-    AND      shift, and go to state 119
-    NE       shift, and go to state 120
-    EQ       shift, and go to state 121
-    GE       shift, and go to state 122
-    GT       shift, and go to state 123
-    LE       shift, and go to state 124
-    LT       shift, and go to state 125
-    MINUS    shift, and go to state 126
-    PLUS     shift, and go to state 127
-    MODULUS  shift, and go to state 128
-    DIVIDE   shift, and go to state 129
-    MULT     shift, and go to state 130
-    RPAREN   shift, and go to state 190
+    OR       shift, and go to state 117
+    AND      shift, and go to state 118
+    NE       shift, and go to state 119
+    EQ       shift, and go to state 120
+    GE       shift, and go to state 121
+    GT       shift, and go to state 122
+    LE       shift, and go to state 123
+    LT       shift, and go to state 124
+    MINUS    shift, and go to state 125
+    PLUS     shift, and go to state 126
+    MODULUS  shift, and go to state 127
+    DIVIDE   shift, and go to state 128
+    MULT     shift, and go to state 129
+
+    $default  reduce using rule 89 (assignment)
 
 
 state 138
 
-   24 expr: expr . AND expr
-   25     | expr . OR expr
-   26     | expr . EQ expr
-   27     | expr . NE expr
-   28     | expr . GT expr
-   29     | expr . GE expr
-   30     | expr . LT expr
-   31     | expr . LE expr
-   32     | expr . PLUS expr
-   33     | expr . MINUS expr
-   34     | expr . MULT expr
-   35     | expr . DIVIDE expr
-   36     | expr . MODULUS expr
-   86 assignment: defineIden ASSIGN expr .
+   37 expr: RPAREN . expr LPAREN
+   67 idenFunc: defineIden LPAREN RPAREN .
 
-    OR       shift, and go to state 118
-    AND      shift, and go to state 119
-    NE       shift, and go to state 120
-    EQ       shift, and go to state 121
-    GE       shift, and go to state 122
-    GT       shift, and go to state 123
-    LE       shift, and go to state 124
-    LT       shift, and go to state 125
-    MINUS    shift, and go to state 126
-    PLUS     shift, and go to state 127
-    MODULUS  shift, and go to state 128
-    DIVIDE   shift, and go to state 129
-    MULT     shift, and go to state 130
+    NAME           shift, and go to state 1
+    INT            shift, and go to state 66
+    NUMBER         shift, and go to state 67
+    STRING         shift, and go to state 68
+    VALUE_BOOLEAN  shift, and go to state 69
+    VALUE_VOID     shift, and go to state 70
+    RPAREN         shift, and go to state 71
+    LPAREN         shift, and go to state 72
+    LBRACE         shift, and go to state 73
+    LBRACKET       shift, and go to state 74
 
-    $default  reduce using rule 86 (assignment)
+    NAME           [reduce using rule 67 (idenFunc)]
+    INT            [reduce using rule 67 (idenFunc)]
+    NUMBER         [reduce using rule 67 (idenFunc)]
+    STRING         [reduce using rule 67 (idenFunc)]
+    VALUE_BOOLEAN  [reduce using rule 67 (idenFunc)]
+    VALUE_VOID     [reduce using rule 67 (idenFunc)]
+    RPAREN         [reduce using rule 67 (idenFunc)]
+    LPAREN         [reduce using rule 67 (idenFunc)]
+    LBRACE         [reduce using rule 67 (idenFunc)]
+    LBRACKET       [reduce using rule 67 (idenFunc)]
+    $default       reduce using rule 67 (idenFunc)
+
+    name         go to state 75
+    arrayExpr    go to state 76
+    dictExpr     go to state 77
+    expr         go to state 108
+    funcExpr     go to state 79
+    funcHeaderE  go to state 80
+    defineIden   go to state 81
+    idenFunc     go to state 82
+    idenBracket  go to state 44
 
 
 state 139
 
    48 exprList: exprList . lists expr
    51         | exprList . endls
-   65 idenFunc: defineIden LPAREN exprList . RPAREN
+   66 idenFunc: defineIden LPAREN exprList . RPAREN
 
     ENDL    shift, and go to state 2
-    RPAREN  shift, and go to state 191
+    RPAREN  shift, and go to state 190
     COMMA   shift, and go to state 30
 
     RPAREN    [reduce using rule 7 (lists)]
     $default  reduce using rule 7 (lists)
 
-    endls  go to state 167
-    list   go to state 163
-    lists  go to state 168
+    endls  go to state 166
+    list   go to state 162
+    lists  go to state 167
 
 
 state 140
@@ -2627,85 +2668,85 @@ state 140
    34     | expr . MULT expr
    35     | expr . DIVIDE expr
    36     | expr . MODULUS expr
-   66 idenBracket: defineIden LBRACKET expr . RBRACKET
+   68 idenBracket: defineIden LBRACKET expr . RBRACKET
 
-    OR        shift, and go to state 118
-    AND       shift, and go to state 119
-    NE        shift, and go to state 120
-    EQ        shift, and go to state 121
-    GE        shift, and go to state 122
-    GT        shift, and go to state 123
-    LE        shift, and go to state 124
-    LT        shift, and go to state 125
-    MINUS     shift, and go to state 126
-    PLUS      shift, and go to state 127
-    MODULUS   shift, and go to state 128
-    DIVIDE    shift, and go to state 129
-    MULT      shift, and go to state 130
-    RBRACKET  shift, and go to state 192
+    OR        shift, and go to state 117
+    AND       shift, and go to state 118
+    NE        shift, and go to state 119
+    EQ        shift, and go to state 120
+    GE        shift, and go to state 121
+    GT        shift, and go to state 122
+    LE        shift, and go to state 123
+    LT        shift, and go to state 124
+    MINUS     shift, and go to state 125
+    PLUS      shift, and go to state 126
+    MODULUS   shift, and go to state 127
+    DIVIDE    shift, and go to state 128
+    MULT      shift, and go to state 129
+    RBRACKET  shift, and go to state 191
 
 
 state 141
 
-   76 elseIfPart: ELSE IF . LPAREN expr RPAREN @6 subSpace
+   78 elseIfPart: ELSE IF . LPAREN expr RPAREN @7 subSpace
 
-    LPAREN  shift, and go to state 193
+    LPAREN  shift, and go to state 192
 
 
 state 142
 
-   78 elsePart: ELSE @7 . subSpace
+   80 elsePart: ELSE @8 . subSpace
 
     ENDL    shift, and go to state 2
-    LBRACE  shift, and go to state 182
+    LBRACE  shift, and go to state 181
 
-    endls     go to state 183
-    subSpace  go to state 194
+    endls     go to state 182
+    subSpace  go to state 193
 
 
 state 143
 
-   73 elseIfParts: elseIfParts elseIfPart .
+   75 elseIfParts: elseIfParts elseIfPart .
 
-    $default  reduce using rule 73 (elseIfParts)
+    $default  reduce using rule 75 (elseIfParts)
 
 
 state 144
 
-   70 defineIf: ifPart elseIfParts elsePart .
+   72 defineIf: ifPart elseIfParts elsePart .
 
-    $default  reduce using rule 70 (defineIf)
+    $default  reduce using rule 72 (defineIf)
 
 
 state 145
 
    14 arrayType: defineType . BRACKET
-   61 funcType: defineType . COLON LPAREN typeList RPAREN
-  148 typeListP: defineType .
+   62 funcType: defineType . COLON LPAREN typeList RPAREN
+  151 typeListP: defineType .
 
     COLON    shift, and go to state 55
     BRACKET  shift, and go to state 56
 
-    $default  reduce using rule 148 (typeListP)
+    $default  reduce using rule 151 (typeListP)
 
 
 state 146
 
-  147 typeListP: typeListP . list defineType
-  150 typeList: typeListP .
+  150 typeListP: typeListP . list defineType
+  153 typeList: typeListP .
 
     COMMA  shift, and go to state 30
 
-    $default  reduce using rule 150 (typeList)
+    $default  reduce using rule 153 (typeList)
 
-    list  go to state 195
+    list  go to state 194
 
 
 state 147
 
-   61 funcType: defineType COLON LPAREN typeList . RPAREN
+   62 funcType: defineType COLON LPAREN typeList . RPAREN
 
-    RPAREN  shift, and go to state 196
+    RPAREN  shift, and go to state 195
 
 
 state 148
@@ -2723,135 +2764,125 @@ state 148
    34     | expr . MULT expr
    35     | expr . DIVIDE expr
    36     | expr . MODULUS expr
-  100 defineParam: defineType name ASSIGN expr .
+  104 defineParam: defineType name ASSIGN expr .
 
-    OR       shift, and go to state 118
-    AND      shift, and go to state 119
-    NE       shift, and go to state 120
-    EQ       shift, and go to state 121
-    GE       shift, and go to state 122
-    GT       shift, and go to state 123
-    LE       shift, and go to state 124
-    LT       shift, and go to state 125
-    MINUS    shift, and go to state 126
-    PLUS     shift, and go to state 127
-    MODULUS  shift, and go to state 128
-    DIVIDE   shift, and go to state 129
-    MULT     shift, and go to state 130
+    OR       shift, and go to state 117
+    AND      shift, and go to state 118
+    NE       shift, and go to state 119
+    EQ       shift, and go to state 120
+    GE       shift, and go to state 121
+    GT       shift, and go to state 122
+    LE       shift, and go to state 123
+    LT       shift, and go to state 124
+    MINUS    shift, and go to state 125
+    PLUS     shift, and go to state 126
+    MODULUS  shift, and go to state 127
+    DIVIDE   shift, and go to state 128
+    MULT     shift, and go to state 129
 
-    $default  reduce using rule 100 (defineParam)
+    $default  reduce using rule 104 (defineParam)
 
 
 state 149
 
-   58 funcHeaderV: LPAREN paramList . RPAREN
-  106 paramList: paramList . endls
+   59 funcHeaderV: LPAREN paramList . RPAREN
+  110 paramList: paramList . endls
 
     ENDL    shift, and go to state 2
-    RPAREN  shift, and go to state 197
+    RPAREN  shift, and go to state 196
 
-    endls  go to state 187
+    endls  go to state 186
 
 
 state 150
 
-   55 defineFunc: defineType name funcHeaderV @2 . subSpace
+   56 defineFunc: defineType name funcHeaderV @3 . subSpace
 
     ENDL    shift, and go to state 2
-    LBRACE  shift, and go to state 182
+    LBRACE  shift, and go to state 181
 
-    endls     go to state 183
-    subSpace  go to state 198
+    endls     go to state 182
+    subSpace  go to state 197
 
 
 state 151
 
     1 endls: endls . ENDL
-   84 initOperatorContext: endls .
+   86 initOperatorContext: endls .
 
     ENDL  shift, and go to state 27
 
-    ENDL      [reduce using rule 84 (initOperatorContext)]
-    $default  reduce using rule 84 (initOperatorContext)
+    ENDL      [reduce using rule 86 (initOperatorContext)]
+    $default  reduce using rule 86 (initOperatorContext)
 
 
 state 152
 
-   81 initOperator: OPERATOR RBRACE initOperatorContexts . LBRACE endls
-   82 initOperatorContexts: initOperatorContexts . initOperatorContext
+   83 initOperator: OPERATOR RBRACE initOperatorContexts . LBRACE endls
+   84 initOperatorContexts: initOperatorContexts . initOperatorContext
 
     NAME    shift, and go to state 1
     ENDL    shift, and go to state 2
-    LBRACE  shift, and go to state 199
+    LBRACE  shift, and go to state 198
 
     endls                go to state 151
     name                 go to state 9
     arrayType            go to state 11
     dictType             go to state 12
     funcType             go to state 14
-    initOperatorContext  go to state 200
+    initOperatorContext  go to state 199
     defineType           go to state 154
 
 
 state 153
 
-   83 initOperatorContexts: initOperatorContext .
+   85 initOperatorContexts: initOperatorContext .
 
-    $default  reduce using rule 83 (initOperatorContexts)
+    $default  reduce using rule 85 (initOperatorContexts)
 
 
 state 154
 
    14 arrayType: defineType . BRACKET
-   61 funcType: defineType . COLON LPAREN typeList RPAREN
-   85 initOperatorContext: defineType . operator defineType ASSIGN name endls
+   62 funcType: defineType . COLON LPAREN typeList RPAREN
+   87 initOperatorContext: defineType . operator defineType ASSIGN name endls
 
-    NE       shift, and go to state 201
-    EQ       shift, and go to state 202
-    GE       shift, and go to state 203
-    GT       shift, and go to state 204
-    LE       shift, and go to state 205
-    LT       shift, and go to state 206
-    MINUS    shift, and go to state 207
-    PLUS     shift, and go to state 208
-    MODULUS  shift, and go to state 209
-    DIVIDE   shift, and go to state 210
-    MULT     shift, and go to state 211
+    NE       shift, and go to state 200
+    EQ       shift, and go to state 201
+    GE       shift, and go to state 202
+    GT       shift, and go to state 203
+    LE       shift, and go to state 204
+    LT       shift, and go to state 205
+    MINUS    shift, and go to state 206
+    PLUS     shift, and go to state 207
+    MODULUS  shift, and go to state 208
+    DIVIDE   shift, and go to state 209
+    MULT     shift, and go to state 210
     COLON    shift, and go to state 55
     BRACKET  shift, and go to state 56
 
-    operator  go to state 212
+    operator  go to state 211
 
 
 state 155
-
-    1 endls: endls . ENDL
-   79 init: DINIT endls initContext DEND endls .
-
-    ENDL  shift, and go to state 27
-
-    $default  reduce using rule 79 (init)
-
-
-state 156
 
    37 expr: RPAREN expr LPAREN .
 
     $default  reduce using rule 37 (expr)
 
 
-state 157
+state 156
 
-   60 funcHeaderE: LPAREN @4 paramList . RPAREN COLON defineType
-  106 paramList: paramList . endls
+   61 funcHeaderE: LPAREN @5 paramList . RPAREN COLON defineType
+  110 paramList: paramList . endls
 
     ENDL    shift, and go to state 2
-    RPAREN  shift, and go to state 213
+    RPAREN  shift, and go to state 212
 
-    endls  go to state 187
+    endls  go to state 186
 
 
-state 158
+state 157
 
     1 endls: endls ENDL .
     2      | ENDL .
@@ -2889,7 +2920,7 @@ state 158
     $default       reduce using rule 1 (endls)
 
 
-state 159
+state 158
 
    19 dictContext: dictContext . lists dictList
    21            | endls dictContext .
@@ -2905,12 +2936,12 @@ state 159
     COMMA     [reduce using rule 21 (dictContext)]
     $default  reduce using rule 7 (lists)
 
-    endls  go to state 162
-    list   go to state 163
-    lists  go to state 164
+    endls  go to state 161
+    list   go to state 162
+    lists  go to state 163
 
 
-state 160
+state 159
 
    23 dictList: name expr .
    24 expr: expr . AND expr
@@ -2927,31 +2958,31 @@ state 160
    35     | expr . DIVIDE expr
    36     | expr . MODULUS expr
 
-    OR       shift, and go to state 118
-    AND      shift, and go to state 119
-    NE       shift, and go to state 120
-    EQ       shift, and go to state 121
-    GE       shift, and go to state 122
-    GT       shift, and go to state 123
-    LE       shift, and go to state 124
-    LT       shift, and go to state 125
-    MINUS    shift, and go to state 126
-    PLUS     shift, and go to state 127
-    MODULUS  shift, and go to state 128
-    DIVIDE   shift, and go to state 129
-    MULT     shift, and go to state 130
+    OR       shift, and go to state 117
+    AND      shift, and go to state 118
+    NE       shift, and go to state 119
+    EQ       shift, and go to state 120
+    GE       shift, and go to state 121
+    GT       shift, and go to state 122
+    LE       shift, and go to state 123
+    LT       shift, and go to state 124
+    MINUS    shift, and go to state 125
+    PLUS     shift, and go to state 126
+    MODULUS  shift, and go to state 127
+    DIVIDE   shift, and go to state 128
+    MULT     shift, and go to state 129
 
     $default  reduce using rule 23 (dictList)
 
 
-state 161
+state 160
 
    17 dictExpr: LBRACE dictContext RBRACE .
 
     $default  reduce using rule 17 (dictExpr)
 
 
-state 162
+state 161
 
     1 endls: endls . ENDL
     9 lists: endls .
@@ -2965,7 +2996,7 @@ state 162
     $default  reduce using rule 22 (dictContext)
 
 
-state 163
+state 162
 
     6 list: list . endls
     8 lists: list .
@@ -2977,17 +3008,17 @@ state 163
     endls  go to state 64
 
 
-state 164
+state 163
 
    19 dictContext: dictContext lists . dictList
 
     NAME  shift, and go to state 1
 
-    name      go to state 112
-    dictList  go to state 214
+    name      go to state 111
+    dictList  go to state 213
 
 
-state 165
+state 164
 
    48 exprList: exprList . lists expr
    50         | endls exprList .
@@ -3021,19 +3052,19 @@ state 165
     LBRACKET       [reduce using rule 50 (exprList)]
     $default       reduce using rule 7 (lists)
 
-    endls  go to state 167
-    list   go to state 163
-    lists  go to state 168
+    endls  go to state 166
+    list   go to state 162
+    lists  go to state 167
 
 
-state 166
+state 165
 
    15 arrayExpr: LBRACKET exprList RBRACKET .
 
     $default  reduce using rule 15 (arrayExpr)
 
 
-state 167
+state 166
 
     1 endls: endls . ENDL
     9 lists: endls .
@@ -3067,7 +3098,7 @@ state 167
     $default       reduce using rule 9 (lists)
 
 
-state 168
+state 167
 
    48 exprList: exprList lists . expr
 
@@ -3085,7 +3116,7 @@ state 168
     name         go to state 75
     arrayExpr    go to state 76
     dictExpr     go to state 77
-    expr         go to state 215
+    expr         go to state 214
     funcExpr     go to state 79
     funcHeaderE  go to state 80
     defineIden   go to state 81
@@ -3093,7 +3124,7 @@ state 168
     idenBracket  go to state 44
 
 
-state 169
+state 168
 
    24 expr: expr . AND expr
    25     | expr . OR expr
@@ -3110,22 +3141,22 @@ state 169
    35     | expr . DIVIDE expr
    36     | expr . MODULUS expr
 
-    NE       shift, and go to state 120
-    EQ       shift, and go to state 121
-    GE       shift, and go to state 122
-    GT       shift, and go to state 123
-    LE       shift, and go to state 124
-    LT       shift, and go to state 125
-    MINUS    shift, and go to state 126
-    PLUS     shift, and go to state 127
-    MODULUS  shift, and go to state 128
-    DIVIDE   shift, and go to state 129
-    MULT     shift, and go to state 130
+    NE       shift, and go to state 119
+    EQ       shift, and go to state 120
+    GE       shift, and go to state 121
+    GT       shift, and go to state 122
+    LE       shift, and go to state 123
+    LT       shift, and go to state 124
+    MINUS    shift, and go to state 125
+    PLUS     shift, and go to state 126
+    MODULUS  shift, and go to state 127
+    DIVIDE   shift, and go to state 128
+    MULT     shift, and go to state 129
 
     $default  reduce using rule 25 (expr)
 
 
-state 170
+state 169
 
    24 expr: expr . AND expr
    24     | expr AND expr .
@@ -3142,22 +3173,22 @@ state 170
    35     | expr . DIVIDE expr
    36     | expr . MODULUS expr
 
-    NE       shift, and go to state 120
-    EQ       shift, and go to state 121
-    GE       shift, and go to state 122
-    GT       shift, and go to state 123
-    LE       shift, and go to state 124
-    LT       shift, and go to state 125
-    MINUS    shift, and go to state 126
-    PLUS     shift, and go to state 127
-    MODULUS  shift, and go to state 128
-    DIVIDE   shift, and go to state 129
-    MULT     shift, and go to state 130
+    NE       shift, and go to state 119
+    EQ       shift, and go to state 120
+    GE       shift, and go to state 121
+    GT       shift, and go to state 122
+    LE       shift, and go to state 123
+    LT       shift, and go to state 124
+    MINUS    shift, and go to state 125
+    PLUS     shift, and go to state 126
+    MODULUS  shift, and go to state 127
+    DIVIDE   shift, and go to state 128
+    MULT     shift, and go to state 129
 
     $default  reduce using rule 24 (expr)
 
 
-state 171
+state 170
 
    24 expr: expr . AND expr
    25     | expr . OR expr
@@ -3174,20 +3205,20 @@ state 171
    35     | expr . DIVIDE expr
    36     | expr . MODULUS expr
 
-    GE       shift, and go to state 122
-    GT       shift, and go to state 123
-    LE       shift, and go to state 124
-    LT       shift, and go to state 125
-    MINUS    shift, and go to state 126
-    PLUS     shift, and go to state 127
-    MODULUS  shift, and go to state 128
-    DIVIDE   shift, and go to state 129
-    MULT     shift, and go to state 130
+    GE       shift, and go to state 121
+    GT       shift, and go to state 122
+    LE       shift, and go to state 123
+    LT       shift, and go to state 124
+    MINUS    shift, and go to state 125
+    PLUS     shift, and go to state 126
+    MODULUS  shift, and go to state 127
+    DIVIDE   shift, and go to state 128
+    MULT     shift, and go to state 129
 
     $default  reduce using rule 27 (expr)
 
 
-state 172
+state 171
 
    24 expr: expr . AND expr
    25     | expr . OR expr
@@ -3204,20 +3235,20 @@ state 172
    35     | expr . DIVIDE expr
    36     | expr . MODULUS expr
 
-    GE       shift, and go to state 122
-    GT       shift, and go to state 123
-    LE       shift, and go to state 124
-    LT       shift, and go to state 125
-    MINUS    shift, and go to state 126
-    PLUS     shift, and go to state 127
-    MODULUS  shift, and go to state 128
-    DIVIDE   shift, and go to state 129
-    MULT     shift, and go to state 130
+    GE       shift, and go to state 121
+    GT       shift, and go to state 122
+    LE       shift, and go to state 123
+    LT       shift, and go to state 124
+    MINUS    shift, and go to state 125
+    PLUS     shift, and go to state 126
+    MODULUS  shift, and go to state 127
+    DIVIDE   shift, and go to state 128
+    MULT     shift, and go to state 129
 
     $default  reduce using rule 26 (expr)
 
 
-state 173
+state 172
 
    24 expr: expr . AND expr
    25     | expr . OR expr
@@ -3234,18 +3265,18 @@ state 173
    35     | expr . DIVIDE expr
    36     | expr . MODULUS expr
 
-    LE       shift, and go to state 124
-    LT       shift, and go to state 125
-    MINUS    shift, and go to state 126
-    PLUS     shift, and go to state 127
-    MODULUS  shift, and go to state 128
-    DIVIDE   shift, and go to state 129
-    MULT     shift, and go to state 130
+    LE       shift, and go to state 123
+    LT       shift, and go to state 124
+    MINUS    shift, and go to state 125
+    PLUS     shift, and go to state 126
+    MODULUS  shift, and go to state 127
+    DIVIDE   shift, and go to state 128
+    MULT     shift, and go to state 129
 
     $default  reduce using rule 29 (expr)
 
 
-state 174
+state 173
 
    24 expr: expr . AND expr
    25     | expr . OR expr
@@ -3262,18 +3293,18 @@ state 174
    35     | expr . DIVIDE expr
    36     | expr . MODULUS expr
 
-    LE       shift, and go to state 124
-    LT       shift, and go to state 125
-    MINUS    shift, and go to state 126
-    PLUS     shift, and go to state 127
-    MODULUS  shift, and go to state 128
-    DIVIDE   shift, and go to state 129
-    MULT     shift, and go to state 130
+    LE       shift, and go to state 123
+    LT       shift, and go to state 124
+    MINUS    shift, and go to state 125
+    PLUS     shift, and go to state 126
+    MODULUS  shift, and go to state 127
+    DIVIDE   shift, and go to state 128
+    MULT     shift, and go to state 129
 
     $default  reduce using rule 28 (expr)
 
 
-state 175
+state 174
 
    24 expr: expr . AND expr
    25     | expr . OR expr
@@ -3290,16 +3321,16 @@ state 175
    35     | expr . DIVIDE expr
    36     | expr . MODULUS expr
 
-    MINUS    shift, and go to state 126
-    PLUS     shift, and go to state 127
-    MODULUS  shift, and go to state 128
-    DIVIDE   shift, and go to state 129
-    MULT     shift, and go to state 130
+    MINUS    shift, and go to state 125
+    PLUS     shift, and go to state 126
+    MODULUS  shift, and go to state 127
+    DIVIDE   shift, and go to state 128
+    MULT     shift, and go to state 129
 
     $default  reduce using rule 31 (expr)
 
 
-state 176
+state 175
 
    24 expr: expr . AND expr
    25     | expr . OR expr
@@ -3316,16 +3347,16 @@ state 176
    35     | expr . DIVIDE expr
    36     | expr . MODULUS expr
 
-    MINUS    shift, and go to state 126
-    PLUS     shift, and go to state 127
-    MODULUS  shift, and go to state 128
-    DIVIDE   shift, and go to state 129
-    MULT     shift, and go to state 130
+    MINUS    shift, and go to state 125
+    PLUS     shift, and go to state 126
+    MODULUS  shift, and go to state 127
+    DIVIDE   shift, and go to state 128
+    MULT     shift, and go to state 129
 
     $default  reduce using rule 30 (expr)
 
 
-state 177
+state 176
 
    24 expr: expr . AND expr
    25     | expr . OR expr
@@ -3342,14 +3373,14 @@ state 177
    35     | expr . DIVIDE expr
    36     | expr . MODULUS expr
 
-    MODULUS  shift, and go to state 128
-    DIVIDE   shift, and go to state 129
-    MULT     shift, and go to state 130
+    MODULUS  shift, and go to state 127
+    DIVIDE   shift, and go to state 128
+    MULT     shift, and go to state 129
 
     $default  reduce using rule 33 (expr)
 
 
-state 178
+state 177
 
    24 expr: expr . AND expr
    25     | expr . OR expr
@@ -3366,14 +3397,14 @@ state 178
    35     | expr . DIVIDE expr
    36     | expr . MODULUS expr
 
-    MODULUS  shift, and go to state 128
-    DIVIDE   shift, and go to state 129
-    MULT     shift, and go to state 130
+    MODULUS  shift, and go to state 127
+    DIVIDE   shift, and go to state 128
+    MULT     shift, and go to state 129
 
     $default  reduce using rule 32 (expr)
 
 
-state 179
+state 178
 
    24 expr: expr . AND expr
    25     | expr . OR expr
@@ -3393,7 +3424,7 @@ state 179
     $default  reduce using rule 36 (expr)
 
 
-state 180
+state 179
 
    24 expr: expr . AND expr
    25     | expr . OR expr
@@ -3413,7 +3444,7 @@ state 180
     $default  reduce using rule 35 (expr)
 
 
-state 181
+state 180
 
    24 expr: expr . AND expr
    25     | expr . OR expr
@@ -3433,9 +3464,9 @@ state 181
     $default  reduce using rule 34 (expr)
 
 
-state 182
+state 181
 
-  107 subSpace: LBRACE . space RBRACE
+  111 subSpace: LBRACE . space RBRACE
 
     NAME       shift, and go to state 1
     ENDL       shift, and go to state 2
@@ -3443,12 +3474,12 @@ state 182
     LBRACE     shift, and go to state 4
     CONST      shift, and go to state 6
 
-    NAME       [reduce using rule 125 (defineStats)]
-    ENDL       [reduce using rule 125 (defineStats)]
-    SEMICOLON  [reduce using rule 125 (defineStats)]
-    LBRACE     [reduce using rule 125 (defineStats)]
-    CONST      [reduce using rule 125 (defineStats)]
-    $default   reduce using rule 125 (defineStats)
+    NAME       [reduce using rule 128 (defineStats)]
+    ENDL       [reduce using rule 128 (defineStats)]
+    SEMICOLON  [reduce using rule 128 (defineStats)]
+    LBRACE     [reduce using rule 128 (defineStats)]
+    CONST      [reduce using rule 128 (defineStats)]
+    $default   reduce using rule 128 (defineStats)
 
     endls          go to state 7
     endc           go to state 8
@@ -3459,107 +3490,107 @@ state 182
     funcType       go to state 14
     defineParam    go to state 16
     paramListP     go to state 17
-    space          go to state 216
+    space          go to state 215
     defineStats    go to state 19
     defineStat     go to state 20
     defineType     go to state 21
     defineVariale  go to state 22
 
 
-state 183
+state 182
 
     1 endls: endls . ENDL
-  108 subSpace: endls . subSpace
+  112 subSpace: endls . subSpace
 
-    ENDL    shift, and go to state 158
-    LBRACE  shift, and go to state 182
+    ENDL    shift, and go to state 157
+    LBRACE  shift, and go to state 181
 
-    endls     go to state 183
-    subSpace  go to state 217
+    endls     go to state 182
+    subSpace  go to state 216
+
+
+state 183
+
+   58 funcExpr: funcHeaderE @4 subSpace .
+
+    $default  reduce using rule 58 (funcExpr)
 
 
 state 184
 
-   57 funcExpr: funcHeaderE @3 subSpace .
+   74 ifPart: IF LPAREN expr RPAREN . @6 subSpace
 
-    $default  reduce using rule 57 (funcExpr)
+    $default  reduce using rule 73 (@6)
+
+    @6  go to state 217
 
 
 state 185
 
-   72 ifPart: IF LPAREN expr RPAREN . @5 subSpace
+  109 paramList: endls paramList .
+  110          | paramList . endls
 
-    $default  reduce using rule 71 (@5)
+    ENDL  shift, and go to state 2
 
-    @5  go to state 218
+    ENDL      [reduce using rule 109 (paramList)]
+    $default  reduce using rule 109 (paramList)
+
+    endls  go to state 186
 
 
 state 186
 
-  105 paramList: endls paramList .
-  106          | paramList . endls
+    1 endls: endls . ENDL
+  110 paramList: paramList endls .
 
-    ENDL  shift, and go to state 2
+    ENDL  shift, and go to state 27
 
-    ENDL      [reduce using rule 105 (paramList)]
-    $default  reduce using rule 105 (paramList)
-
-    endls  go to state 187
+    ENDL      [reduce using rule 110 (paramList)]
+    $default  reduce using rule 110 (paramList)
 
 
 state 187
 
-    1 endls: endls . ENDL
-  106 paramList: paramList endls .
+   54 defineFor: FOR LPAREN paramList @1 . SEMICOLON expr SEMICOLON iteration RPAREN @2 subSpace
 
-    ENDL  shift, and go to state 27
-
-    ENDL      [reduce using rule 106 (paramList)]
-    $default  reduce using rule 106 (paramList)
+    SEMICOLON  shift, and go to state 218
 
 
 state 188
 
-   53 defineFor: FOR LPAREN paramList @1 . SEMICOLON expr SEMICOLON iteration RPAREN subSpace
+  157 defineWhile: WHILE LPAREN expr RPAREN . @12 subSpace
 
-    SEMICOLON  shift, and go to state 219
+    $default  reduce using rule 156 (@12)
+
+    @12  go to state 219
 
 
 state 189
 
-  154 defineWhile: WHILE LPAREN expr RPAREN . @11 subSpace
+  135 defineSwitch: SWITCH LPAREN expr RPAREN . @9 switchSpace
 
-    $default  reduce using rule 153 (@11)
+    $default  reduce using rule 134 (@9)
 
-    @11  go to state 220
+    @9  go to state 220
 
 
 state 190
 
-  132 defineSwitch: SWITCH LPAREN expr RPAREN . @8 switchSpace
+   66 idenFunc: defineIden LPAREN exprList RPAREN .
 
-    $default  reduce using rule 131 (@8)
-
-    @8  go to state 221
+    $default  reduce using rule 66 (idenFunc)
 
 
 state 191
 
-   65 idenFunc: defineIden LPAREN exprList RPAREN .
+   68 idenBracket: defineIden LBRACKET expr RBRACKET .
 
-    $default  reduce using rule 65 (idenFunc)
+    $default  reduce using rule 68 (idenBracket)
 
 
 state 192
 
-   66 idenBracket: defineIden LBRACKET expr RBRACKET .
-
-    $default  reduce using rule 66 (idenBracket)
-
-
-state 193
-
-   76 elseIfPart: ELSE IF LPAREN . expr RPAREN @6 subSpace
+   78 elseIfPart: ELSE IF LPAREN . expr RPAREN @7 subSpace
 
     NAME           shift, and go to state 1
     INT            shift, and go to state 66
@@ -3575,7 +3606,7 @@ state 193
     name         go to state 75
     arrayExpr    go to state 76
     dictExpr     go to state 77
-    expr         go to state 222
+    expr         go to state 221
     funcExpr     go to state 79
     funcHeaderE  go to state 80
     defineIden   go to state 81
@@ -3583,17 +3614,17 @@ state 193
     idenBracket  go to state 44
 
 
+state 193
+
+   80 elsePart: ELSE @8 subSpace .
+
+    $default  reduce using rule 80 (elsePart)
+
+
 state 194
 
-   78 elsePart: ELSE @7 subSpace .
-
-    $default  reduce using rule 78 (elsePart)
-
-
-state 195
-
     6 list: list . endls
-  147 typeListP: typeListP list . defineType
+  150 typeListP: typeListP list . defineType
 
     NAME    shift, and go to state 1
     ENDL    shift, and go to state 2
@@ -3604,40 +3635,40 @@ state 195
     arrayType   go to state 11
     dictType    go to state 12
     funcType    go to state 14
-    defineType  go to state 223
+    defineType  go to state 222
+
+
+state 195
+
+   62 funcType: defineType COLON LPAREN typeList RPAREN .
+
+    $default  reduce using rule 62 (funcType)
 
 
 state 196
 
-   61 funcType: defineType COLON LPAREN typeList RPAREN .
+   59 funcHeaderV: LPAREN paramList RPAREN .
 
-    $default  reduce using rule 61 (funcType)
+    $default  reduce using rule 59 (funcHeaderV)
 
 
 state 197
 
-   58 funcHeaderV: LPAREN paramList RPAREN .
+   56 defineFunc: defineType name funcHeaderV @3 subSpace .
 
-    $default  reduce using rule 58 (funcHeaderV)
+    $default  reduce using rule 56 (defineFunc)
 
 
 state 198
 
-   55 defineFunc: defineType name funcHeaderV @2 subSpace .
-
-    $default  reduce using rule 55 (defineFunc)
-
-
-state 199
-
    16 dictType: LBRACE . defineType RBRACE
-   81 initOperator: OPERATOR RBRACE initOperatorContexts LBRACE . endls
+   83 initOperator: OPERATOR RBRACE initOperatorContexts LBRACE . endls
 
     NAME    shift, and go to state 1
     ENDL    shift, and go to state 2
     LBRACE  shift, and go to state 4
 
-    endls       go to state 224
+    endls       go to state 223
     name        go to state 9
     arrayType   go to state 11
     dictType    go to state 12
@@ -3645,93 +3676,93 @@ state 199
     defineType  go to state 23
 
 
+state 199
+
+   84 initOperatorContexts: initOperatorContexts initOperatorContext .
+
+    $default  reduce using rule 84 (initOperatorContexts)
+
+
 state 200
 
-   82 initOperatorContexts: initOperatorContexts initOperatorContext .
-
-    $default  reduce using rule 82 (initOperatorContexts)
-
-
-state 201
-
-   94 operator: NE .
-
-    $default  reduce using rule 94 (operator)
-
-
-state 202
-
-   93 operator: EQ .
-
-    $default  reduce using rule 93 (operator)
-
-
-state 203
-
-   96 operator: GE .
-
-    $default  reduce using rule 96 (operator)
-
-
-state 204
-
-   95 operator: GT .
-
-    $default  reduce using rule 95 (operator)
-
-
-state 205
-
-   98 operator: LE .
+   98 operator: NE .
 
     $default  reduce using rule 98 (operator)
 
 
-state 206
+state 201
 
-   97 operator: LT .
+   97 operator: EQ .
 
     $default  reduce using rule 97 (operator)
 
 
+state 202
+
+  100 operator: GE .
+
+    $default  reduce using rule 100 (operator)
+
+
+state 203
+
+   99 operator: GT .
+
+    $default  reduce using rule 99 (operator)
+
+
+state 204
+
+  102 operator: LE .
+
+    $default  reduce using rule 102 (operator)
+
+
+state 205
+
+  101 operator: LT .
+
+    $default  reduce using rule 101 (operator)
+
+
+state 206
+
+   93 operator: MINUS .
+
+    $default  reduce using rule 93 (operator)
+
+
 state 207
 
-   89 operator: MINUS .
-
-    $default  reduce using rule 89 (operator)
-
-
-state 208
-
-   88 operator: PLUS .
-
-    $default  reduce using rule 88 (operator)
-
-
-state 209
-
-   92 operator: MODULUS .
+   92 operator: PLUS .
 
     $default  reduce using rule 92 (operator)
 
 
+state 208
+
+   96 operator: MODULUS .
+
+    $default  reduce using rule 96 (operator)
+
+
+state 209
+
+   95 operator: DIVIDE .
+
+    $default  reduce using rule 95 (operator)
+
+
 state 210
 
-   91 operator: DIVIDE .
+   94 operator: MULT .
 
-    $default  reduce using rule 91 (operator)
+    $default  reduce using rule 94 (operator)
 
 
 state 211
 
-   90 operator: MULT .
-
-    $default  reduce using rule 90 (operator)
-
-
-state 212
-
-   85 initOperatorContext: defineType operator . defineType ASSIGN name endls
+   87 initOperatorContext: defineType operator . defineType ASSIGN name endls
 
     NAME    shift, and go to state 1
     LBRACE  shift, and go to state 4
@@ -3740,24 +3771,24 @@ state 212
     arrayType   go to state 11
     dictType    go to state 12
     funcType    go to state 14
-    defineType  go to state 225
+    defineType  go to state 224
+
+
+state 212
+
+   61 funcHeaderE: LPAREN @5 paramList RPAREN . COLON defineType
+
+    COLON  shift, and go to state 225
 
 
 state 213
-
-   60 funcHeaderE: LPAREN @4 paramList RPAREN . COLON defineType
-
-    COLON  shift, and go to state 226
-
-
-state 214
 
    19 dictContext: dictContext lists dictList .
 
     $default  reduce using rule 19 (dictContext)
 
 
-state 215
+state 214
 
    24 expr: expr . AND expr
    25     | expr . OR expr
@@ -3774,51 +3805,51 @@ state 215
    36     | expr . MODULUS expr
    48 exprList: exprList lists expr .
 
-    OR       shift, and go to state 118
-    AND      shift, and go to state 119
-    NE       shift, and go to state 120
-    EQ       shift, and go to state 121
-    GE       shift, and go to state 122
-    GT       shift, and go to state 123
-    LE       shift, and go to state 124
-    LT       shift, and go to state 125
-    MINUS    shift, and go to state 126
-    PLUS     shift, and go to state 127
-    MODULUS  shift, and go to state 128
-    DIVIDE   shift, and go to state 129
-    MULT     shift, and go to state 130
+    OR       shift, and go to state 117
+    AND      shift, and go to state 118
+    NE       shift, and go to state 119
+    EQ       shift, and go to state 120
+    GE       shift, and go to state 121
+    GT       shift, and go to state 122
+    LE       shift, and go to state 123
+    LT       shift, and go to state 124
+    MINUS    shift, and go to state 125
+    PLUS     shift, and go to state 126
+    MODULUS  shift, and go to state 127
+    DIVIDE   shift, and go to state 128
+    MULT     shift, and go to state 129
 
     $default  reduce using rule 48 (exprList)
 
 
+state 215
+
+  111 subSpace: LBRACE space . RBRACE
+
+    RBRACE  shift, and go to state 226
+
+
 state 216
 
-  107 subSpace: LBRACE space . RBRACE
+  112 subSpace: endls subSpace .
 
-    RBRACE  shift, and go to state 227
+    $default  reduce using rule 112 (subSpace)
 
 
 state 217
 
-  108 subSpace: endls subSpace .
+   74 ifPart: IF LPAREN expr RPAREN @6 . subSpace
 
-    $default  reduce using rule 108 (subSpace)
+    ENDL    shift, and go to state 2
+    LBRACE  shift, and go to state 181
+
+    endls     go to state 182
+    subSpace  go to state 227
 
 
 state 218
 
-   72 ifPart: IF LPAREN expr RPAREN @5 . subSpace
-
-    ENDL    shift, and go to state 2
-    LBRACE  shift, and go to state 182
-
-    endls     go to state 183
-    subSpace  go to state 228
-
-
-state 219
-
-   53 defineFor: FOR LPAREN paramList @1 SEMICOLON . expr SEMICOLON iteration RPAREN subSpace
+   54 defineFor: FOR LPAREN paramList @1 SEMICOLON . expr SEMICOLON iteration RPAREN @2 subSpace
 
     NAME           shift, and go to state 1
     INT            shift, and go to state 66
@@ -3834,7 +3865,7 @@ state 219
     name         go to state 75
     arrayExpr    go to state 76
     dictExpr     go to state 77
-    expr         go to state 229
+    expr         go to state 228
     funcExpr     go to state 79
     funcHeaderE  go to state 80
     defineIden   go to state 81
@@ -3842,29 +3873,29 @@ state 219
     idenBracket  go to state 44
 
 
-state 220
+state 219
 
-  154 defineWhile: WHILE LPAREN expr RPAREN @11 . subSpace
+  157 defineWhile: WHILE LPAREN expr RPAREN @12 . subSpace
 
     ENDL    shift, and go to state 2
-    LBRACE  shift, and go to state 182
+    LBRACE  shift, and go to state 181
 
-    endls     go to state 183
-    subSpace  go to state 230
+    endls     go to state 182
+    subSpace  go to state 229
+
+
+state 220
+
+  135 defineSwitch: SWITCH LPAREN expr RPAREN @9 . switchSpace
+
+    ENDL    shift, and go to state 2
+    LBRACE  shift, and go to state 230
+
+    endls        go to state 231
+    switchSpace  go to state 232
 
 
 state 221
-
-  132 defineSwitch: SWITCH LPAREN expr RPAREN @8 . switchSpace
-
-    ENDL    shift, and go to state 2
-    RBRACE  shift, and go to state 231
-
-    endls        go to state 232
-    switchSpace  go to state 233
-
-
-state 222
 
    24 expr: expr . AND expr
    25     | expr . OR expr
@@ -3879,60 +3910,60 @@ state 222
    34     | expr . MULT expr
    35     | expr . DIVIDE expr
    36     | expr . MODULUS expr
-   76 elseIfPart: ELSE IF LPAREN expr . RPAREN @6 subSpace
+   78 elseIfPart: ELSE IF LPAREN expr . RPAREN @7 subSpace
 
-    OR       shift, and go to state 118
-    AND      shift, and go to state 119
-    NE       shift, and go to state 120
-    EQ       shift, and go to state 121
-    GE       shift, and go to state 122
-    GT       shift, and go to state 123
-    LE       shift, and go to state 124
-    LT       shift, and go to state 125
-    MINUS    shift, and go to state 126
-    PLUS     shift, and go to state 127
-    MODULUS  shift, and go to state 128
-    DIVIDE   shift, and go to state 129
-    MULT     shift, and go to state 130
-    RPAREN   shift, and go to state 234
+    OR       shift, and go to state 117
+    AND      shift, and go to state 118
+    NE       shift, and go to state 119
+    EQ       shift, and go to state 120
+    GE       shift, and go to state 121
+    GT       shift, and go to state 122
+    LE       shift, and go to state 123
+    LT       shift, and go to state 124
+    MINUS    shift, and go to state 125
+    PLUS     shift, and go to state 126
+    MODULUS  shift, and go to state 127
+    DIVIDE   shift, and go to state 128
+    MULT     shift, and go to state 129
+    RPAREN   shift, and go to state 233
+
+
+state 222
+
+   14 arrayType: defineType . BRACKET
+   62 funcType: defineType . COLON LPAREN typeList RPAREN
+  150 typeListP: typeListP list defineType .
+
+    COLON    shift, and go to state 55
+    BRACKET  shift, and go to state 56
+
+    $default  reduce using rule 150 (typeListP)
 
 
 state 223
 
-   14 arrayType: defineType . BRACKET
-   61 funcType: defineType . COLON LPAREN typeList RPAREN
-  147 typeListP: typeListP list defineType .
+    1 endls: endls . ENDL
+   83 initOperator: OPERATOR RBRACE initOperatorContexts LBRACE endls .
 
-    COLON    shift, and go to state 55
-    BRACKET  shift, and go to state 56
+    ENDL  shift, and go to state 27
 
-    $default  reduce using rule 147 (typeListP)
+    $default  reduce using rule 83 (initOperator)
 
 
 state 224
 
-    1 endls: endls . ENDL
-   81 initOperator: OPERATOR RBRACE initOperatorContexts LBRACE endls .
+   14 arrayType: defineType . BRACKET
+   62 funcType: defineType . COLON LPAREN typeList RPAREN
+   87 initOperatorContext: defineType operator defineType . ASSIGN name endls
 
-    ENDL  shift, and go to state 27
-
-    $default  reduce using rule 81 (initOperator)
+    COLON    shift, and go to state 55
+    ASSIGN   shift, and go to state 234
+    BRACKET  shift, and go to state 56
 
 
 state 225
 
-   14 arrayType: defineType . BRACKET
-   61 funcType: defineType . COLON LPAREN typeList RPAREN
-   85 initOperatorContext: defineType operator defineType . ASSIGN name endls
-
-    COLON    shift, and go to state 55
-    ASSIGN   shift, and go to state 235
-    BRACKET  shift, and go to state 56
-
-
-state 226
-
-   60 funcHeaderE: LPAREN @4 paramList RPAREN COLON . defineType
+   61 funcHeaderE: LPAREN @5 paramList RPAREN COLON . defineType
 
     NAME    shift, and go to state 1
     LBRACE  shift, and go to state 4
@@ -3941,24 +3972,24 @@ state 226
     arrayType   go to state 11
     dictType    go to state 12
     funcType    go to state 14
-    defineType  go to state 236
+    defineType  go to state 235
+
+
+state 226
+
+  111 subSpace: LBRACE space RBRACE .
+
+    $default  reduce using rule 111 (subSpace)
 
 
 state 227
 
-  107 subSpace: LBRACE space RBRACE .
+   74 ifPart: IF LPAREN expr RPAREN @6 subSpace .
 
-    $default  reduce using rule 107 (subSpace)
+    $default  reduce using rule 74 (ifPart)
 
 
 state 228
-
-   72 ifPart: IF LPAREN expr RPAREN @5 subSpace .
-
-    $default  reduce using rule 72 (ifPart)
-
-
-state 229
 
    24 expr: expr . AND expr
    25     | expr . OR expr
@@ -3973,202 +4004,204 @@ state 229
    34     | expr . MULT expr
    35     | expr . DIVIDE expr
    36     | expr . MODULUS expr
-   53 defineFor: FOR LPAREN paramList @1 SEMICOLON expr . SEMICOLON iteration RPAREN subSpace
+   54 defineFor: FOR LPAREN paramList @1 SEMICOLON expr . SEMICOLON iteration RPAREN @2 subSpace
 
-    OR         shift, and go to state 118
-    AND        shift, and go to state 119
-    NE         shift, and go to state 120
-    EQ         shift, and go to state 121
-    GE         shift, and go to state 122
-    GT         shift, and go to state 123
-    LE         shift, and go to state 124
-    LT         shift, and go to state 125
-    MINUS      shift, and go to state 126
-    PLUS       shift, and go to state 127
-    MODULUS    shift, and go to state 128
-    DIVIDE     shift, and go to state 129
-    MULT       shift, and go to state 130
-    SEMICOLON  shift, and go to state 237
+    OR         shift, and go to state 117
+    AND        shift, and go to state 118
+    NE         shift, and go to state 119
+    EQ         shift, and go to state 120
+    GE         shift, and go to state 121
+    GT         shift, and go to state 122
+    LE         shift, and go to state 123
+    LT         shift, and go to state 124
+    MINUS      shift, and go to state 125
+    PLUS       shift, and go to state 126
+    MODULUS    shift, and go to state 127
+    DIVIDE     shift, and go to state 128
+    MULT       shift, and go to state 129
+    SEMICOLON  shift, and go to state 236
+
+
+state 229
+
+  157 defineWhile: WHILE LPAREN expr RPAREN @12 subSpace .
+
+    $default  reduce using rule 157 (defineWhile)
 
 
 state 230
 
-  154 defineWhile: WHILE LPAREN expr RPAREN @11 subSpace .
+  136 switchSpace: LBRACE . switchStats RBRACE
 
-    $default  reduce using rule 154 (defineWhile)
+    ENDL     shift, and go to state 2
+    CASE     shift, and go to state 237
+    DEFAULT  shift, and go to state 238
+
+    ENDL      [reduce using rule 140 (switchStat)]
+    CASE      [reduce using rule 140 (switchStat)]
+    DEFAULT   [reduce using rule 140 (switchStat)]
+    $default  reduce using rule 140 (switchStat)
+
+    endls        go to state 239
+    switchStats  go to state 240
+    switchStat   go to state 241
 
 
 state 231
 
-  133 switchSpace: RBRACE . switchStats LBRACE
+    1 endls: endls . ENDL
+  137 switchSpace: endls . switchSpace
 
-    ENDL     shift, and go to state 2
-    CASE     shift, and go to state 238
-    DEFAULT  shift, and go to state 239
+    ENDL    shift, and go to state 157
+    LBRACE  shift, and go to state 230
 
-    ENDL      [reduce using rule 137 (switchStat)]
-    CASE      [reduce using rule 137 (switchStat)]
-    DEFAULT   [reduce using rule 137 (switchStat)]
-    $default  reduce using rule 137 (switchStat)
-
-    endls        go to state 240
-    switchStats  go to state 241
-    switchStat   go to state 242
+    endls        go to state 231
+    switchSpace  go to state 242
 
 
 state 232
 
-    1 endls: endls . ENDL
-  134 switchSpace: endls . switchSpace
+  135 defineSwitch: SWITCH LPAREN expr RPAREN @9 switchSpace .
 
-    ENDL    shift, and go to state 158
-    RBRACE  shift, and go to state 231
-
-    endls        go to state 232
-    switchSpace  go to state 243
+    $default  reduce using rule 135 (defineSwitch)
 
 
 state 233
 
-  132 defineSwitch: SWITCH LPAREN expr RPAREN @8 switchSpace .
+   78 elseIfPart: ELSE IF LPAREN expr RPAREN . @7 subSpace
 
-    $default  reduce using rule 132 (defineSwitch)
+    $default  reduce using rule 77 (@7)
+
+    @7  go to state 243
 
 
 state 234
 
-   76 elseIfPart: ELSE IF LPAREN expr RPAREN . @6 subSpace
+   87 initOperatorContext: defineType operator defineType ASSIGN . name endls
 
-    $default  reduce using rule 75 (@6)
+    NAME  shift, and go to state 1
 
-    @6  go to state 244
+    name  go to state 244
 
 
 state 235
 
-   85 initOperatorContext: defineType operator defineType ASSIGN . name endls
-
-    NAME  shift, and go to state 1
-
-    name  go to state 245
-
-
-state 236
-
    14 arrayType: defineType . BRACKET
-   60 funcHeaderE: LPAREN @4 paramList RPAREN COLON defineType .
-   61 funcType: defineType . COLON LPAREN typeList RPAREN
+   61 funcHeaderE: LPAREN @5 paramList RPAREN COLON defineType .
+   62 funcType: defineType . COLON LPAREN typeList RPAREN
 
     COLON    shift, and go to state 55
     BRACKET  shift, and go to state 56
 
-    $default  reduce using rule 60 (funcHeaderE)
+    $default  reduce using rule 61 (funcHeaderE)
+
+
+state 236
+
+   54 defineFor: FOR LPAREN paramList @1 SEMICOLON expr SEMICOLON . iteration RPAREN @2 subSpace
+
+    NAME  shift, and go to state 1
+
+    $default  reduce using rule 88 (assignment)
+
+    name         go to state 75
+    defineIden   go to state 42
+    idenFunc     go to state 43
+    idenBracket  go to state 44
+    assignment   go to state 47
+    iteration    go to state 245
 
 
 state 237
 
-   53 defineFor: FOR LPAREN paramList @1 SEMICOLON expr SEMICOLON . iteration RPAREN subSpace
+  143 switchStat: CASE . LPAREN expr RPAREN @10 subSpace
 
-    NAME  shift, and go to state 1
-
-    name         go to state 75
-    defineIden   go to state 42
-    idenFunc     go to state 82
-    idenBracket  go to state 44
-    assignment   go to state 47
-    iteration    go to state 246
+    LPAREN  shift, and go to state 246
 
 
 state 238
 
-  140 switchStat: CASE . LPAREN expr RPAREN @9 subSpace
+  145 switchStat: DEFAULT . @11 subSpace
 
-    LPAREN  shift, and go to state 247
+    $default  reduce using rule 144 (@11)
+
+    @11  go to state 247
 
 
 state 239
 
-  142 switchStat: DEFAULT . @10 subSpace
+    1 endls: endls . ENDL
+  141 switchStat: endls .
 
-    $default  reduce using rule 141 (@10)
+    ENDL  shift, and go to state 27
 
-    @10  go to state 248
+    ENDL      [reduce using rule 141 (switchStat)]
+    $default  reduce using rule 141 (switchStat)
 
 
 state 240
 
-    1 endls: endls . ENDL
-  138 switchStat: endls .
+  136 switchSpace: LBRACE switchStats . RBRACE
+  138 switchStats: switchStats . switchStat
 
-    ENDL  shift, and go to state 27
+    ENDL     shift, and go to state 2
+    RBRACE   shift, and go to state 248
+    CASE     shift, and go to state 237
+    DEFAULT  shift, and go to state 238
 
-    ENDL      [reduce using rule 138 (switchStat)]
-    $default  reduce using rule 138 (switchStat)
+    ENDL     [reduce using rule 140 (switchStat)]
+    RBRACE   [reduce using rule 140 (switchStat)]
+    CASE     [reduce using rule 140 (switchStat)]
+    DEFAULT  [reduce using rule 140 (switchStat)]
+
+    endls       go to state 239
+    switchStat  go to state 249
 
 
 state 241
 
-  133 switchSpace: RBRACE switchStats . LBRACE
-  135 switchStats: switchStats . switchStat
+  139 switchStats: switchStat .
 
-    ENDL     shift, and go to state 2
-    LBRACE   shift, and go to state 249
-    CASE     shift, and go to state 238
-    DEFAULT  shift, and go to state 239
-
-    ENDL     [reduce using rule 137 (switchStat)]
-    LBRACE   [reduce using rule 137 (switchStat)]
-    CASE     [reduce using rule 137 (switchStat)]
-    DEFAULT  [reduce using rule 137 (switchStat)]
-
-    endls       go to state 240
-    switchStat  go to state 250
+    $default  reduce using rule 139 (switchStats)
 
 
 state 242
 
-  136 switchStats: switchStat .
+  137 switchSpace: endls switchSpace .
 
-    $default  reduce using rule 136 (switchStats)
+    $default  reduce using rule 137 (switchSpace)
 
 
 state 243
 
-  134 switchSpace: endls switchSpace .
+   78 elseIfPart: ELSE IF LPAREN expr RPAREN @7 . subSpace
 
-    $default  reduce using rule 134 (switchSpace)
+    ENDL    shift, and go to state 2
+    LBRACE  shift, and go to state 181
+
+    endls     go to state 182
+    subSpace  go to state 250
 
 
 state 244
 
-   76 elseIfPart: ELSE IF LPAREN expr RPAREN @6 . subSpace
+   87 initOperatorContext: defineType operator defineType ASSIGN name . endls
 
-    ENDL    shift, and go to state 2
-    LBRACE  shift, and go to state 182
+    ENDL  shift, and go to state 2
 
-    endls     go to state 183
-    subSpace  go to state 251
+    endls  go to state 251
 
 
 state 245
 
-   85 initOperatorContext: defineType operator defineType ASSIGN name . endls
+   54 defineFor: FOR LPAREN paramList @1 SEMICOLON expr SEMICOLON iteration . RPAREN @2 subSpace
 
-    ENDL  shift, and go to state 2
-
-    endls  go to state 252
+    RPAREN  shift, and go to state 252
 
 
 state 246
 
-   53 defineFor: FOR LPAREN paramList @1 SEMICOLON expr SEMICOLON iteration . RPAREN subSpace
-
-    RPAREN  shift, and go to state 253
-
-
-state 247
-
-  140 switchStat: CASE LPAREN . expr RPAREN @9 subSpace
+  143 switchStat: CASE LPAREN . expr RPAREN @10 subSpace
 
     NAME           shift, and go to state 1
     INT            shift, and go to state 66
@@ -4184,7 +4217,7 @@ state 247
     name         go to state 75
     arrayExpr    go to state 76
     dictExpr     go to state 77
-    expr         go to state 254
+    expr         go to state 253
     funcExpr     go to state 79
     funcHeaderE  go to state 80
     defineIden   go to state 81
@@ -4192,61 +4225,59 @@ state 247
     idenBracket  go to state 44
 
 
-state 248
+state 247
 
-  142 switchStat: DEFAULT @10 . subSpace
+  145 switchStat: DEFAULT @11 . subSpace
 
     ENDL    shift, and go to state 2
-    LBRACE  shift, and go to state 182
+    LBRACE  shift, and go to state 181
 
-    endls     go to state 183
-    subSpace  go to state 255
+    endls     go to state 182
+    subSpace  go to state 254
+
+
+state 248
+
+  136 switchSpace: LBRACE switchStats RBRACE .
+
+    $default  reduce using rule 136 (switchSpace)
 
 
 state 249
 
-  133 switchSpace: RBRACE switchStats LBRACE .
+  138 switchStats: switchStats switchStat .
 
-    $default  reduce using rule 133 (switchSpace)
+    $default  reduce using rule 138 (switchStats)
 
 
 state 250
 
-  135 switchStats: switchStats switchStat .
+   78 elseIfPart: ELSE IF LPAREN expr RPAREN @7 subSpace .
 
-    $default  reduce using rule 135 (switchStats)
+    $default  reduce using rule 78 (elseIfPart)
 
 
 state 251
 
-   76 elseIfPart: ELSE IF LPAREN expr RPAREN @6 subSpace .
+    1 endls: endls . ENDL
+   87 initOperatorContext: defineType operator defineType ASSIGN name endls .
 
-    $default  reduce using rule 76 (elseIfPart)
+    ENDL  shift, and go to state 27
+
+    ENDL      [reduce using rule 87 (initOperatorContext)]
+    $default  reduce using rule 87 (initOperatorContext)
 
 
 state 252
 
-    1 endls: endls . ENDL
-   85 initOperatorContext: defineType operator defineType ASSIGN name endls .
+   54 defineFor: FOR LPAREN paramList @1 SEMICOLON expr SEMICOLON iteration RPAREN . @2 subSpace
 
-    ENDL  shift, and go to state 27
+    $default  reduce using rule 53 (@2)
 
-    ENDL      [reduce using rule 85 (initOperatorContext)]
-    $default  reduce using rule 85 (initOperatorContext)
+    @2  go to state 255
 
 
 state 253
-
-   53 defineFor: FOR LPAREN paramList @1 SEMICOLON expr SEMICOLON iteration RPAREN . subSpace
-
-    ENDL    shift, and go to state 2
-    LBRACE  shift, and go to state 182
-
-    endls     go to state 183
-    subSpace  go to state 256
-
-
-state 254
 
    24 expr: expr . AND expr
    25     | expr . OR expr
@@ -4261,60 +4292,71 @@ state 254
    34     | expr . MULT expr
    35     | expr . DIVIDE expr
    36     | expr . MODULUS expr
-  140 switchStat: CASE LPAREN expr . RPAREN @9 subSpace
+  143 switchStat: CASE LPAREN expr . RPAREN @10 subSpace
 
-    OR       shift, and go to state 118
-    AND      shift, and go to state 119
-    NE       shift, and go to state 120
-    EQ       shift, and go to state 121
-    GE       shift, and go to state 122
-    GT       shift, and go to state 123
-    LE       shift, and go to state 124
-    LT       shift, and go to state 125
-    MINUS    shift, and go to state 126
-    PLUS     shift, and go to state 127
-    MODULUS  shift, and go to state 128
-    DIVIDE   shift, and go to state 129
-    MULT     shift, and go to state 130
-    RPAREN   shift, and go to state 257
+    OR       shift, and go to state 117
+    AND      shift, and go to state 118
+    NE       shift, and go to state 119
+    EQ       shift, and go to state 120
+    GE       shift, and go to state 121
+    GT       shift, and go to state 122
+    LE       shift, and go to state 123
+    LT       shift, and go to state 124
+    MINUS    shift, and go to state 125
+    PLUS     shift, and go to state 126
+    MODULUS  shift, and go to state 127
+    DIVIDE   shift, and go to state 128
+    MULT     shift, and go to state 129
+    RPAREN   shift, and go to state 256
+
+
+state 254
+
+  145 switchStat: DEFAULT @11 subSpace .
+
+    $default  reduce using rule 145 (switchStat)
 
 
 state 255
 
-  142 switchStat: DEFAULT @10 subSpace .
+   54 defineFor: FOR LPAREN paramList @1 SEMICOLON expr SEMICOLON iteration RPAREN @2 . subSpace
 
-    $default  reduce using rule 142 (switchStat)
+    ENDL    shift, and go to state 2
+    LBRACE  shift, and go to state 181
+
+    endls     go to state 182
+    subSpace  go to state 257
 
 
 state 256
 
-   53 defineFor: FOR LPAREN paramList @1 SEMICOLON expr SEMICOLON iteration RPAREN subSpace .
+  143 switchStat: CASE LPAREN expr RPAREN . @10 subSpace
 
-    $default  reduce using rule 53 (defineFor)
+    $default  reduce using rule 142 (@10)
+
+    @10  go to state 258
 
 
 state 257
 
-  140 switchStat: CASE LPAREN expr RPAREN . @9 subSpace
+   54 defineFor: FOR LPAREN paramList @1 SEMICOLON expr SEMICOLON iteration RPAREN @2 subSpace .
 
-    $default  reduce using rule 139 (@9)
-
-    @9  go to state 258
+    $default  reduce using rule 54 (defineFor)
 
 
 state 258
 
-  140 switchStat: CASE LPAREN expr RPAREN @9 . subSpace
+  143 switchStat: CASE LPAREN expr RPAREN @10 . subSpace
 
     ENDL    shift, and go to state 2
-    LBRACE  shift, and go to state 182
+    LBRACE  shift, and go to state 181
 
-    endls     go to state 183
+    endls     go to state 182
     subSpace  go to state 259
 
 
 state 259
 
-  140 switchStat: CASE LPAREN expr RPAREN @9 subSpace .
+  143 switchStat: CASE LPAREN expr RPAREN @10 subSpace .
 
-    $default  reduce using rule 140 (switchStat)
+    $default  reduce using rule 143 (switchStat)

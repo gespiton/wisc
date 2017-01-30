@@ -1,5 +1,5 @@
 {
-    "include" : ["ast", "stype", "stats"],
+    "include" : ["ast", "stype", "stats", "template"],
     "define" : {
         "type" : 102,
         "define" : 101,
@@ -186,6 +186,12 @@
             "params" : {
                 "length" : "int",
                 "..." : ""
+            }
+        },
+        "tab" : {
+            "return" : "char",
+            "params" : {
+                "num" : "int"
             }
         },
         "itoc" : {

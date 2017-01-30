@@ -1,5 +1,21 @@
 # Schedule
 
+## Schedule 7 (1/30/17)
+- [x] Generate javascript file
+- [x] WiScript controller
+- [x] Module generate
+- [x] Assignment generate
+- [x] Space variables generate
+- [x] If generate
+- [x] For generate
+- [x] While generate
+- [x] Switch generate
+- [x] Define function generate
+- [x] Function expression generate
+- [x] Variable generate name
+- [x] Expression generate name
+- [x] Identifier generate name
+
 ## Schedule 6 (1/28/17)
 - [x] Array special type
 - [x] Array expression

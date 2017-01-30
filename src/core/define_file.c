@@ -12,6 +12,7 @@ files_list = file_push(files_list, nfile);
 // Set current working file
 current_file = nfile;
 current_space = current_file->main_space;
+space_header(current_space, concat(tab(1), TEMPLATE_DEBUG_MODULE));
 // Init this file
 init_file();
 

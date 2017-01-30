@@ -1,3 +1,7 @@
-{string} demo
+string demo(string:(number) num, number d = 12) {
+    return "Hello world"
+}
 
-demo["few"] = 12
+demo((number num = 12):string {
+    return "Hello world"
+}, undefined)

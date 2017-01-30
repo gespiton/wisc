@@ -19,6 +19,6 @@ if (!type_compare(current_space->func->return_type, expr->type)) {
 }
 
 current_space->func->have_return = 1;
-current_space->generate = merge(4, current_space->generate, "return ", expr->value, ";");
+space_context(current_space, merge(3, "return ", expr->value, ";"), 1);
 
 return "";

@@ -20,6 +20,6 @@ if (!type_compare(iden->type, expr->type)) {
 }
 
 debug(merge(4, "Assign ", token(iden_name(iden)), " = ", token(expr->name)), location_plus(iden->location, expr->location));
-current_space->generate = merge(4, current_space->generate, iden_gname(iden), "=", expr->value, ";");
-
-return "";
+char* result = merge(4, iden_gname(iden), " = ", expr->value, ";");
+space_context(current_space, result, 1);
+return result;

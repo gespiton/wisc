@@ -1,4 +1,4 @@
-if (tlist == NULL) return NULL;
+if (parsing_step > DEFINE || tlist == NULL) return NULL;
 type* ctype = tlist;
 param* nparam = NULL;
 for (; ctype != NULL; ctype = ctype->next) {

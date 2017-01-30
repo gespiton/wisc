@@ -7,7 +7,6 @@ stat:
 endc { ; }
 | iteration endc { ; }
 | controlSpace endc { ; }
-| idenFunc endc { ; }
 
 | defineIf endc { ; }
 | defineWhile endc { ; }

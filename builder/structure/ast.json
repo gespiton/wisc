@@ -146,11 +146,15 @@
             "parent" : ["space", "NULL"],
             "children" : ["space", "NULL"],
             "current_child" : ["space", "NULL"],
-            "generate" : ["char", "\"\""],
+
+            "init" : ["char", "\"\""],
+            "header" : ["char", "\"\""],
+            "context" : ["char", "\"\""],
 
             "func" : ["func", "NULL"],
             "loop" : ["int", "0"],
 
+            "init_variables" : ["var", "NULL"],
             "variables" : ["var", "NULL"],
 
             "lock" : ["int", "0"],
@@ -163,6 +167,46 @@
                 "return" : "space",
                 "params" : {}
             },
+            "init" : {
+                "return" : "void",
+                "params" : {
+                    "target" : "space",
+                    "context" : "char"
+                }
+            },
+            "header" : {
+                "return" : "void",
+                "params" : {
+                    "target" : "space",
+                    "context" : "char"
+                }
+            },
+            "context" : {
+                "return" : "void",
+                "params" : {
+                    "target" : "space",
+                    "context" : "char",
+                    "new_line" : "int"
+                }
+            },
+            "generate" : {
+                "return" : "char",
+                "params" : {
+                    "target" : "space"
+                }
+            },
+            "generate_switch" : {
+                "return" : "char",
+                "params" : {
+                    "target" : "space"
+                }
+            },
+            "parent_num" : {
+                "return" : "int",
+                "params" : {
+                    "target" : "space"
+                }
+            },
             "end" : {
                 "return" : "void",
                 "params" : {}
@@ -174,7 +218,8 @@
             "add_var" : {
                 "return" : "int",
                 "params" : {
-                    "variable" : "var"
+                    "variable" : "var",
+                    "for_init" : "int"
                 }
             },
             "search_var" : {
@@ -193,8 +238,8 @@
             "name" : ["char", "\"\""],
             "gname" : ["char", "\"\""],
             "type" : ["type", "NULL"],
-            "expr" : ["expr", "NULL"],
             "read_only" : ["int", "0"],
+            "define_func" : ["int", "0"],
 
             "location" : ["location", "NULL"],
             "length" : ["int", "1"],

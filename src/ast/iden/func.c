@@ -31,8 +31,8 @@ if (target->attach != NULL) {
         }
         return NULL;
     } else {
-        niden->name = merge(4, iden_name(target), "(", expr_name(params), ")");
-        niden->gname = merge(4, iden_gname(target), "(", expr_string(params), ")");
+        niden->name = merge(4, cvar->name, "(", expr_name(params), ")");
+        niden->gname = merge(4, cvar->gname, "(", expr_string(params), ")");
         niden->type = cvar->type->stype->func->return_type;
     }
 } else {
