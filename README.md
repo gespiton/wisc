@@ -1,6 +1,7 @@
 # Schedule
 
 ## Schedule 8 (2/4/17)
+#### Purpose
 - [x] Multiple type system
 - [x] Multiple type definition
 - [x] Multiple type compare
@@ -11,6 +12,7 @@
 - [x] #105: Function '{variable name}' already define by type '{type name}', cannot match with '{variable name}'
 
 ## Schedule 7 (1/30/17)
+#### Purpose
 - [x] Generate javascript file
 - [x] WiScript controller
 - [x] Module generate
@@ -27,6 +29,7 @@
 - [x] Identifier generate name
 
 ## Schedule 6 (1/28/17)
+#### Purpose
 - [x] Array special type
 - [x] Array expression
 - [x] Dictionary special type
