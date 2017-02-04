@@ -1,6 +1,6 @@
 # Schedule
 
-## Schedule 8
+## Schedule 8 (2/4/17)
 - [x] Multiple type system
 - [x] Multiple type definition
 - [x] Multiple type compare
