@@ -64,6 +64,12 @@
                     "root" : "structure",
                     "sub" : "structure"
                 }
+            },
+            "new" : {
+                "return" : "structure",
+                "params" : {
+                    "target" : "structure"
+                }
             }
         }
     },
@@ -274,6 +280,7 @@
             "code" : ["char", "\"\""],
 
             "stype" : ["stype", "NULL"],
+            "multiple" : ["type", "NULL"],
 
             "location" : ["location", "NULL"],
             "length" : ["int", "1"],
@@ -294,10 +301,18 @@
                     "sub" : "type"
                 }
             },
+            "multiple" : {
+                "return" : "type",
+                "params" : {
+                    "root" : "type",
+                    "sub" : "type"
+                }
+            },
             "compare" : {
                 "return" : "int",
                 "params" : {
                     "left" : "type",
+                    "generate_left" : "type",
                     "right" : "type"
                 }
             },
@@ -335,6 +350,8 @@
             "gname" : ["char", "\"\""],
             "type" : ["type", "NULL"],
             "attach" : ["var", "NULL"],
+
+            "bracket" : ["char", "\"\""],
 
             "location" : ["location", "NULL"]
         },

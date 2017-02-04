@@ -13,6 +13,9 @@ expr* nexpr = expr_create(
     string_create(merge(3, left->value, symbol, right->value)),
     type_create(string_create(copt->output), stype_blank())
 );
-nexpr->location = location_plus(left->location, right->location);
+if (nexpr != NULL) {
+    nexpr->value = merge(5, left->value, " " , symbol, " ", right->value);
+    nexpr->location = location_plus(left->location, right->location);
+}
 
 return nexpr;

@@ -1,11 +1,13 @@
 char* string = "";
-if (target->variables != NULL && !target->variables->define_func) {
-    string = "var ";
+if (target->variables != NULL) {
     var* cvar = target->variables;
     for (; cvar != NULL; cvar = cvar->next) {
-        if (cvar->define_func) continue;
-        string = concat(string, cvar->gname);
-        if (cvar->next != NULL && !cvar->next->define_func) string = concat(string, ", ");
+        if (!cvar->define_func) {
+            if (strcmp(string, "") == 0) string = "var ";
+            string = concat(string, cvar->gname);
+        }
+        if (strcmp(string, "") != 0 && cvar->next != NULL && !cvar->next->define_func)
+            string = concat(string, ", ");
     }
     string = merge(4, "\n", tab(space_parent_num(target) + 2), string, ";");
 }

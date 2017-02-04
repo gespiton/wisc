@@ -1,5 +1,15 @@
 # Schedule
 
+## Schedule 8
+- [x] Multiple type system
+- [x] Multiple type definition
+- [x] Multiple type compare
+- [x] Multiple type array expression
+- [x] Multiple type dictionary expression
+
+#### Remove Error
+- [x] #105: Function '{variable name}' already define by type '{type name}', cannot match with '{variable name}'
+
 ## Schedule 7 (1/30/17)
 - [x] Generate javascript file
 - [x] WiScript controller

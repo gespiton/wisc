@@ -16,13 +16,11 @@ LBRACKET exprList RBRACKET {
             type* ctype = $2->type;
             expr* cexpr = $2->next;
             for (; cexpr != NULL; cexpr = cexpr->next) {
-                if (!type_compare(ctype, cexpr->type)) {
-                    if (type_compare(cexpr->type, ctype)) {
+                if (!type_compare(ctype, ctype, cexpr->type)) {
+                    if (type_compare(cexpr->type, cexpr->type, ctype)) {
                         ctype = cexpr->type;
                     } else {
-                        // Turn array into any type
-                        $$ = NULL;
-                        return 1;
+                        ctype = type_multiple(ctype, cexpr->type);
                     }
                 }
             }
@@ -32,7 +30,9 @@ LBRACKET exprList RBRACKET {
             );
             if ($$ != NULL) {
                 $$->location = location_plus($1, $3);
-                $$->type->code = concat(ctype->code, "[]");
+                if (ctype->multiple == NULL) $$->type->code = concat(ctype->code, "[]");
+                else $$->type->code = merge(4, "(", ctype->code, ")", "[]");
+                $$->type->name = $$->type->code;
             }
         }
     } else $$ = NULL;

@@ -1,2 +1,3 @@
-if (target == NULL || target->attach == NULL) return target->gname;
-return target->attach->gname;
+if (target == NULL) return "";
+if (target->attach == NULL) return concat(target->gname, target->bracket);
+return concat(target->attach->gname, target->bracket);

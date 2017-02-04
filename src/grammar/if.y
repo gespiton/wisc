@@ -1,8 +1,8 @@
 defineIf:
 ifPart { ; }
 | ifPart elseIfParts { ; }
-| ifPart elsePart { ; }
-| ifPart elseIfParts elsePart { ; }
+| ifPart endlsn elsePart { ; }
+| ifPart endlsn elseIfParts endlsn elsePart { ; }
 ;
 
 ifPart:
@@ -24,7 +24,7 @@ IF LPAREN expr RPAREN {
 ;
 
 elseIfParts:
-elseIfParts elseIfPart { ; }
+elseIfParts endlsn elseIfPart { ; }
 | elseIfPart { ; }
 
 elseIfPart:

@@ -27,6 +27,8 @@
 "["                         { yylval.location = current_location; return LBRACKET; }
 "]"                         { yylval.location = current_location; return RBRACKET; }
 
+"|"                         { yylval.location = current_location; return SOR; }
+
 "=="                        { yylval.location = current_location; return EQ; }
 "!="                        { yylval.location = current_location; return NE; }
 "<"                         { yylval.location = current_location; return LT; }
@@ -62,7 +64,7 @@
 "undefined"                 { return VALUE_VOID; }
 "null"                      { return VALUE_VOID; }
 
-[a-zA-Z][a-zA-Z_0-9]*       { return NAME; }
+[a-zA-Z_][a-zA-Z_0-9]*       { return NAME; }
 [0-9]+                      { return INT; }
 \+[0-9]+                    { yylval.sval = &yylval.sval[1]; return INT; }
 \-[0-9]+                    { return INT; }

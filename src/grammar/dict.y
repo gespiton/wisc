@@ -16,13 +16,11 @@ LBRACE dictContext RBRACE {
             type* ctype = $2->type;
             expr* dlist = $2->next;
             for (; dlist != NULL; dlist = dlist->next) {
-                if (!type_compare(ctype, dlist->type)) {
-                    if (type_compare(dlist->type, ctype)) {
+                if (!type_compare(ctype, ctype, dlist->type)) {
+                    if (type_compare(dlist->type, dlist->type, ctype)) {
                         ctype = dlist->type;
                     } else {
-                        // Turn array into any type
-                        $$ = NULL;
-                        return 1;
+                        ctype = type_multiple(ctype, dlist->type);
                     }
                 }
             }
@@ -32,7 +30,9 @@ LBRACE dictContext RBRACE {
             if ($$ != NULL) {
                 $$->value = merge(3, "{", expr_string($2), "}");
                 $$->location = location_plus($1, $3);
-                $$->type->code = merge(3, "{", ctype->code, "}");
+                if (ctype->multiple == NULL) $$->type->code = merge(3, "{", ctype->code, "}");
+                else $$->type->code = merge(3, "{(", ctype->code, ")}");
+                $$->type->name = $$->type->code;
             }
         }
     } else $$ = NULL;

@@ -33,7 +33,7 @@
 %token SEMICOLON COLON ASSIGN RPAREN LPAREN RBRACE LBRACE COMMA BRACKET RBRACKET LBRACKET
 %token DINIT DEND
 %token RETURN IF ELSE FOR WHILE SWITCH CASE DEFAULT BREAK CONTINUE OPERATOR CONST
-%token EQ NE GT GE LT LE
+%token EQ NE GT GE LT LE SOR
 %token PLUS EPLUS DPLUS MINUS EMINUS DMINUS MULT EMULT DIVIDE EDIVIDE MODULUS EMODULUS OR AND OPPOSITE
 
 %type <sval> NAME INT NUMBER STRING VALUE_BOOLEAN VALUE_VOID
@@ -47,7 +47,7 @@
 %type <func> funcHeaderV funcHeaderE
 
 %type <string> name
-%type <type> defineType typeListP typeList funcType arrayType dictType
+%type <type> defineType typeListP typeList funcType arrayType dictType typeListM
 %type <iden> defineIden idenFunc idenBracket
 %type <param> defineParam paramListP paramList
 %type <expr> expr exprList funcExpr arrayExpr dictExpr dictContext dictList
@@ -59,6 +59,10 @@
 endls:
 endls ENDL { ; }
 | ENDL { ; }
+;
+
+endlsn: { ; }
+| endls { ; }
 ;
 
 endc:
@@ -77,8 +81,9 @@ lists:
 ;
 
 name: NAME { $$ = string_create($1); }
+;
 
 program: { ; }
 | init { ; }
-| space { ; }
+| stats { ; }
 ;

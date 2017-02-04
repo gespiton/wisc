@@ -8,8 +8,15 @@ paramListP {
         param* cp = $1;
         for (; cp != NULL; cp = cp->next) {
             var* cvar = space_search_var(current_space, cp->name, 0);
-            if (cvar != NULL && cp->expr != NULL)
+            if (cvar != NULL && cp->expr != NULL) {
+                if (!type_compare(cvar->type, cvar->type, cp->expr->type)) {
+                    error(VAR_CANNOT_MATCH,
+                        merge(6, "Variable ", token(cvar->name), " type ", token(cvar->type->name), " cannot match with ", token(cp->expr->type->name)),
+                        location_plus(cvar->location, cp->expr->location));
+                    continue;
+                }
                 space_context(current_space, merge(4, cvar->gname, " = ", cp->expr->value, ";"), 1);
+            }
         }
     }
 }

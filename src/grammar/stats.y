@@ -1,26 +1,21 @@
-stats: { ; }
-| stats stat { ; }
-| stat { ; }
+stats:
+stats stat endc { ; }
+| stat endc { ; }
 ;
 
 stat:
 endc { ; }
-| iteration endc { ; }
-| controlSpace endc { ; }
-
-| defineIf endc { ; }
-| defineWhile endc { ; }
-| defineFor endc { ; }
-| defineSwitch endc { ; }
-;
-
-defineStats: { ; }
-| defineStats defineStat { ; }
+| iteration { ; }
+| controlSpace { ; }
 | defineStat { ; }
+
+| defineIf { ; }
+| defineWhile { ; }
+| defineFor { ; }
+| defineSwitch { ; }
 ;
 
 defineStat:
-endc { ; }
-| defineFunc endc { ; }
-| defineVariale endc { ; }
+defineFunc { ; }
+| defineVariale { ; }
 ;

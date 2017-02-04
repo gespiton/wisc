@@ -46,7 +46,9 @@
         "cannot_getting_member" : 119,
         "array_getting_member" : 120,
         "dictionary_getting_member" : 121,
-        "assignment_constant_var" : 122
+        "assignment_constant_var" : 122,
+
+        "type_exists_in_group" : 123
     },
     "params" : {
         "inited" : ["int", "0"],
@@ -64,6 +66,15 @@
         "current_location" : ["location", "NULL"],
 
         "parsing_step" : ["int", "TYPE"],
+
+        "void_structure" : ["structure", "structure_create(TYPE_VOID)"],
+        "bool_structure" : ["structure", "structure_create(TYPE_BOOLEAN)"],
+        "int_structure" : ["structure", "structure_create(TYPE_INT)"],
+        "number_structure" : ["structure", "structure_create(TYPE_NUMBER)"],
+        "string_structure" : ["structure", "structure_create(TYPE_STRING)"],
+        "func_structure" : ["structure", "structure_create(TYPE_FUNCTION)"],
+        "array_structure" : ["structure", "structure_create(TYPE_ARRAY)"],
+        "dict_structure" : ["structure", "structure_create(TYPE_DICT)"],
 
         "line_number" : ["int", "1"],
         "col_number" : ["int", "1"],

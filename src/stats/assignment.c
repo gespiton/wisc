@@ -10,9 +10,9 @@ if (iden->attach->read_only) {
     return "";
 }
 
-if (!type_compare(iden->type, expr->type)) {
+if (!type_compare(iden->type, NULL, expr->type)) {
     error(VAR_CANNOT_MATCH,
-        merge(6, "Variable ", token(iden_name(iden)), " type ", token(iden->type->code), " cannot match with ", token(expr->type->code)),
+        merge(6, "Variable ", token(iden_name(iden)), " type ", token(iden->type->name), " cannot match with ", token(expr->type->name)),
         location_plus(iden->location, expr->location));
     note(merge(3, "Variable ", token(iden_name(iden)), " was define here"), iden->attach->location);
 

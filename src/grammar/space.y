@@ -1,10 +1,8 @@
 subSpace:
-LBRACE space RBRACE { ; }
+LBRACE endlsn stats RBRACE { ; }
+| stat { ; }
+| LBRACE endlsn stat endlsn RBRACE { ; }
 | endls subSpace { ; }
-;
-
-space:
-defineStats stats { ; }
 ;
 
 controlSpace:

@@ -19,13 +19,5 @@
     return require(0);
 }) ([
     function(module, exports, require, tools) {
-        function demo (num, d) {
-            if (d == undefined) d = 12;
-            return "Hello world";
-        }
-        demo(function (num) {
-            if (num == undefined) num = 12;
-            return "Hello world";
-        },undefined);
     }
 ])
