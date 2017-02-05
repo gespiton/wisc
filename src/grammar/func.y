@@ -97,10 +97,9 @@ funcHeaderE {
 }
 ;
 
-
 funcHeaderV:
 LPAREN paramList RPAREN {
-    string* typeString = string_create(TYPE_VOID);
+    string* typeString = string_create(TYPE_ANY);
     typeString->location = NULL;
     $$ = func_create(type_create(typeString, NULL), $2);
     if ($$ != NULL)

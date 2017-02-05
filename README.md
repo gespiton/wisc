@@ -1,5 +1,43 @@
 # Schedule
 
+## Schedule 10
+#### Purpose
+- [ ] Prototype system
+- [ ] Init prototype
+- [ ] Calling prototype
+- [ ] Special prototype
+- [ ] Customize special prototype
+- [ ] Generics prototype
+- [ ] Matrix special type
+- [ ] Matrix define type
+- [ ] Matrix expression define
+- [ ] Init string prototype
+- [ ] Init array prototype
+- [ ] Init dictionary prototype
+- [ ] Init matrix prototype
+
+## Schedule 9 (3/4/17)
+#### Purpose
+- [x] Typedef system
+- [x] Define type by typedef system
+- [x] Any type
+- [x] Any type compare
+- [x] Any type getting bracket
+- [x] Any type calling function
+- [x] Any type operator
+- [x] Multiple logic operator
+- [x] String calling bracket
+- [x] Fixed multiple type compare
+- [x] Identifier target type
+- [x] Single line command
+- [x] Multiple line command
+
+#### Error
+- [x] #123: Identifier '{Identifier name}' already exists as structure
+- [x] #124: Identifier '{Identifier name}' already exists as typedef
+- [x] #125: '{variable name}' is type '{type name}' only getting member by an string // string
+- [x] #126: Identifier '{Identifier name}' type not exists type '{type name}'
+
 ## Schedule 8 (2/4/17)
 #### Purpose
 - [x] Multiple type system

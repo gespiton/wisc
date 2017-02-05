@@ -2,6 +2,11 @@ if (left == NULL || right == NULL) return 0;
 int passing = 0;
 if (left != NULL && generate_left == NULL)
     generate_left = left;
+
+// Pass very variable assign with left any type
+if (strcmp(left->code, TYPE_ANY) == 0 ||
+    strcmp(right->code, TYPE_ANY) == 0)
+    passing = 1;
 // Pass very variable assign with void type
 if (strcmp(right->code, TYPE_VOID) == 0) passing = 1;
 
@@ -27,7 +32,7 @@ if (strcmp(left->code, right->code) == 0)
 
 if (!passing && left->multiple != NULL)
     passing = type_compare(left->multiple, generate_left, right);
-if (passing && right->multiple != NULL)
+if (!passing && right->multiple != NULL)
     passing = type_compare(generate_left, generate_left, right->multiple);
 
 return passing;

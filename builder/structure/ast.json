@@ -6,6 +6,7 @@
             "generate" : ["char", "\"\""],
 
             "structures" : ["structure", "NULL"],
+            "typeds" : ["typed", "NULL"],
             "main_space" : ["space", "NULL"],
 
             "length" : ["int", "1"],
@@ -35,6 +36,20 @@
             },
             "search_structure" : {
                 "return" : "structure",
+                "params" : {
+                    "target" : "file",
+                    "name" : "char"
+                }
+            },
+            "add_typed" : {
+                "return" : "void",
+                "params" : {
+                    "target" : "file",
+                    "typede" : "typed"
+                }
+            },
+            "search_typed" : {
+                "return" : "typed",
                 "params" : {
                     "target" : "file",
                     "name" : "char"
@@ -141,6 +156,33 @@
                 "return" : "string",
                 "params" : {
                     "name" : "char"
+                }
+            }
+        }
+    },
+
+    "typed" : {
+        "struct" : {
+            "name" : ["char", "\"\""],
+            "type" : ["type", "NULL"],
+
+            "location" : ["location", "NULL"],
+            "length" : ["int", "1"],
+            "next" : ["typed", "NULL"]
+        },
+        "action" : {
+            "create" : {
+                "return" : "typed",
+                "params" : {
+                    "name" : "char",
+                    "ttype" : "type"
+                }
+            },
+            "push" : {
+                "return" : "typed",
+                "params" : {
+                    "root" : "typed",
+                    "sub" : "typed"
                 }
             }
         }
@@ -352,6 +394,7 @@
             "attach" : ["var", "NULL"],
 
             "bracket" : ["char", "\"\""],
+            "gbracket" : ["char", "\"\""],
 
             "location" : ["location", "NULL"]
         },
@@ -387,6 +430,14 @@
                 "params" : {
                     "target" : "iden",
                     "value" : "expr",
+                    "location" : "struct location"
+                }
+            },
+            "target" : {
+                "return" : "iden",
+                "params" : {
+                    "target" : "iden",
+                    "deft" : "type",
                     "location" : "struct location"
                 }
             }

@@ -1,5 +1,5 @@
-stats:
-stats stat endc { ; }
+stats: { ; }
+| stats stat endc { ; }
 | stat endc { ; }
 ;
 

@@ -1,6 +1,19 @@
 if (parsing_step != DEFINE) return 0;
 if (variable == NULL) return 0;
 
+// Search if variable name already exists as structure
+if (file_search_structure(current_file, variable->name) != NULL) {
+    error(STRUCTURE_ALREADY_EXISTS, merge(3, "Identifier ", token(variable->name), " already exist as structure"), variable->location);
+    return 0;
+}
+// Search if variable name already exists as typedef
+typed* ctd = file_search_typed(current_file, variable->name);
+if (ctd != NULL) {
+    error(TYPEDEF_ALREADY_EXISTS, merge(3, "Identifier ", token(variable->name), " already exist as typedef"), variable->location);
+    note(merge(3, "Typedef ", token(ctd->name), " was defined here"), ctd->location);
+    return 0;
+}
+
 // Search if variable name already exists
 var* cvar = space_search_var(current_space, variable->name, 0);
 if (cvar != NULL) {

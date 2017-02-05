@@ -1,12 +1,18 @@
 if (name == NULL) return NULL;
 
-if (current_file != NULL && file_search_structure(current_file, name->name) == NULL) {
+# new ntype name name->name code name->name location name->location stype stype
+// Get typedef type
+typed* ctd;
+if (current_file != NULL)
+    ctd = file_search_typed(current_file, name->name);
+if (current_file != NULL && ctd != NULL) ntype = ctd->type;
+else if (current_file != NULL && file_search_structure(current_file, name->name) == NULL) {
     if (parsing_step == STAT)
         error(UNKNOWN_TYPE_ERROR, concat("Unknown type ", token(name->name)), name->location);
     return NULL;
 }
 
-if (stype != NULL) {
+if (ntype->stype != NULL) {
     if (strcmp(name->name, TYPE_FUNCTION) == 0 && stype->func == NULL) {
         if (parsing_step == STAT) {
             error(DEFINE_FUNC_TYPE_FAILED, "Define a variable function type incorrect", name->location);
@@ -30,7 +36,6 @@ if (stype != NULL) {
         }
         return NULL;
     }
-} else stype = stype_blank();
+} else ntype->stype = stype_blank();
 
-# new ntype name name->name code name->name location name->location stype stype
 return ntype;

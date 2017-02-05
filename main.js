@@ -19,5 +19,13 @@
     return require(0);
 }) ([
     function(module, exports, require, tools) {
+        ;
+        function demo (func) {
+            func("12");
+        }
+        demo(function (str) {
+            str = 0.21;
+            return str;
+        });
     }
 ])

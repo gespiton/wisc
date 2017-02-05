@@ -6,10 +6,9 @@ if (nexpr != NULL) {
     nexpr->location = location_plus(left->location, right->location);
 }
 
-if (!type_compare(left->type, left->type, right->type)) {
-    if (type_compare(right->type, left->type, left->type))
-        nexpr->type = right->type;
-    else return NULL;
-} else nexpr->type = left->type;
+nexpr->type = type_multiple(left->type, right->type);
+if (nexpr->type->multiple != NULL) {
+    nexpr->type->name = merge(3, "(", nexpr->type->name, ")");
+}
 
 return nexpr;

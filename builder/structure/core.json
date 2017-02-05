@@ -5,6 +5,7 @@
         "define" : 101,
         "stat" : 100,
 
+        "type_any" : "\"any\"",
         "type_void" : "\"void\"",
         "type_boolean" : "\"boolean\"",
         "type_int" : "\"int\"",
@@ -48,7 +49,10 @@
         "dictionary_getting_member" : 121,
         "assignment_constant_var" : 122,
 
-        "type_exists_in_group" : 123
+        "structure_already_exists" : 123,
+        "typedef_already_exists" : 124,
+        "string_getting_member" : 125,
+        "iden_target_type_failed" : 126
     },
     "params" : {
         "inited" : ["int", "0"],
@@ -67,6 +71,7 @@
 
         "parsing_step" : ["int", "TYPE"],
 
+        "any_structure" : ["structure", "structure_create(TYPE_ANY)"],
         "void_structure" : ["structure", "structure_create(TYPE_VOID)"],
         "bool_structure" : ["structure", "structure_create(TYPE_BOOLEAN)"],
         "int_structure" : ["structure", "structure_create(TYPE_INT)"],

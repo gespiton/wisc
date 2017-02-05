@@ -32,23 +32,23 @@
 %token NAME ENDL INT NUMBER STRING VALUE_BOOLEAN VALUE_VOID
 %token SEMICOLON COLON ASSIGN RPAREN LPAREN RBRACE LBRACE COMMA BRACKET RBRACKET LBRACKET
 %token DINIT DEND
-%token RETURN IF ELSE FOR WHILE SWITCH CASE DEFAULT BREAK CONTINUE OPERATOR CONST
-%token EQ NE GT GE LT LE SOR
+%token RETURN IF ELSE FOR WHILE SWITCH CASE DEFAULT BREAK CONTINUE OPERATOR CONST TYPEDEF
+%token EQ NE GT GE LT LE SOR RARROW
 %token PLUS EPLUS DPLUS MINUS EMINUS DMINUS MULT EMULT DIVIDE EDIVIDE MODULUS EMODULUS OR AND OPPOSITE
 
 %type <sval> NAME INT NUMBER STRING VALUE_BOOLEAN VALUE_VOID
 %type <sval> stats stat operator iteration assignment
 
-%type <location> RETURN IF ELSE FOR WHILE SWITCH CASE DEFAULT BREAK CONTINUE
+%type <location> RETURN IF ELSE FOR WHILE SWITCH CASE DEFAULT BREAK CONTINUE OPERATOR CONST TYPEDEF
 %type <location> SEMICOLON COLON ASSIGN RPAREN LPAREN RBRACE LBRACE COMMA BRACKET RBRACKET LBRACKET
-%type <location> EQ NE GT GE LT LE
+%type <location> EQ NE GT GE LT LE SOR RARROW
 %type <location> PLUS EPLUS DPLUS MINUS EMINUS DMINUS MULT EMULT DIVIDE EDIVIDE MODULUS EMODULUS OR AND OPPOSITE
 
 %type <func> funcHeaderV funcHeaderE
 
 %type <string> name
 %type <type> defineType typeListP typeList funcType arrayType dictType typeListM
-%type <iden> defineIden idenFunc idenBracket
+%type <iden> defineIden idenFunc idenBracket idenTarget
 %type <param> defineParam paramListP paramList
 %type <expr> expr exprList funcExpr arrayExpr dictExpr dictContext dictList
 
@@ -85,5 +85,5 @@ name: NAME { $$ = string_create($1); }
 
 program: { ; }
 | init { ; }
-| stats { ; }
+| typedefs stats { ; }
 ;

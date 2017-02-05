@@ -10,6 +10,7 @@
     location* string_location;
 %}
 
+%x COMMENTS
 %x STRINGQ
 %x STRINGA
 
@@ -28,6 +29,8 @@
 "]"                         { yylval.location = current_location; return RBRACKET; }
 
 "|"                         { yylval.location = current_location; return SOR; }
+
+">>"                        { yylval.location = current_location; return RARROW; }
 
 "=="                        { yylval.location = current_location; return EQ; }
 "!="                        { yylval.location = current_location; return NE; }
@@ -58,20 +61,26 @@
 "continue"                  { yylval.location = current_location; return CONTINUE; }
 "operator"                  { yylval.location = current_location; return OPERATOR; }
 "const"                     { yylval.location = current_location; return CONST; }
+"typedef"                   { yylval.location = current_location; return TYPEDEF; }
 
 "true"                      { return VALUE_BOOLEAN; }
 "false"                     { return VALUE_BOOLEAN; }
 "undefined"                 { return VALUE_VOID; }
 "null"                      { return VALUE_VOID; }
 
-[a-zA-Z_][a-zA-Z_0-9]*       { return NAME; }
+[a-zA-Z_][a-zA-Z_0-9]*      { return NAME; }
 [0-9]+                      { return INT; }
 \+[0-9]+                    { yylval.sval = &yylval.sval[1]; return INT; }
 \-[0-9]+                    { return INT; }
-[0-9]+\.[0-9]+               { return NUMBER; }
+[0-9]+\.[0-9]+              { return NUMBER; }
 \.[0-9]+                    { yylval.sval = concat("0", yytext); return NUMBER; }
-\-[0-9]+\.[0-9]+             { return NUMBER; }
+\-[0-9]+\.[0-9]+            { return NUMBER; }
 \-\.[0-9]+                  { yylval.sval = concat("-0", &yylval.sval[1]); return NUMBER; }
+
+\/\*                        { BEGIN(COMMENTS); }
+<COMMENTS>\*\/              { BEGIN(INITIAL); }
+<COMMENTS>\n                { ++line_number; }
+<COMMENTS>.                 { ; }
 
 \"                          { BEGIN(STRINGQ); on_string = ""; string_location = current_location; }
 <STRINGQ>\"                 { BEGIN(INITIAL); yylval.sval = strdup(on_string); current_location = location_plus(string_location, current_location); return STRING; }
@@ -86,7 +95,8 @@
 <STRINGA>\\.                { on_string = concat(on_string, yytext); }
 <STRINGA>.                  { on_string = concat(on_string, yytext); }
 
-\n                          { col_number = 1; line_number++; return ENDL; }
+\n                          { col_number = 1; line_number += 1; return ENDL; }
+"//".*\n                    { line_number += 1; }
 .                           { ; }
 
 

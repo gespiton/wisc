@@ -1,0 +1,8 @@
+void demo(string:((string | number)) func) {
+    func("12")
+}
+
+demo((number str):any {
+    str = .21
+    return str
+})

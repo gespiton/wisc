@@ -1,12 +1,17 @@
 if (target == NULL) return NULL;
 // Check if target type is a function
-if (target->type->stype->func == NULL) {
+if (strcmp(target->type->code, TYPE_ANY) == 0) {
+} else if (target->type->stype->func == NULL) {
     error(ISNT_FUNCTION, concat(token(iden_name(target)), " is not a function"), target->location);
     return NULL;
 }
 
 # new niden location location_plus(target->location,location)
-if (target->attach != NULL) {
+if (strcmp(target->type->code, TYPE_ANY) == 0) {
+    niden->name = merge(4, iden_name(target), "(", expr_name(params), ")");
+    niden->gname = merge(4, iden_gname(target), "(", expr_string(params), ")");
+    niden->type = target->type;
+} else if (target->attach != NULL) {
     var* cvar = target->attach;
     int fail = 0;
     for (; cvar != NULL; cvar = cvar->next) {

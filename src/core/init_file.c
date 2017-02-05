@@ -1,3 +1,4 @@
+file_add_structure(current_file, structure_new(any_structure));
 file_add_structure(current_file, structure_new(void_structure));
 file_add_structure(current_file, structure_new(bool_structure));
 file_add_structure(current_file, structure_new(int_structure));
